@@ -1,0 +1,62 @@
+[
+  {
+    "id": "clinical-nlp-ehr",
+    "title": "Clinical NLP & Information Extraction from EHRs",
+    "description": "We develop transformer-based models that extract structured clinical knowledge from unstructured electronic health record narratives, including diagnoses, medications, procedures, and temporal relationships. Our systems support automated patient phenotyping and cohort identification for downstream clinical research and trial recruitment.",
+    "status": "active",
+    "startYear": 2022,
+    "tags": ["NLP", "EHR", "Phenotyping", "Named Entity Recognition", "Transformers"],
+    "fundingAgency": "Canadian Institutes of Health Research (CIHR)",
+    "icon": "brain"
+  },
+  {
+    "id": "data-provenance",
+    "title": "Data Provenance Engineering for Clinical AI",
+    "description": "This project builds provenance-aware pipelines that systematically track the full lineage of clinical data from point of collection through preprocessing, feature engineering, model training, and inference. Provenance graphs enable reproducible, auditable AI-assisted clinical decisions and support regulatory compliance.",
+    "status": "active",
+    "startYear": 2021,
+    "tags": ["Provenance", "Reproducibility", "Explainability", "Lineage Tracking", "Audit"],
+    "fundingAgency": "Natural Sciences and Engineering Research Council (NSERC)",
+    "icon": "database"
+  },
+  {
+    "id": "federated-learning-ehr",
+    "title": "Federated Learning for Privacy-Preserving EHR Analysis",
+    "description": "We design and evaluate federated learning protocols that allow multiple hospitals to collaboratively train clinical AI models without sharing raw patient data, preserving privacy while maximising statistical power. Our work addresses challenges unique to healthcare: non-IID data distributions, institutional heterogeneity, and differential privacy guarantees.",
+    "status": "active",
+    "startYear": 2023,
+    "tags": ["Federated Learning", "Privacy", "Differential Privacy", "Multi-site", "EHR"],
+    "fundingAgency": "Alberta Innovates",
+    "icon": "shield"
+  },
+  {
+    "id": "precision-medicine",
+    "title": "Precision Medicine & Multi-modal Patient Stratification",
+    "description": "By integrating genomic sequences, clinical imaging, and free-text clinical notes, we identify fine-grained patient subgroups that respond differently to therapeutic interventions. Our multi-modal fusion architectures are evaluated on real-world cohorts for oncology, cardiology, and rare-disease applications.",
+    "status": "active",
+    "startYear": 2023,
+    "tags": ["Genomics", "Multi-modal", "Patient Stratification", "Precision Medicine", "Deep Learning"],
+    "fundingAgency": "Canadian Cancer Society",
+    "icon": "microscope"
+  },
+  {
+    "id": "llm-clinical-benchmark",
+    "title": "Benchmarking Large Language Models on Clinical Tasks",
+    "description": "This project systematically evaluates state-of-the-art large language models — including GPT-4, Llama, and domain-specific variants — on a curated suite of clinical tasks spanning named entity recognition, relation extraction, clinical reasoning, and discharge summarisation. We release public benchmarks and leaderboards to drive community progress.",
+    "status": "active",
+    "startYear": 2024,
+    "tags": ["LLMs", "Benchmarking", "Clinical Reasoning", "GPT-4", "Evaluation"],
+    "icon": "chart"
+  },
+  {
+    "id": "kg-clinical-decision",
+    "title": "Knowledge Graph Integration for Clinical Decision Support",
+    "description": "We constructed and curated a large-scale biomedical knowledge graph linking SNOMED CT, OMIM, DrugBank, and institutional EHR data to provide interpretable, evidence-grounded recommendations to clinicians at the point of care. The system was deployed in a pilot study at two partner hospitals and demonstrated measurable improvements in guideline adherence.",
+    "status": "completed",
+    "startYear": 2019,
+    "endYear": 2023,
+    "tags": ["Knowledge Graph", "Clinical Decision Support", "SNOMED CT", "Ontology", "Interpretability"],
+    "fundingAgency": "Health Canada",
+    "icon": "network"
+  }
+]
