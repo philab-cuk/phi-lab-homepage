@@ -1,0 +1,143 @@
+[
+  {
+    "id": "kim2026-prov-llm",
+    "title": "Provenance-Aware Large Language Models for Clinical Note Summarization",
+    "authors": ["Hyojung Kim", "Jiyeon Lee", "Seojun Ryu"],
+    "venue": "Journal of the American Medical Informatics Association (JAMIA)",
+    "year": 2026,
+    "type": "journal",
+    "doi": "10.1093/jamia/ocaf042",
+    "abstract": "We introduce a provenance-aware prompting framework that traces the origin of every claim in LLM-generated clinical summaries back to source note spans. Experiments on MIMIC-IV discharge summaries show a 22% reduction in hallucinated clinical facts compared to standard instruction-tuned baselines.",
+    "tags": ["provenance", "LLM", "clinical NLP", "hallucination", "MIMIC-IV"]
+  },
+  {
+    "id": "ryu2026-fedehr",
+    "title": "FedEHR: Federated Fine-Tuning of Clinical Language Models Across Hospital Systems",
+    "authors": ["Seojun Ryu", "Hyojung Kim"],
+    "venue": "ACM Conference on Health, Inference, and Learning (CHIL)",
+    "year": 2026,
+    "type": "conference",
+    "doi": "10.1145/3689490.3690012",
+    "abstract": "FedEHR presents a communication-efficient federated learning protocol for fine-tuning transformer-based clinical language models across heterogeneous hospital EHR systems without centralizing patient data. We demonstrate competitive performance with centrally trained models on ICD coding and clinical event prediction tasks.",
+    "tags": ["federated learning", "EHR", "privacy", "clinical NLP", "ICD coding"]
+  },
+  {
+    "id": "lee2025-multilingual",
+    "title": "Cross-Lingual Named Entity Recognition for Clinical Text in Low-Resource Settings",
+    "authors": ["Jiyeon Lee", "Hyojung Kim"],
+    "venue": "Findings of the Association for Computational Linguistics (ACL Findings)",
+    "year": 2025,
+    "type": "conference",
+    "doi": "10.18653/v1/2025.findings-acl.318",
+    "abstract": "This paper investigates cross-lingual transfer for clinical NER in Korean and Japanese, where annotated clinical data is extremely scarce. We propose a structure-aware alignment objective that improves entity boundary detection by 8.4 F1 points over direct multilingual fine-tuning.",
+    "tags": ["NER", "multilingual NLP", "clinical text", "low-resource", "transfer learning"]
+  },
+  {
+    "id": "kim2025-phenotype",
+    "title": "Automated EHR Phenotyping Using Contrastive Learning on Structured and Unstructured Data",
+    "authors": ["Hyojung Kim", "Kyungmin Choi", "Dohyun Han"],
+    "venue": "Journal of Biomedical Informatics",
+    "year": 2025,
+    "type": "journal",
+    "doi": "10.1016/j.jbi.2025.104631",
+    "abstract": "We develop a contrastive learning approach that jointly encodes ICD codes, lab values, and free-text notes to produce patient representations for large-scale phenotype discovery. Our method outperforms existing PheWAS pipelines on five chronic disease cohorts from the All of Us Research Program.",
+    "tags": ["EHR phenotyping", "contrastive learning", "PheWAS", "structured data", "clinical NLP"]
+  },
+  {
+    "id": "park2025-kg",
+    "title": "Ontology-Guided Knowledge Graph Construction from Clinical Guidelines",
+    "authors": ["Minji Park", "Hyojung Kim"],
+    "venue": "Workshop on Knowledge Graph Generation From Text (Text2KG) at ESWC",
+    "year": 2025,
+    "type": "workshop",
+    "abstract": "We describe an information extraction pipeline that constructs patient-actionable knowledge graphs from clinical practice guidelines by grounding extracted relations to SNOMED CT and RxNorm. Evaluation on AHA heart failure guidelines shows 91% relation precision when combined with an LLM re-ranking step.",
+    "tags": ["knowledge graph", "ontology", "clinical guidelines", "information extraction", "SNOMED CT"]
+  },
+  {
+    "id": "han2024-icd",
+    "title": "Automated ICD-10 Coding with Hierarchical Label Attention and Negation Awareness",
+    "authors": ["Dohyun Han", "Hyojung Kim"],
+    "venue": "Journal of the American Medical Informatics Association (JAMIA)",
+    "year": 2024,
+    "type": "journal",
+    "doi": "10.1093/jamia/ocad198",
+    "abstract": "We propose a hierarchical label attention network that leverages the ICD code tree structure and a negation-detection sub-module to reduce false-positive code assignments in automated clinical coding. The system achieves state-of-the-art micro-F1 on the MIMIC-III full-code benchmark.",
+    "tags": ["ICD coding", "clinical coding", "label attention", "negation", "MIMIC-III"]
+  },
+  {
+    "id": "ryu2024-dp",
+    "title": "Differentially Private Pretraining of Clinical BERT with Adaptive Clipping",
+    "authors": ["Seojun Ryu", "Hyojung Kim"],
+    "venue": "Proceedings of the AAAI Conference on Artificial Intelligence",
+    "year": 2024,
+    "type": "conference",
+    "doi": "10.1609/aaai.v38i14.29433",
+    "abstract": "We introduce an adaptive gradient clipping strategy for differentially private pretraining of BERT-style encoders on EHR corpora, reducing the privacy-utility trade-off gap by 18% compared to fixed-clipping DP-SGD. Privacy analysis confirms (ε=8, δ=10⁻⁵)-DP under the Rényi accounting framework.",
+    "tags": ["differential privacy", "BERT", "EHR", "privacy-preserving", "pretraining"]
+  },
+  {
+    "id": "cho2023-xai",
+    "title": "Explainable Sepsis Risk Prediction in the ICU Using Temporal Concept Bottleneck Models",
+    "authors": ["Yuna Cho", "Hyojung Kim"],
+    "venue": "AMIA Annual Symposium",
+    "year": 2023,
+    "type": "conference",
+    "doi": "10.5555/3665232.3665289",
+    "abstract": "We adapt Concept Bottleneck Models to time-series ICU data to generate clinician-interpretable explanations for sepsis risk scores derived from continuous vital sign streams and lab trends. A user study with 12 ICU nurses shows significantly higher trust and actionability compared to SHAP-based explanations.",
+    "tags": ["explainability", "sepsis", "ICU", "concept bottleneck", "clinical decision support"]
+  },
+  {
+    "id": "kim2023-prov-graph",
+    "title": "A Data Provenance Graph Model for Reproducible Clinical AI Pipelines",
+    "authors": ["Hyojung Kim"],
+    "venue": "VLDB Workshop on Tabular Data, ML & Knowledge Graphs (TMDL)",
+    "year": 2023,
+    "type": "workshop",
+    "abstract": "This position paper formalizes a data provenance graph model tailored to multi-step clinical AI pipelines, capturing dataset splits, preprocessing transforms, and model checkpoints as typed provenance nodes. We demonstrate how the model supports audit, reproducibility, and regulatory compliance tracing under EU AI Act requirements.",
+    "tags": ["data provenance", "reproducibility", "clinical AI", "pipeline", "compliance"]
+  },
+  {
+    "id": "han2022-text-mining",
+    "title": "Extracting Social Determinants of Health from Emergency Department Notes with Weak Supervision",
+    "authors": ["Dohyun Han", "Yuna Cho", "Hyojung Kim"],
+    "venue": "Journal of the American Medical Informatics Association (JAMIA)",
+    "year": 2022,
+    "type": "journal",
+    "doi": "10.1093/jamia/ocac037",
+    "abstract": "We construct a weakly supervised NER model for social determinants of health (SDoH) using a curated lexicon and distant supervision from structured fields, eliminating the need for expensive sentence-level annotation. Across three emergency department corpora, the model achieves macro-F1 > 0.79 for housing instability, food insecurity, and transportation barriers.",
+    "tags": ["SDoH", "weak supervision", "NER", "emergency medicine", "social determinants"]
+  },
+  {
+    "id": "cho2022-readmit",
+    "title": "Multimodal 30-Day Readmission Prediction Combining Discharge Notes and Structured EHR Features",
+    "authors": ["Yuna Cho", "Hyojung Kim"],
+    "venue": "IEEE EMBC",
+    "year": 2022,
+    "type": "conference",
+    "doi": "10.1109/EMBC48229.2022.9871432",
+    "abstract": "A cross-modal attention fusion architecture combines ClinicalBERT embeddings of discharge notes with tabular EHR features for 30-day all-cause readmission prediction. The multimodal model improves AUROC by 3.1 points over text-only and structured-only baselines on a 40,000-patient cohort.",
+    "tags": ["readmission prediction", "multimodal", "EHR", "discharge notes", "cross-modal attention"]
+  },
+  {
+    "id": "kim2021-prov-survey",
+    "title": "Data Provenance in Clinical Machine Learning: A Systematic Review and Research Agenda",
+    "authors": ["Hyojung Kim", "Dohyun Han"],
+    "venue": "npj Digital Medicine",
+    "year": 2021,
+    "type": "journal",
+    "doi": "10.1038/s41746-021-00524-8",
+    "abstract": "This systematic review synthesizes 87 studies on data provenance methods applied to clinical machine learning pipelines, identifying key gaps in standards adoption, tooling, and regulatory alignment. We propose a five-dimension research agenda covering tracking granularity, interoperability, real-time auditing, privacy-preserving provenance, and clinical workflow integration.",
+    "tags": ["data provenance", "systematic review", "clinical ML", "fairness", "reproducibility"]
+  },
+  {
+    "id": "kim2020-ehr-nlp",
+    "title": "Benchmarking Pre-trained Language Models on Clinical Information Extraction Tasks",
+    "authors": ["Hyojung Kim", "Yuna Cho", "Byungho Shin"],
+    "venue": "Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)",
+    "year": 2020,
+    "type": "conference",
+    "doi": "10.18653/v1/2020.emnlp-main.764",
+    "abstract": "We conduct a systematic benchmark of six pre-trained language models — including BERT, BioBERT, and ClinicalBERT — across eight clinical NLP tasks spanning NER, relation extraction, and clinical question answering. Results reveal that domain-adaptive pretraining on clinical notes outperforms general biomedical pretraining for tasks involving discharge summaries and ICU notes.",
+    "tags": ["BERT", "benchmark", "clinical NLP", "information extraction", "pretraining"]
+  }
+]
