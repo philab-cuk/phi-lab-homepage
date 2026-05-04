@@ -1,0 +1,110 @@
+{
+  "current": [
+    {
+      "id": "hkim",
+      "name": "Hyojung Kim",
+      "role": "Principal Investigator",
+      "degree": "Ph.D.",
+      "year": null,
+      "photo": "https://api.dicebear.com/7.x/initials/svg?seed=Hyojung%20Kim&backgroundColor=1d4ed8&fontFamily=Arial&fontSize=40&fontWeight=700&textColor=ffffff",
+      "email": "hyojung.kim@university.edu",
+      "researchInterests": ["Clinical NLP", "Data Provenance", "Health AI", "EHR Phenotyping"],
+      "linkedin": "https://linkedin.com",
+      "googleScholar": "https://scholar.google.com",
+      "status": "current",
+      "bio": "Professor Kim leads the PHI Lab with a focus on trustworthy clinical AI, data provenance engineering, and natural language processing for electronic health records. She received her Ph.D. from Stanford University and held a postdoctoral fellowship at MIT CSAIL before joining the faculty."
+    },
+    {
+      "id": "sryu",
+      "name": "Seojun Ryu",
+      "role": "PhD Student",
+      "degree": "Ph.D. Candidate",
+      "year": 3,
+      "photo": "https://api.dicebear.com/7.x/initials/svg?seed=Seojun%20Ryu&backgroundColor=1e40af&fontFamily=Arial&fontSize=40&fontWeight=700&textColor=ffffff",
+      "email": "s.ryu@university.edu",
+      "researchInterests": ["Federated Learning", "Privacy-Preserving AI", "EHR"],
+      "linkedin": "https://linkedin.com",
+      "googleScholar": "https://scholar.google.com",
+      "status": "current"
+    },
+    {
+      "id": "jlee",
+      "name": "Jiyeon Lee",
+      "role": "PhD Student",
+      "degree": "Ph.D. Student",
+      "year": 2,
+      "photo": "https://api.dicebear.com/7.x/initials/svg?seed=Jiyeon%20Lee&backgroundColor=1e3a8a&fontFamily=Arial&fontSize=40&fontWeight=700&textColor=ffffff",
+      "email": "j.lee@university.edu",
+      "researchInterests": ["Clinical NER", "Large Language Models", "Multilingual NLP"],
+      "googleScholar": "https://scholar.google.com",
+      "status": "current"
+    },
+    {
+      "id": "kchoi",
+      "name": "Kyungmin Choi",
+      "role": "Master's Student",
+      "degree": "M.S. Student",
+      "year": 2,
+      "photo": "https://api.dicebear.com/7.x/initials/svg?seed=Kyungmin%20Choi&backgroundColor=1d4ed8&fontFamily=Arial&fontSize=40&fontWeight=700&textColor=ffffff",
+      "email": "k.choi@university.edu",
+      "researchInterests": ["Precision Medicine", "Genomics", "Multi-modal Learning"],
+      "linkedin": "https://linkedin.com",
+      "status": "current"
+    },
+    {
+      "id": "mpark",
+      "name": "Minji Park",
+      "role": "Master's Student",
+      "degree": "M.S. Student",
+      "year": 1,
+      "photo": "https://api.dicebear.com/7.x/initials/svg?seed=Minji%20Park&backgroundColor=2563eb&fontFamily=Arial&fontSize=40&fontWeight=700&textColor=ffffff",
+      "email": "m.park@university.edu",
+      "researchInterests": ["Knowledge Graphs", "Clinical Decision Support", "Ontologies"],
+      "linkedin": "https://linkedin.com",
+      "status": "current"
+    }
+  ],
+  "alumni": [
+    {
+      "id": "dhan",
+      "name": "Dohyun Han",
+      "role": "PhD Alumnus",
+      "degree": "Ph.D.",
+      "graduatedYear": 2024,
+      "photo": "https://api.dicebear.com/7.x/initials/svg?seed=Dohyun%20Han&backgroundColor=374151&fontFamily=Arial&fontSize=40&fontWeight=700&textColor=ffffff",
+      "email": "dohyun.han@hospital.org",
+      "researchInterests": ["Clinical Text Mining", "ICD Coding Automation"],
+      "currentAffiliation": "Research Scientist, Samsung Medical Center AI Lab",
+      "linkedin": "https://linkedin.com",
+      "googleScholar": "https://scholar.google.com",
+      "status": "alumni"
+    },
+    {
+      "id": "ycho",
+      "name": "Yuna Cho",
+      "role": "PhD Alumna",
+      "degree": "Ph.D.",
+      "graduatedYear": 2023,
+      "photo": "https://api.dicebear.com/7.x/initials/svg?seed=Yuna%20Cho&backgroundColor=374151&fontFamily=Arial&fontSize=40&fontWeight=700&textColor=ffffff",
+      "email": "yuna.cho@company.ai",
+      "researchInterests": ["Explainable AI", "Clinical Risk Prediction"],
+      "currentAffiliation": "Applied Scientist, Kakao Healthcare",
+      "linkedin": "https://linkedin.com",
+      "googleScholar": "https://scholar.google.com",
+      "status": "alumni"
+    },
+    {
+      "id": "bshin",
+      "name": "Byungho Shin",
+      "role": "Master's Alumnus",
+      "degree": "M.S.",
+      "graduatedYear": 2023,
+      "photo": "https://api.dicebear.com/7.x/initials/svg?seed=Byungho%20Shin&backgroundColor=374151&fontFamily=Arial&fontSize=40&fontWeight=700&textColor=ffffff",
+      "email": "byungho.shin@hospital.kr",
+      "researchInterests": ["Medical Imaging AI", "Radiology NLP"],
+      "currentAffiliation": "ML Engineer, Asan Medical Center",
+      "linkedin": "https://linkedin.com",
+      "status": "alumni"
+    }
+  ]
+}
