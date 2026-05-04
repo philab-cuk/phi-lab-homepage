@@ -1,0 +1,56 @@
+[
+  {
+    "id": "hi501",
+    "code": "HI 501",
+    "title": "Foundations of Health Informatics",
+    "semester": "Fall 2024",
+    "level": "graduate",
+    "description": "An introductory graduate course covering core concepts of health informatics including clinical data standards (HL7, FHIR), electronic health record systems, interoperability frameworks, and the role of information technology in modern healthcare delivery.",
+    "tags": ["EHR", "FHIR", "Interoperability", "Clinical Data"]
+  },
+  {
+    "id": "hi601",
+    "code": "HI 601",
+    "title": "Clinical Natural Language Processing",
+    "semester": "Spring 2024",
+    "level": "graduate",
+    "description": "Advanced methods for extracting structured knowledge from clinical text. Topics include named entity recognition, relation extraction, de-identification, transformer-based models (BERT, ClinicalBERT), and evaluation on benchmark clinical NLP corpora.",
+    "tags": ["NLP", "Transformers", "Named Entity Recognition", "Clinical Text"]
+  },
+  {
+    "id": "hi302",
+    "code": "HI 302",
+    "title": "Introduction to Biomedical Data Science",
+    "semester": "Fall 2024",
+    "level": "undergraduate",
+    "description": "A hands-on introduction to data science techniques applied to biomedical problems. Students learn Python-based data wrangling, visualization, and machine learning using real-world clinical and genomic datasets.",
+    "tags": ["Python", "Machine Learning", "Data Visualization", "Genomics"]
+  },
+  {
+    "id": "hi620",
+    "code": "HI 620",
+    "title": "Data Provenance and Reproducibility in Health AI",
+    "semester": "Spring 2025",
+    "level": "graduate",
+    "description": "Examines provenance frameworks, lineage tracking, and reproducibility standards for AI systems deployed in clinical settings. Covers W3C PROV, audit logging, explainability requirements, and regulatory considerations for health AI.",
+    "tags": ["Provenance", "Explainability", "Reproducibility", "Health AI", "Regulation"]
+  },
+  {
+    "id": "hi210",
+    "code": "HI 210",
+    "title": "Health Data Management",
+    "semester": "Spring 2024",
+    "level": "undergraduate",
+    "description": "Principles of managing health data throughout its lifecycle. Topics include database design for clinical systems, data quality assessment, privacy and HIPAA compliance, data governance policies, and practical SQL skills for querying clinical datasets.",
+    "tags": ["Database", "HIPAA", "Data Quality", "SQL", "Privacy"]
+  },
+  {
+    "id": "hi710",
+    "code": "HI 710",
+    "title": "Advanced Topics: Federated Learning in Healthcare",
+    "semester": "Fall 2023",
+    "level": "graduate",
+    "description": "A seminar-style course on privacy-preserving machine learning for healthcare. Covers federated learning architectures, differential privacy, secure aggregation, and practical challenges of multi-site clinical model training across institutional boundaries.",
+    "tags": ["Federated Learning", "Differential Privacy", "Multi-site Studies", "Privacy-Preserving ML"]
+  }
+]

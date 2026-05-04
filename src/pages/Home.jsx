@@ -8,6 +8,7 @@ import {
   ExternalLink,
   ChevronRight,
 } from 'lucide-react'
+import { useLanguage } from '../i18n/LanguageContext.jsx'
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -162,6 +163,9 @@ function NewsCard({ date, category, title, body }) {
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default function Home() {
+  const { t } = useLanguage()
+  const h = t.hero
+
   return (
     <>
       {/* ── Hero ── */}
@@ -183,33 +187,33 @@ export default function Home() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 md:py-36">
           <div className="max-w-3xl">
             <span className="inline-block bg-blue-600/40 border border-blue-400/40 text-blue-100 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
-              Research Lab &mdash; Health Informatics
+              {h.badge}
             </span>
             <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-4 tracking-tight">
-              PHI Lab
+              {h.title}
             </h1>
             <p className="text-blue-100 text-xl md:text-2xl font-medium mb-3 leading-snug">
-              Precision &amp; Provenance Health Informatics Lab
+              {h.subtitle}
             </p>
             <p className="text-blue-200 text-base mb-2">
-              Led by <span className="font-semibold text-white">Prof. Hyojung Kim</span>
+              {h.lead}{' '}
+              <span className="font-semibold text-white">{h.leadName}</span>
             </p>
             <p className="text-blue-200/80 text-sm mb-10 max-w-xl leading-relaxed">
-              We develop trustworthy, data-driven methods at the intersection of clinical informatics,
-              machine learning, and provenance engineering to improve health outcomes.
+              {h.body}
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
                 to="/research"
                 className="inline-flex items-center gap-2 bg-white text-blue-800 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors shadow-sm text-sm"
               >
-                Explore Research <ArrowRight size={16} />
+                {h.ctaResearch} <ArrowRight size={16} />
               </Link>
               <Link
                 to="/about"
                 className="inline-flex items-center gap-2 bg-blue-700/50 border border-blue-400/50 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-600/50 transition-colors text-sm"
               >
-                About the Lab <ChevronRight size={16} />
+                {h.ctaAbout} <ChevronRight size={16} />
               </Link>
             </div>
           </div>
