@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PHI Lab @ CUK — Precision & Provenance Health Informatics Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    .section-heading {
+      border-left: 3px solid #0f766e;
+      padding-left: 12px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 1.5rem;
+    }
+    a { color: #0f766e; }
+    a:hover { text-decoration: underline; }
+    .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 1px solid #d1d5db;
+      border-radius: 2px;
+      color: #4b5563;
+      margin-right: 4px;
+      margin-top: 4px;
+    }
+    .pub-item {
+      padding: 14px 0;
+      border-bottom: 1px solid #e5e7eb;
+      line-height: 1.6;
+    }
+    .pub-item:last-child { border-bottom: none; }
+  </style>
+</head>
+<body class="bg-white text-gray-900 text-[15px]">
+
+<!-- NAV -->
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="font-bold text-[#0f766e] text-base tracking-tight">PHI Lab</span>
+      <span class="text-gray-300 text-sm">|</span>
+      <span class="text-gray-500 text-sm hidden sm:block">The Catholic University of Korea</span>
+    </div>
+    <nav class="flex items-center gap-5 text-sm text-gray-600 font-medium">
+      <a href="#research" class="hover:text-[#0f766e] transition-colors">Research</a>
+      <a href="#publications" class="hover:text-[#0f766e] transition-colors">Publications</a>
+      <a href="#members" class="hover:text-[#0f766e] transition-colors">Members</a>
+      <a href="#lectures" class="hover:text-[#0f766e] transition-colors">Lectures</a>
+      <a href="#about" class="hover:text-[#0f766e] transition-colors">About</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="bg-[#f8fafc] border-b border-gray-200 py-10">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-xs font-medium text-[#0f766e] uppercase tracking-wider mb-2">Department of Biomedical Software Engineering · The Catholic University of Korea</p>
+    <h1 class="text-3xl font-bold text-gray-900 mb-1 leading-tight">PHI Lab @ CUK</h1>
+    <p class="text-gray-500 text-base mb-3">Precision &amp; Provenance Health Informatics Lab</p>
+    <p class="text-gray-700 leading-relaxed max-w-2xl mb-6">
+      We bridge data science and implementation science to generate real-world evidence from clinical data. Our work spans knowledge representation, secondary use of EHR and claims data, and AI-driven phenotyping — with a focus on cancer, pharmacovigilance, and health equity.
+    </p>
+    <div class="flex items-center gap-8 text-sm text-gray-500">
+      <div><span class="text-xl font-bold text-gray-900">18</span>&nbsp; Active Projects</div>
+      <div class="text-gray-300">|</div>
+      <div><span class="text-xl font-bold text-gray-900">16</span>&nbsp; Publications</div>
+      <div class="text-gray-300">|</div>
+      <div><span class="text-xl font-bold text-gray-900">12+</span>&nbsp; Collaborating Institutions</div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH PILLARS -->
+<section id="research" class="py-12 bg-white border-b border-gray-100">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="section-heading">Research Areas</h2>
+    <div class="grid grid-cols-3 gap-8">
+      <div>
+        <h3 class="font-semibold text-gray-900 mb-2">Knowledge Representation</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Data modeling, biomedical ontology, clinical data engineering, pipeline construction, and governance for precision medicine applications. Includes clinical genome data modeling (cGDM) and interoperability frameworks.
+        </p>
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-900 mb-2">Real-World Data (RWD)</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Secondary use of electronic health records (EHR), clinical data warehouses (CDW), FAERS, and Korean claims data (HIRA). Registry construction, cohort definition, and data quality management for multi-institutional studies.
+        </p>
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-900 mb-2">Real-World Evidence (RWE)</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Scientific data processing for evidence generation and causal inference. Pharmacovigilance signal detection, treatment effectiveness evaluation, and integration of social determinants of health with clinical outcomes.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACTIVE PROJECTS -->
+<section id="projects" class="py-12 bg-[#f8fafc] border-b border-gray-200">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="section-heading">Active Projects</h2>
+    <div class="grid grid-cols-2 gap-4">
+
+      <!-- Project 1 -->
+      <div class="bg-white border border-gray-200 p-5">
+        <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">Samsung Medical Center · Kakao Healthcare</p>
+        <h3 class="font-semibold text-gray-900 text-sm leading-snug mb-2">
+          MOMENTUM Study<br>
+          <span class="font-normal text-gray-500">유방암 대사 취약성 × 내분비치료 AI 분석</span>
+        </h3>
+        <p class="text-gray-600 text-xs leading-relaxed mb-3">
+          Exploring the intersection of metabolic vulnerability and endocrine therapy in breast cancer through AI techniques and real-world data from multi-institutions in Korea.
+        </p>
+        <div>
+          <span class="tag">RWD</span>
+          <span class="tag">ML</span>
+          <span class="tag">Multi-inst.</span>
+          <span class="tag">Breast Cancer</span>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="bg-white border border-gray-200 p-5">
+        <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">NRF Funded</p>
+        <h3 class="font-semibold text-gray-900 text-sm leading-snug mb-2">
+          AI-Based Cancer Trajectory Recontextualization<br>
+          <span class="font-normal text-gray-500">개인 중심 표현형 방법론</span>
+        </h3>
+        <p class="text-gray-600 text-xs leading-relaxed mb-3">
+          Methodology for person-centered phenotyping applied to breast and colorectal cancer real-world data. Focuses on DL-based trajectory modeling and data-information value chain construction.
+        </p>
+        <div>
+          <span class="tag">RWD</span>
+          <span class="tag">DL</span>
+          <span class="tag">NRF</span>
+          <span class="tag">Phenotyping</span>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="bg-white border border-gray-200 p-5">
+        <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">Kakao Healthcare</p>
+        <h3 class="font-semibold text-gray-900 text-sm leading-snug mb-2">
+          LLM-based Clinical NER<br>
+          <span class="font-normal text-gray-500">임상 텍스트 개체명 인식 통합모델</span>
+        </h3>
+        <p class="text-gray-600 text-xs leading-relaxed mb-3">
+          Integrated named entity recognition model for clinical text using large language models. Research includes journal publication and patent application.
+        </p>
+        <div>
+          <span class="tag">LLM</span>
+          <span class="tag">NER</span>
+          <span class="tag">NLP</span>
+          <span class="tag">Patent</span>
+        </div>
+      </div>
+
+      <!-- Project 4 -->
+      <div class="bg-white border border-gray-200 p-5">
+        <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">PHI Lab Internal</p>
+        <h3 class="font-semibold text-gray-900 text-sm leading-snug mb-2">
+          FAERS Dynamic Deduplication<br>
+          <span class="font-normal text-gray-500">FAERS 데이터 중복 제거 방법론</span>
+        </h3>
+        <p class="text-gray-600 text-xs leading-relaxed mb-3">
+          Research on methodology for dynamic deduplication of FDA Adverse Event Reporting System (FAERS) data to improve pharmacovigilance signal detection accuracy.
+        </p>
+        <div>
+          <span class="tag">FAERS</span>
+          <span class="tag">RWD</span>
+          <span class="tag">Pharmacovigilance</span>
+        </div>
+      </div>
+
+      <!-- Project 5 -->
+      <div class="bg-white border border-gray-200 p-5">
+        <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">Chonnam National University · College of Nursing</p>
+        <h3 class="font-semibold text-gray-900 text-sm leading-snug mb-2">
+          SJS-TEN Pharmacovigilance<br>
+          <span class="font-normal text-gray-500">스티븐스-존슨 증후군 이상반응 연구</span>
+        </h3>
+        <p class="text-gray-600 text-xs leading-relaxed mb-3">
+          Adverse drug reaction research on Stevens-Johnson Syndrome and Toxic Epidermal Necrolysis using FDA FAERS and Korean HIRA claims data.
+        </p>
+        <div>
+          <span class="tag">FAERS</span>
+          <span class="tag">HIRA</span>
+          <span class="tag">SJS-TEN</span>
+        </div>
+      </div>
+
+      <!-- Project 6 -->
+      <div class="bg-white border border-gray-200 p-5">
+        <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">Samsung Medical Center · U. Cincinnati · Harvard · Tufts · SKKU</p>
+        <h3 class="font-semibold text-gray-900 text-sm leading-snug mb-2">
+          Social Determinants &amp; Breast Cancer Mortality<br>
+          <span class="font-normal text-gray-500">사회결정요인 × 유방암 사망률</span>
+        </h3>
+        <p class="text-gray-600 text-xs leading-relaxed mb-3">
+          Breast cancer mortality research integrating clinical and public data by residential area. Uses GIS and geographically weighted regression (GWR) methods.
+        </p>
+        <div>
+          <span class="tag">RWD</span>
+          <span class="tag">GIS/GWR</span>
+          <span class="tag">Multi-inst.</span>
+          <span class="tag">Public Data</span>
+        </div>
+      </div>
+
+      <!-- Project 7 -->
+      <div class="bg-white border border-gray-200 p-5">
+        <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">Catholic University · Dept. of Biomedical Sciences</p>
+        <h3 class="font-semibold text-gray-900 text-sm leading-snug mb-2">
+          Antibiotic Exposure &amp; Neurodevelopmental Disorders<br>
+          <span class="font-normal text-gray-500">영아기 항생제 처방 → ADHD·ASD 위험도</span>
+        </h3>
+        <p class="text-gray-600 text-xs leading-relaxed mb-3">
+          Effect of excessive antibiotic prescription within the first 2 years of life on neurodevelopmental disorders including ADHD and autism spectrum disorder.
+        </p>
+        <div>
+          <span class="tag">ML</span>
+          <span class="tag">Pediatrics</span>
+          <span class="tag">ADHD</span>
+        </div>
+      </div>
+
+      <!-- Project 8 -->
+      <div class="bg-white border border-gray-200 p-5">
+        <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">Sookmyung Women's University · College of Pharmacy</p>
+        <h3 class="font-semibold text-gray-900 text-sm leading-snug mb-2">
+          Ovulation Induction Agents Pharmacovigilance<br>
+          <span class="font-normal text-gray-500">배란유도제 FAERS 약물감시 연구</span>
+        </h3>
+        <p class="text-gray-600 text-xs leading-relaxed mb-3">
+          Pharmacovigilance research on adverse drug reactions to ovulation induction agents based on FDA FAERS database analysis.
+        </p>
+        <div>
+          <span class="tag">FAERS</span>
+          <span class="tag">Pharmacovigilance</span>
+          <span class="tag">OB/GYN</span>
+        </div>
+      </div>
+
+    </div>
+    <p class="text-sm text-gray-400 mt-4">Showing 8 of 18 active projects · <a href="#" class="text-[#0f766e]">View all →</a></p>
+  </div>
+</section>
+
+<!-- PUBLICATIONS -->
+<section id="publications" class="py-12 bg-white border-b border-gray-100">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="section-heading">Recent Publications</h2>
+
+    <div class="pub-item">
+      <span class="text-xs font-medium text-white bg-[#0f766e] px-2 py-0.5 rounded-sm mr-2">2026</span>
+      Choo H, Lee D, Shin SY, Lee J, Lee D, Kim E, …&amp; <strong>Kim HJ</strong>.
+      "Enhancing COVID-19 Screening Models With Epidemiological and Mobility Features: Machine-Learning Model Study."
+      <em>JMIR AI</em>, 5(1), e54956.
+      <a href="https://ai.jmir.org/2026/1/e54956/" class="ml-1 text-xs">[Link]</a>
+    </div>
+
+    <div class="pub-item">
+      <span class="text-xs font-medium text-white bg-[#0f766e] px-2 py-0.5 rounded-sm mr-2">2025</span>
+      Kim MJ, <strong>Kim HJ</strong>, Kim JY, Shin J, &amp; Park YH.
+      "Effectiveness of Adjuvant Capecitabine in Triple-Negative Breast Cancer Patients With Residual Disease After Neoadjuvant Treatment: A Real-World Evidence Study in Korea."
+      <em>Clinical Breast Cancer</em>.
+      <a href="https://pubmed.ncbi.nlm.nih.gov/39909791/" class="ml-1 text-xs">[PubMed]</a>
+    </div>
+
+    <div class="pub-item">
+      <span class="text-xs font-medium text-white bg-gray-400 px-2 py-0.5 rounded-sm mr-2">2024</span>
+      <strong>Kim HJ</strong>†, Yoon JH†, &amp; Lee KH.
+      "Investigating the Safety Profile of Fast-Track COVID-19 Drugs Using the FDA Adverse Event Reporting System Database: A Comparative Observational Study."
+      <em>Pharmacoepidemiology and Drug Safety</em>, 33(11), e70043.
+      <a href="https://pubmed.ncbi.nlm.nih.gov/39533148/" class="ml-1 text-xs">[PubMed]</a>
+    </div>
+
+    <div class="pub-item">
+      <span class="text-xs font-medium text-white bg-gray-400 px-2 py-0.5 rounded-sm mr-2">2024</span>
+      <strong>Kim HJ</strong>†, Yoon JH†, &amp; Park YH.
+      "Long-term hepatobiliary disorder associated with trastuzumab emtansine: pharmacovigilance study using the FDA Adverse Event Reporting System database."
+      <em>Scientific Reports</em>, 14(1), 19587.
+      <a href="https://www.nature.com/articles/s41598-024-69614-x" class="ml-1 text-xs">[Link]</a>
+    </div>
+
+    <div class="pub-item">
+      <span class="text-xs font-medium text-white bg-gray-400 px-2 py-0.5 rounded-sm mr-2">2024</span>
+      Kang D, Park S, <strong>Kim HJ</strong>, Lee J, Han J, Kim SW, …&amp; Park YH.
+      "Comprehensive Young Age Breast Cancer registry from clinical, genomics, and patient-reported outcomes measured with 15 years follow-up: the CHARM cohort profile."
+      <em>Breast Cancer</em>, 31(3), 467–475.
+      <a href="https://link.springer.com/article/10.1007/s12282-024-01559-5" class="ml-1 text-xs">[Link]</a>
+    </div>
+
+    <div class="pub-item">
+      <span class="text-xs font-medium text-white bg-gray-400 px-2 py-0.5 rounded-sm mr-2">2023</span>
+      Choe S, Lee S, Park CH, Lee JH, <strong>Kim HJ</strong>, Byeon SJ, …&amp; Kim JH.
+      "Development and Application of an Active Pharmacovigilance Framework Based on Electronic Healthcare Records from Multiple Centers in Korea."
+      <em>Drug Safety</em>, 46(7), 647–660.
+      <a href="https://pubmed.ncbi.nlm.nih.gov/37243963/" class="ml-1 text-xs">[PubMed]</a>
+    </div>
+
+    <div class="pub-item">
+      <span class="text-xs font-medium text-white bg-gray-400 px-2 py-0.5 rounded-sm mr-2">2023</span>
+      Kim MJ†, <strong>Kim HJ</strong>†, Kang D, Ahn HK, Shin S, Park S, Cho J, &amp; Park Y.
+      "Preliminary attainability assessment of real-world data for answering major clinical research questions in breast cancer brain metastasis: framework development and validation."
+      <em>Journal of Medical Internet Research</em>.
+      <a href="https://doi.org/10.2196/43359" class="ml-1 text-xs">[DOI]</a>
+    </div>
+
+    <div class="pub-item">
+      <span class="text-xs font-medium text-white bg-gray-400 px-2 py-0.5 rounded-sm mr-2">2022</span>
+      Lee KH, Kang DY, Kim HH, Kim YJ, <strong>Kim HJ</strong>, Kim JH, &amp; Kang HR.
+      "Reducing severe cutaneous adverse and type B adverse drug reactions using pre-stored human leukocyte antigen genotypes."
+      <em>Clinical and Translational Allergy</em>, 12(1), e12098.
+      <a href="https://onlinelibrary.wiley.com/doi/10.1002/clt2.12098" class="ml-1 text-xs">[Link]</a>
+    </div>
+
+    <p class="text-sm text-gray-400 mt-2 pt-4">† Co-first authors · <a href="#" class="text-[#0f766e]">View all 16 publications + 24 conference presentations →</a></p>
+  </div>
+</section>
+
+<!-- LAB MEMBERS -->
+<section id="members" class="py-12 bg-[#f8fafc] border-b border-gray-200">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="section-heading">Lab Members</h2>
+
+    <!-- PI -->
+    <div class="bg-white border border-gray-200 p-6 mb-6 flex gap-6 items-start">
+      <div class="w-16 h-16 bg-gray-100 border border-gray-200 flex-shrink-0 flex items-center justify-center text-gray-400 text-xs">Photo</div>
+      <div>
+        <h3 class="font-bold text-gray-900 text-base mb-0.5">Hyo Jung Kim, PhD</h3>
+        <p class="text-sm text-gray-600 mb-0.5">Assistant Professor</p>
+        <p class="text-sm text-gray-500 mb-2">Department of Biomedical Software Engineering, The Catholic University of Korea</p>
+        <p class="text-sm text-gray-600 leading-relaxed mb-2">
+          Clinical informaticist with over 20 years of professional experience across clinical practice, EHR architecture, and academic research. PhD in Biomedical Informatics, Seoul National University (2020). Former ML/LLM Senior Data Engineer at Kakao Healthcare; postdoctoral researcher at Samsung Medical Center and Sungkyunkwan University SAIHST.
+        </p>
+        <p class="text-xs text-gray-400">Member, 2nd Data Disclosure and Utilization Committee, CODA, Korea National Institute of Health</p>
+        <p class="text-xs mt-1">
+          <a href="mailto:hyojung.kim@catholic.ac.kr" class="text-[#0f766e]">hyojung.kim@catholic.ac.kr</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Students -->
+    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Undergraduate Research Students</h3>
+    <div class="grid grid-cols-4 gap-3">
+      <div class="bg-white border border-gray-200 p-4 text-center">
+        <div class="w-10 h-10 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-gray-400 text-xs">–</div>
+        <p class="text-sm font-medium text-gray-900">Jun Seok Her</p>
+        <p class="text-xs text-gray-400 mt-0.5">Undergraduate Researcher</p>
+      </div>
+      <div class="bg-white border border-gray-200 p-4 text-center">
+        <div class="w-10 h-10 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-gray-400 text-xs">–</div>
+        <p class="text-sm font-medium text-gray-900">Jin Woo Yoo</p>
+        <p class="text-xs text-gray-400 mt-0.5">Undergraduate Researcher</p>
+      </div>
+      <div class="bg-white border border-gray-200 p-4 text-center">
+        <div class="w-10 h-10 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-gray-400 text-xs">–</div>
+        <p class="text-sm font-medium text-gray-900">Eun Jin Jeong</p>
+        <p class="text-xs text-gray-400 mt-0.5">Undergraduate Researcher</p>
+      </div>
+      <div class="bg-white border border-gray-200 p-4 text-center">
+        <div class="w-10 h-10 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-gray-400 text-xs">–</div>
+        <p class="text-sm font-medium text-gray-900">Yeseo Lee</p>
+        <p class="text-xs text-gray-400 mt-0.5">Undergraduate Researcher</p>
+      </div>
+      <div class="bg-white border border-gray-200 p-4 text-center">
+        <div class="w-10 h-10 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-gray-400 text-xs">–</div>
+        <p class="text-sm font-medium text-gray-900">Eun Ji Kim</p>
+        <p class="text-xs text-gray-400 mt-0.5">Undergraduate Researcher</p>
+      </div>
+      <div class="bg-white border border-gray-200 p-4 text-center">
+        <div class="w-10 h-10 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-gray-400 text-xs">–</div>
+        <p class="text-sm font-medium text-gray-900">Sang Min Lim</p>
+        <p class="text-xs text-gray-400 mt-0.5">Undergraduate Researcher</p>
+      </div>
+      <div class="bg-white border border-gray-200 p-4 text-center">
+        <div class="w-10 h-10 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-gray-400 text-xs">–</div>
+        <p class="text-sm font-medium text-gray-900">Jae Hyeok Han</p>
+        <p class="text-xs text-gray-400 mt-0.5">Undergraduate Researcher</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LECTURES -->
+<section id="lectures" class="py-12 bg-white border-b border-gray-100">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="section-heading">Lectures</h2>
+    <div class="grid grid-cols-2 gap-8">
+      <div>
+        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Spring 2026</h3>
+        <ul class="space-y-2 text-sm text-gray-700">
+          <li class="flex gap-2"><span class="text-gray-300">—</span> 인공지능프로그래밍설계 (AI Programming Design)</li>
+          <li class="flex gap-2"><span class="text-gray-300">—</span> 의료빅데이터분석(R) (Healthcare Big Data Analysis with R)</li>
+          <li class="flex gap-2"><span class="text-gray-300">—</span> BMSW캡스톤디자인1 (Capstone Design 1)</li>
+          <li class="flex gap-2"><span class="text-gray-300">—</span> 디지털헬스AI시스템설계 (Digital Health AI System Design) <span class="text-xs text-gray-400 ml-1">Graduate</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Fall 2025</h3>
+        <ul class="space-y-2 text-sm text-gray-700">
+          <li class="flex gap-2"><span class="text-gray-300">—</span> 보건의료정보학개론 (Introduction to Health Informatics)</li>
+          <li class="flex gap-2"><span class="text-gray-300">—</span> 의료데이터사이언스 (Medical Data Science)</li>
+          <li class="flex gap-2"><span class="text-gray-300">—</span> BMSW캡스톤디자인2 (Capstone Design 2)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT / CONTACT -->
+<section id="about" class="py-12 bg-[#f8fafc] border-b border-gray-200">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="section-heading">About the Lab</h2>
+    <div class="grid grid-cols-3 gap-8">
+      <div class="col-span-2">
+        <p class="text-gray-700 leading-relaxed mb-4">
+          The Precision &amp; Provenance Health Informatics Lab (PHI Lab, φ) is a research laboratory in the Department of Biomedical Software Engineering at The Catholic University of Korea. The lab is led by Professor Hyo Jung Kim, a clinical informaticist with over two decades of experience in clinical practice, hospital information systems, and academic research.
+        </p>
+        <p class="text-gray-700 leading-relaxed">
+          Our research focuses on three interconnected pillars: knowledge representation of clinical and genomic data, secondary use of real-world data from EHR systems and administrative claims, and the generation of real-world evidence to support precision medicine and public health decision-making. We conduct multi-institutional studies in collaboration with major Korean hospitals, international universities, and industry partners.
+        </p>
+      </div>
+      <div>
+        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Contact</h3>
+        <p class="text-sm text-gray-700 leading-relaxed">
+          Department of Biomedical Software Engineering<br>
+          The Catholic University of Korea<br>
+          43, Jibong-ro, Bucheon<br>
+          14662, Gyeonggi-do, South Korea
+        </p>
+        <p class="text-sm mt-3">
+          <a href="mailto:hyojung.kim@catholic.ac.kr" class="text-[#0f766e]">hyojung.kim@catholic.ac.kr</a>
+        </p>
+        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mt-5 mb-3">Collaborating Institutions</h3>
+        <p class="text-xs text-gray-500 leading-relaxed">
+          Samsung Medical Center · Kakao Healthcare · Eunpyeong St. Mary's Hospital · Bucheon St. Mary's Hospital · Sookmyung Women's University · Chonnam National University · University of Cincinnati · Harvard University · Tufts University · SKKU
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-[#0f766e] text-white py-8">
+  <div class="max-w-5xl mx-auto px-6 flex justify-between items-start">
+    <div>
+      <p class="font-bold text-base mb-1">PHI Lab @ CUK</p>
+      <p class="text-teal-200 text-sm">Precision &amp; Provenance Health Informatics Lab</p>
+      <p class="text-teal-200 text-xs mt-1">The Catholic University of Korea · Department of Biomedical Software Engineering</p>
+    </div>
+    <div class="text-right text-xs text-teal-200">
+      <p>43, Jibong-ro, Bucheon, 14662, Gyeonggi-do, South Korea</p>
+      <p class="mt-1">hyojung.kim@catholic.ac.kr</p>
+      <p class="mt-3 text-teal-300">© 2026 PHI Lab. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
