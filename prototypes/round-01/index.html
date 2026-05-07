@@ -10,12 +10,12 @@
       theme: {
         extend: {
           colors: {
-            primary:   { DEFAULT: '#1e40af', dark: '#1e3a8a', light: '#3b82f6', xlight: '#dbeafe' },
-            accent:    '#0ea5e9',
+            primary: { DEFAULT: '#1e40af', dark: '#1e3a8a', light: '#3b82f6', xlight: '#dbeafe' },
+            accent: '#0ea5e9',
           },
           fontFamily: {
-            sans:  ['"Inter"', 'system-ui', 'sans-serif'],
-            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans:  ['"Inter"',            'system-ui', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia',   'serif'],
           },
         },
       },
@@ -23,175 +23,191 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+
   <style>
-    /* ── smooth-scroll & box sizing ── */
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', system-ui, sans-serif; }
 
-    /* ── Navbar ── */
+    /* ── Nav underline ── */
     .nav-link {
       position: relative;
       font-weight: 500;
-      color: #1e3a8a;
+      color: #334155;
       transition: color .2s;
     }
     .nav-link::after {
       content: '';
       position: absolute;
-      left: 0; bottom: -3px;
+      left: 0; bottom: -4px;
       width: 0; height: 2px;
       background: #3b82f6;
       transition: width .25s ease;
     }
-    .nav-link:hover { color: #3b82f6; }
-    .nav-link:hover::after { width: 100%; }
+    .nav-link:hover         { color: #1e40af; }
+    .nav-link:hover::after  { width: 100%; }
 
-    /* ── Hero Carousel ── */
-    #carousel-track { transition: transform .6s cubic-bezier(.4,0,.2,1); }
+    /* ── Carousel ── */
+    #carousel-track { transition: transform .65s cubic-bezier(.4,0,.2,1); }
 
-    .slide-bg-1 { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #0ea5e9 100%); }
-    .slide-bg-2 { background: linear-gradient(135deg, #0f2057 0%, #1e3a8a 45%, #1d4ed8 100%); }
-    .slide-bg-3 { background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 50%, #0ea5e9 100%); }
+    .slide-bg-1 { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #0369a1 100%); }
+    .slide-bg-2 { background: linear-gradient(135deg, #0c1f5c 0%, #1e3a8a 45%, #1d4ed8 100%); }
+    .slide-bg-3 { background: linear-gradient(135deg, #1e3a8a 0%, #0c4a6e 50%, #0ea5e9 100%); }
 
     .slide-noise {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
     }
 
     .hero-tag {
       display: inline-block;
-      background: rgba(255,255,255,.15);
-      border: 1px solid rgba(255,255,255,.3);
+      background: rgba(255,255,255,.13);
+      border: 1px solid rgba(255,255,255,.28);
       color: #bfdbfe;
-      font-size: .72rem;
+      font-size: .7rem;
       font-weight: 600;
-      letter-spacing: .08em;
+      letter-spacing: .09em;
       text-transform: uppercase;
-      padding: .3rem .85rem;
+      padding: .28rem .8rem;
       border-radius: 999px;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(6px);
     }
 
     .carousel-dot {
       width: 8px; height: 8px;
       border-radius: 9999px;
-      background: rgba(255,255,255,.4);
+      background: rgba(255,255,255,.35);
       cursor: pointer;
-      transition: background .25s, width .25s;
+      transition: background .25s, width .3s ease;
     }
-    .carousel-dot.active {
-      background: #fff;
-      width: 24px;
-    }
+    .carousel-dot.active { background: #fff; width: 26px; }
 
-    /* ── Research Cards ── */
+    /* ── Research cards ── */
     .research-card {
       border: 1px solid #e0e7ff;
-      border-radius: 1rem;
-      padding: 1.75rem;
+      border-radius: 1.1rem;
+      padding: 1.85rem;
       background: #fff;
-      transition: transform .25s, box-shadow .25s, border-color .25s;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
     }
     .research-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(30,64,175,.10);
+      transform: translateY(-5px);
+      box-shadow: 0 14px 36px rgba(30,64,175,.11);
       border-color: #93c5fd;
     }
     .research-card .icon-wrap {
-      width: 52px; height: 52px;
-      border-radius: .75rem;
+      width: 54px; height: 54px;
+      border-radius: .85rem;
       background: #dbeafe;
       display: flex; align-items: center; justify-content: center;
-      margin-bottom: 1rem;
+      margin-bottom: 1.1rem;
       flex-shrink: 0;
     }
 
     /* ── Section headings ── */
     .section-eyebrow {
-      font-size: .75rem;
+      font-size: .72rem;
       font-weight: 700;
-      letter-spacing: .12em;
+      letter-spacing: .14em;
       text-transform: uppercase;
       color: #3b82f6;
       margin-bottom: .4rem;
     }
     .section-title {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-size: clamp(1.65rem, 3vw, 2.3rem);
       font-weight: 700;
       color: #1e3a8a;
       line-height: 1.2;
     }
     .section-divider {
-      width: 48px; height: 3px;
+      width: 44px; height: 3px;
       border-radius: 2px;
       background: linear-gradient(90deg, #3b82f6, #0ea5e9);
-      margin-top: .75rem;
+      margin-top: .8rem;
     }
 
-    /* ── Publication items ── */
+    /* ── Publication border ── */
     .pub-item {
       border-left: 3px solid #bfdbfe;
-      padding-left: 1.25rem;
       transition: border-color .2s;
     }
     .pub-item:hover { border-color: #3b82f6; }
 
-    /* ── Collaborator logos ── */
+    /* ── Collaborator pills ── */
     .collab-pill {
       display: inline-flex;
       align-items: center;
-      gap: .45rem;
+      gap: .4rem;
       background: #f0f7ff;
       border: 1px solid #dbeafe;
       border-radius: 999px;
-      padding: .45rem 1rem;
-      font-size: .85rem;
+      padding: .42rem .95rem;
+      font-size: .82rem;
       font-weight: 500;
       color: #1e40af;
       white-space: nowrap;
+      transition: background .2s, border-color .2s;
     }
+    .collab-pill:hover { background: #dbeafe; border-color: #93c5fd; }
 
-    /* ── Footer ── */
+    /* ── Member card ── */
+    .member-card {
+      border: 1px solid #e0e7ff;
+      border-radius: .9rem;
+      padding: 1.25rem 1.4rem;
+      background: #fff;
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .member-card:hover { box-shadow: 0 6px 20px rgba(30,64,175,.09); border-color: #93c5fd; }
+
+    /* ── Fade-in ── */
+    .fade-in { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    /* ── Quote pull ── */
+    .quote-bar { border-left: 4px solid #3b82f6; }
+
     footer { background: #0f172a; }
   </style>
 </head>
+
 <body class="bg-slate-50 text-slate-800 antialiased">
 
-<!-- ═══════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════
      NAV
-══════════════════════════════════════════════════ -->
-<header id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/70 transition-shadow duration-300">
+═══════════════════════════════════════════════════ -->
+<header id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/92 backdrop-blur-md border-b border-slate-200/60 transition-shadow duration-300">
   <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
 
     <!-- Logo -->
-    <a href="#" class="flex items-center gap-2.5 group">
-      <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-sm">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <path d="m9 12 2 2 4-4"/>
+    <a href="#" class="flex items-center gap-2.5 group" aria-label="PHI Lab home">
+      <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-sm flex-shrink-0">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/>
+          <path d="M12 6v6l4 2"/>
+          <path d="M8 12h8"/>
         </svg>
       </div>
       <div class="leading-tight">
-        <span class="text-primary-dark font-bold text-sm tracking-tight">PHI Lab</span>
-        <span class="hidden sm:block text-slate-400 text-[10px] leading-none mt-0.5">Precision &amp; Provenance Health Informatics</span>
+        <span class="text-primary-dark font-bold text-[0.92rem] tracking-tight">PHI Lab <span class="text-primary font-light">φ</span></span>
+        <span class="hidden sm:block text-slate-400 text-[0.64rem] leading-none mt-0.5 tracking-wide">Precision &amp; Provenance Health Informatics</span>
       </div>
     </a>
 
     <!-- Desktop nav -->
-    <nav class="hidden md:flex items-center gap-7 text-sm">
+    <nav class="hidden md:flex items-center gap-6 text-sm" aria-label="Primary">
+      <a href="#about"          class="nav-link">About</a>
       <a href="#research"       class="nav-link">Research</a>
       <a href="#projects"       class="nav-link">Projects</a>
       <a href="#publications"   class="nav-link">Publications</a>
       <a href="#team"           class="nav-link">Team</a>
-      <a href="#collaborators"  class="nav-link">Collaborators</a>
-      <a href="#contact"        class="ml-2 px-4 py-1.5 bg-primary text-white text-sm font-medium rounded-full shadow hover:bg-primary-dark transition-colors">Contact</a>
+      <a href="#contact" class="ml-1 px-4 py-1.5 bg-primary text-white text-sm font-medium rounded-full shadow-sm hover:bg-primary-dark transition-colors">Contact</a>
     </nav>
 
     <!-- Mobile hamburger -->
-    <button id="mob-menu-btn" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100" aria-label="Open menu">
-      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <button id="mob-menu-btn" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors" aria-label="Open menu" aria-expanded="false" aria-controls="mob-menu">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
         <line x1="3" y1="6"  x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
         <line x1="3" y1="18" x2="21" y2="18"/>
@@ -200,260 +216,362 @@
   </div>
 
   <!-- Mobile drawer -->
-  <div id="mob-menu" class="hidden md:hidden bg-white border-t border-slate-100 px-6 py-4 flex flex-col gap-4 text-sm">
-    <a href="#research"       class="nav-link" onclick="closeMob()">Research</a>
-    <a href="#projects"       class="nav-link" onclick="closeMob()">Projects</a>
-    <a href="#publications"   class="nav-link" onclick="closeMob()">Publications</a>
-    <a href="#team"           class="nav-link" onclick="closeMob()">Team</a>
-    <a href="#collaborators"  class="nav-link" onclick="closeMob()">Collaborators</a>
-    <a href="#contact"        class="nav-link" onclick="closeMob()">Contact</a>
+  <div id="mob-menu" class="hidden md:hidden bg-white border-t border-slate-100 px-6 py-5 flex flex-col gap-4 text-sm shadow-lg">
+    <a href="#about"         class="nav-link" onclick="closeMob()">About</a>
+    <a href="#research"      class="nav-link" onclick="closeMob()">Research</a>
+    <a href="#projects"      class="nav-link" onclick="closeMob()">Projects</a>
+    <a href="#publications"  class="nav-link" onclick="closeMob()">Publications</a>
+    <a href="#team"          class="nav-link" onclick="closeMob()">Team</a>
+    <a href="#contact"       class="nav-link" onclick="closeMob()">Contact</a>
   </div>
 </header>
 
-<!-- ═══════════════════════════════════════════════
-     HERO CAROUSEL
-══════════════════════════════════════════════════ -->
-<section class="relative overflow-hidden mt-16" style="height: clamp(420px, 68vh, 640px);">
 
-  <!-- Track -->
-  <div id="carousel-track" class="flex h-full w-[300%]">
+<!-- ══════════════════════════════════════════════
+     HERO CAROUSEL  (full-screen, 3 slides)
+═══════════════════════════════════════════════════ -->
+<section id="hero" class="relative overflow-hidden mt-16" style="height: clamp(440px, 72vh, 660px);">
 
-    <!-- Slide 1: MOMENTUM -->
-    <div class="slide-bg-1 slide-noise relative w-1/3 h-full flex items-center px-8 md:px-20">
-      <!-- Decorative circle -->
-      <div class="absolute right-[-80px] top-[-80px] w-[440px] h-[440px] rounded-full bg-white/5 pointer-events-none"></div>
-      <div class="absolute right-[80px] bottom-[-120px] w-[260px] h-[260px] rounded-full bg-white/5 pointer-events-none"></div>
+  <div id="carousel-track" class="flex h-full" style="width: 300%;">
+
+    <!-- ── Slide 1: MOMENTUM Study ── -->
+    <div class="slide-bg-1 slide-noise relative flex-shrink-0 flex items-center px-8 md:px-20" style="width:33.333%;">
+      <div class="absolute right-[-90px] top-[-90px] w-[480px] h-[480px] rounded-full bg-white/[0.04] pointer-events-none"></div>
+      <div class="absolute left-[5%]  bottom-[-100px] w-[300px] h-[300px] rounded-full bg-white/[0.03] pointer-events-none"></div>
       <div class="relative z-10 max-w-2xl text-white">
-        <span class="hero-tag mb-4 block">Featured Project</span>
-        <h2 class="font-serif font-bold text-white leading-tight mb-4" style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.8rem,4.5vw,3rem)">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="hero-tag">Featured Project</span>
+          <span class="hero-tag">Multi-Institution · Korea</span>
+        </div>
+        <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.9rem,4.6vw,3.1rem);font-weight:700;line-height:1.12;margin-bottom:1.1rem;">
           MOMENTUM Study
         </h2>
-        <p class="text-blue-100 text-base md:text-lg leading-relaxed mb-6 max-w-xl">
-          Investigating metabolic vulnerability and endocrine therapy resistance in breast cancer using AI and real-world data across multiple Korean institutions.
+        <p class="text-blue-100 text-[0.97rem] md:text-[1.05rem] leading-relaxed mb-5 max-w-lg">
+          Exploring the intersection of metabolic vulnerability and endocrine therapy in breast cancer through AI techniques and real-world data from multi-institutions in Korea.
         </p>
+        <p class="text-blue-200/70 text-xs mb-5 italic">In collaboration with Samsung Seoul Hospital · Kakao Healthcare</p>
         <div class="flex flex-wrap gap-2 mb-8">
-          <span class="hero-tag">Multi-Institution Korea</span>
-          <span class="hero-tag">AI + RWD</span>
-          <span class="hero-tag">Breast Cancer</span>
+          <span class="hero-tag">Clinical Research Platform</span>
+          <span class="hero-tag">Data Pipelining</span>
+          <span class="hero-tag">Landscape Study</span>
         </div>
-        <a href="#projects" class="inline-flex items-center gap-2 bg-white text-primary font-semibold text-sm px-6 py-3 rounded-full shadow-lg hover:bg-blue-50 transition-colors">
-          Learn More
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <a href="#projects" class="inline-flex items-center gap-2 bg-white text-primary font-semibold text-sm px-6 py-2.5 rounded-full shadow-lg hover:bg-blue-50 transition-colors">
+          View Project
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
     </div>
 
-    <!-- Slide 2: Cancer Trajectory -->
-    <div class="slide-bg-2 slide-noise relative w-1/3 h-full flex items-center px-8 md:px-20">
-      <div class="absolute left-[-60px] top-[-60px] w-[380px] h-[380px] rounded-full bg-white/5 pointer-events-none"></div>
-      <div class="absolute right-[60px] bottom-[-80px] w-[220px] h-[220px] rounded-full bg-white/5 pointer-events-none"></div>
+    <!-- ── Slide 2: AI Cancer Trajectory ── -->
+    <div class="slide-bg-2 slide-noise relative flex-shrink-0 flex items-center px-8 md:px-20" style="width:33.333%;">
+      <div class="absolute left-[-70px] top-[-70px] w-[420px] h-[420px] rounded-full bg-white/[0.04] pointer-events-none"></div>
+      <div class="absolute right-[8%] bottom-[-110px] w-[260px] h-[260px] rounded-full bg-white/[0.03] pointer-events-none"></div>
       <div class="relative z-10 max-w-2xl text-white">
-        <span class="hero-tag mb-4 block">NRF-Funded Research</span>
-        <h2 class="font-serif font-bold text-white leading-tight mb-4" style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.8rem,4.5vw,3rem)">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="hero-tag">NRF-Funded</span>
+          <span class="hero-tag">Deep Learning · RWD</span>
+        </div>
+        <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.9rem,4.6vw,3.1rem);font-weight:700;line-height:1.12;margin-bottom:1.1rem;">
           AI-Based Cancer<br/>Trajectory Analysis
         </h2>
-        <p class="text-blue-100 text-base md:text-lg leading-relaxed mb-6 max-w-xl">
-          Deep learning phenotyping models for breast and colorectal cancer, characterizing disease trajectories from longitudinal real-world EHR data.
+        <p class="text-blue-100 text-[0.97rem] md:text-[1.05rem] leading-relaxed mb-5 max-w-lg">
+          Person-centered phenotyping methodology via AI-based cancer trajectory recontextualization — applied to breast and colorectal cancer real-world data.
         </p>
+        <p class="text-blue-200/70 text-xs mb-5 italic">National Research Foundation of Korea (NRF) funded</p>
         <div class="flex flex-wrap gap-2 mb-8">
-          <span class="hero-tag">Deep Learning</span>
+          <span class="hero-tag">Data-Information Value Chain</span>
+          <span class="hero-tag">Methodology</span>
           <span class="hero-tag">Phenotyping</span>
-          <span class="hero-tag">NRF Korea</span>
         </div>
-        <a href="#projects" class="inline-flex items-center gap-2 bg-white text-primary font-semibold text-sm px-6 py-3 rounded-full shadow-lg hover:bg-blue-50 transition-colors">
-          Learn More
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <a href="#projects" class="inline-flex items-center gap-2 bg-white text-primary font-semibold text-sm px-6 py-2.5 rounded-full shadow-lg hover:bg-blue-50 transition-colors">
+          View Project
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
     </div>
 
-    <!-- Slide 3: Pharmacovigilance -->
-    <div class="slide-bg-3 slide-noise relative w-1/3 h-full flex items-center px-8 md:px-20">
-      <div class="absolute right-[-100px] bottom-[-100px] w-[500px] h-[500px] rounded-full bg-white/5 pointer-events-none"></div>
+    <!-- ── Slide 3: Social Determinants ── -->
+    <div class="slide-bg-3 slide-noise relative flex-shrink-0 flex items-center px-8 md:px-20" style="width:33.333%;">
+      <div class="absolute right-[-100px] bottom-[-100px] w-[540px] h-[540px] rounded-full bg-white/[0.04] pointer-events-none"></div>
       <div class="relative z-10 max-w-2xl text-white">
-        <span class="hero-tag mb-4 block">Drug Safety Research</span>
-        <h2 class="font-serif font-bold text-white leading-tight mb-4" style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.8rem,4.5vw,3rem)">
-          Pharmacovigilance<br/>Framework
-        </h2>
-        <p class="text-blue-100 text-base md:text-lg leading-relaxed mb-6 max-w-xl">
-          Scalable FAERS deduplication and active drug safety monitoring pipelines, with applied research on Stevens-Johnson syndrome and COVID-19 therapeutics.
-        </p>
-        <div class="flex flex-wrap gap-2 mb-8">
-          <span class="hero-tag">FAERS</span>
-          <span class="hero-tag">Drug Safety</span>
-          <span class="hero-tag">Adverse Events</span>
+        <div class="flex items-center gap-3 mb-5">
+          <span class="hero-tag">Social Determinants of Health</span>
+          <span class="hero-tag">GIS/GWR</span>
         </div>
-        <a href="#projects" class="inline-flex items-center gap-2 bg-white text-primary font-semibold text-sm px-6 py-3 rounded-full shadow-lg hover:bg-blue-50 transition-colors">
-          Learn More
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.9rem,4.6vw,3.1rem);font-weight:700;line-height:1.12;margin-bottom:1.1rem;">
+          Traffic Exposure &amp;<br/>Breast Cancer Mortality
+        </h2>
+        <p class="text-blue-100 text-[0.97rem] md:text-[1.05rem] leading-relaxed mb-5 max-w-lg">
+          Examining area-level traffic exposure and its association with breast cancer mortality using geospatially weighted regression and multi-institution real-world data.
+        </p>
+        <p class="text-blue-200/70 text-xs mb-5 italic">International collaboration: Harvard · U Cincinnati · Tufts · SKKU</p>
+        <div class="flex flex-wrap gap-2 mb-8">
+          <span class="hero-tag">Public Data</span>
+          <span class="hero-tag">Multi-Institution</span>
+          <span class="hero-tag">RWD</span>
+        </div>
+        <a href="#projects" class="inline-flex items-center gap-2 bg-white text-primary font-semibold text-sm px-6 py-2.5 rounded-full shadow-lg hover:bg-blue-50 transition-colors">
+          View Project
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
     </div>
-  </div>
 
-  <!-- Prev / Next buttons -->
+  </div><!-- /carousel-track -->
+
+  <!-- Hero headline overlay strip -->
+  <div class="absolute bottom-0 left-0 right-0 z-10 pointer-events-none" style="background:linear-gradient(to top,rgba(15,23,42,.55),transparent);height:120px;"></div>
+
+  <!-- Prev / Next -->
   <button id="prev-btn" onclick="moveCarousel(-1)" aria-label="Previous slide"
-    class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur hover:bg-white/40 text-white flex items-center justify-center transition-colors">
-    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white flex items-center justify-center transition-colors">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
   </button>
   <button id="next-btn" onclick="moveCarousel(1)" aria-label="Next slide"
-    class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur hover:bg-white/40 text-white flex items-center justify-center transition-colors">
-    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white flex items-center justify-center transition-colors">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
   </button>
 
   <!-- Dots -->
-  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
-    <div class="carousel-dot active" onclick="goToSlide(0)"></div>
-    <div class="carousel-dot"        onclick="goToSlide(1)"></div>
-    <div class="carousel-dot"        onclick="goToSlide(2)"></div>
+  <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2" role="tablist" aria-label="Slides">
+    <button class="carousel-dot active" onclick="goToSlide(0)" aria-label="Slide 1" role="tab" aria-selected="true"></button>
+    <button class="carousel-dot"        onclick="goToSlide(1)" aria-label="Slide 2" role="tab" aria-selected="false"></button>
+    <button class="carousel-dot"        onclick="goToSlide(2)" aria-label="Slide 3" role="tab" aria-selected="false"></button>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════
+
+<!-- ══════════════════════════════════════════════
      MISSION BANNER
-══════════════════════════════════════════════════ -->
+═══════════════════════════════════════════════════ -->
 <section class="bg-white border-y border-slate-100">
-  <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center gap-6">
-    <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-primary-xlight flex items-center justify-center">
-      <svg width="28" height="28" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+  <div class="max-w-7xl mx-auto px-6 py-9 flex flex-col md:flex-row items-start md:items-center gap-6">
+    <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-primary-xlight flex items-center justify-center">
+      <svg width="24" height="24" fill="none" stroke="#1e40af" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <path d="m9 12 2 2 4-4"/>
       </svg>
     </div>
-    <div>
-      <p class="text-xs font-bold uppercase tracking-widest text-primary-light mb-1">Our Mission</p>
-      <blockquote class="text-slate-700 text-lg md:text-xl font-medium leading-relaxed italic">
-        "Contributing to digital healthcare innovation with data-intensive approaches based on real-world demands."
-      </blockquote>
+    <div class="flex-1">
+      <p class="text-[0.7rem] font-bold uppercase tracking-widest text-primary-light mb-1.5">Mission</p>
+      <p class="text-slate-700 text-[1.05rem] md:text-[1.12rem] font-medium leading-snug">
+        Contribute to digital healthcare innovation with data-intensive approaches based on real-world demands —
+        <em class="text-primary-dark not-italic font-semibold"> from precision medicine to social determinants of health.</em>
+      </p>
     </div>
-    <div class="md:ml-auto flex-shrink-0 text-center md:text-right">
+    <div class="flex-shrink-0 text-right hidden md:block">
       <p class="text-primary-dark font-semibold text-sm">The Catholic University of Korea</p>
-      <p class="text-slate-500 text-xs mt-0.5">Dept. of Biomedical Software Engineering</p>
+      <p class="text-slate-400 text-xs mt-0.5">Dept. of Biomedical Software Engineering</p>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════
-     RESEARCH AREAS
-══════════════════════════════════════════════════ -->
-<section id="research" class="py-20 bg-slate-50">
+
+<!-- ══════════════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════════════════ -->
+<section id="about" class="py-20 bg-slate-50">
   <div class="max-w-7xl mx-auto px-6">
 
-    <!-- Heading -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
+
+      <!-- Left: About text -->
+      <div class="fade-in">
+        <p class="section-eyebrow">About the Lab</p>
+        <h2 class="section-title">PHI Lab <span class="text-primary font-light">φ</span></h2>
+        <div class="section-divider mb-7"></div>
+
+        <div class="space-y-4 text-slate-600 text-[0.95rem] leading-relaxed">
+          <p>
+            PHI (Precision &amp; Provenance Health Informatics Lab) at the Catholic University of Korea is dedicated to advancing
+            <strong class="text-slate-700 font-semibold">precision medicine and digital healthcare</strong> through data-driven interdisciplinary research.
+            The lab's work spans from public data to EHR data, emphasizing trustworthy data utilization, knowledge generation via data science,
+            and supporting decision-making through data-based digital healthcare systems.
+          </p>
+          <p lang="ko" class="text-slate-500 text-sm bg-white border border-slate-100 rounded-xl p-4 leading-loose">
+            가톨릭대학교 PHI(φ, Precision &amp; Provenance Health Informatics Lab) 연구실에서는 정밀의료와 디지털 헬스케어 구현을 위한 데이터 기반 다학제연구를 수행합니다.
+            공공데이터부터 EHR 데이터까지 포괄적으로 연구하며, 신뢰할 수 있는 데이터의 활용, 데이터 과학을 통한 지식 창출, 의사결정을 지원하는 데이터 기반 디지털 헬스케어 시스템 전반을 연구합니다.
+          </p>
+        </div>
+
+        <!-- Contact snippet -->
+        <div class="mt-8 flex flex-wrap gap-4 text-sm">
+          <a href="mailto:hyojung.kim@catholic.ac.kr" class="inline-flex items-center gap-2 text-primary-light hover:text-primary transition-colors font-medium">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            hyojung.kim@catholic.ac.kr
+          </a>
+          <span class="inline-flex items-center gap-2 text-slate-500">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/></svg>
+            43, Jibong-ro, Bucheon, 14662, Gyeonggi-do, South Korea
+          </span>
+        </div>
+      </div>
+
+      <!-- Right: Quote -->
+      <div class="fade-in">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 quote-bar pl-9 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-40 h-40 rounded-full bg-blue-50 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+          <svg class="text-blue-200 mb-4" width="36" height="36" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+          </svg>
+          <blockquote>
+            <p class="text-slate-700 text-lg font-medium italic leading-relaxed mb-3">
+              "Data is the new soil, not oil."
+            </p>
+            <footer class="text-sm text-primary-light font-semibold not-italic mb-5">— David McCandless, <span class="font-normal text-slate-500">Information is Beautiful</span></footer>
+          </blockquote>
+          <p class="text-slate-500 text-sm leading-relaxed">
+            Oil is valuable and tradable. Data only becomes valuable with considerable effort. In the data-driven era, the effectiveness of AI machines depends on the granularity and precision of the data.
+            We focus on <strong class="text-slate-600 font-semibold">optimal informative transformation</strong> with the right application, so that it could be a medium that bridges the gap between raw data and actionable knowledge.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     RESEARCH AREAS
+═══════════════════════════════════════════════════ -->
+<section id="research" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-6">
+
     <div class="text-center mb-14">
       <p class="section-eyebrow">What We Do</p>
       <h2 class="section-title">Research Areas</h2>
-      <div class="section-divider mx-auto"></div>
-      <p class="text-slate-500 mt-5 max-w-xl mx-auto text-sm leading-relaxed">
-        PHI Lab bridges clinical informatics, AI, and epidemiology to generate evidence from real-world healthcare data.
+      <div class="section-divider mx-auto mb-5"></div>
+      <p class="text-slate-500 text-[0.9rem] max-w-lg mx-auto leading-relaxed">
+        PHI Lab bridges clinical informatics, AI, and pharmacoepidemiology to generate trustworthy evidence from real-world healthcare data.
       </p>
     </div>
 
-    <!-- Card grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
       <!-- 1. Knowledge Representation -->
-      <div class="research-card">
+      <div class="research-card fade-in">
         <div class="icon-wrap">
-          <!-- database / schema icon -->
-          <svg width="26" height="26" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+          <svg width="26" height="26" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+            <path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/>
+            <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
           </svg>
         </div>
-        <h3 class="font-semibold text-slate-800 text-base mb-2">Knowledge Representation</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Clinical data modeling, ontology engineering, and end-to-end data pipeline construction for interoperable healthcare information.</p>
-        <div class="mt-4 flex flex-wrap gap-1.5">
+        <h3 class="font-semibold text-slate-800 text-[0.97rem] mb-2">Knowledge Representation</h3>
+        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+          Data modeling, data engineering, end-to-end pipeline construction, and data management &amp; governance for interoperable healthcare information systems.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
           <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Data Modeling</span>
-          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Ontology</span>
-          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Pipelines</span>
+          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Engineering</span>
+          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Governance</span>
         </div>
       </div>
 
       <!-- 2. Real-World Data -->
-      <div class="research-card">
+      <div class="research-card fade-in">
         <div class="icon-wrap">
-          <!-- file-bar-chart -->
-          <svg width="26" height="26" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-            <line x1="8" y1="13" x2="8" y2="17"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="16" y1="15" x2="16" y2="17"/>
+          <svg width="26" height="26" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="8" y1="13" x2="8"  y2="17"/>
+            <line x1="12" y1="11" x2="12" y2="17"/>
+            <line x1="16" y1="15" x2="16" y2="17"/>
           </svg>
         </div>
-        <h3 class="font-semibold text-slate-800 text-base mb-2">Real-World Data (RWD)</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Secondary analysis of electronic health records, clinical data warehouses, and FAERS for large-scale observational research.</p>
-        <div class="mt-4 flex flex-wrap gap-1.5">
-          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">EHR</span>
-          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">CDW</span>
+        <h3 class="font-semibold text-slate-800 text-[0.97rem] mb-2">Real-World Data (RWD)</h3>
+        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+          Secondary use of electronic health records and clinical data warehouse data, plus public repositories including FAERS for large-scale observational research.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">EHR / CDW</span>
           <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">FAERS</span>
+          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Secondary Use</span>
         </div>
       </div>
 
       <!-- 3. Real-World Evidence -->
-      <div class="research-card">
+      <div class="research-card fade-in">
         <div class="icon-wrap">
-          <!-- activity / waveform -->
-          <svg width="26" height="26" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <svg width="26" height="26" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
           </svg>
         </div>
-        <h3 class="font-semibold text-slate-800 text-base mb-2">Real-World Evidence (RWE)</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Rigorous scientific data processing and statistical frameworks to generate regulatory-grade clinical evidence from observational sources.</p>
-        <div class="mt-4 flex flex-wrap gap-1.5">
+        <h3 class="font-semibold text-slate-800 text-[0.97rem] mb-2">Real-World Evidence (RWE)</h3>
+        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+          Scientific data processing and rigorous analytics for systematic evidence generation from observational clinical sources.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
           <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Causal Inference</span>
+          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Analytics</span>
           <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Evidence</span>
         </div>
       </div>
 
       <!-- 4. Pharmacovigilance -->
-      <div class="research-card">
+      <div class="research-card fade-in">
         <div class="icon-wrap">
-          <!-- shield + check -->
-          <svg width="26" height="26" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>
+          <svg width="26" height="26" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <polyline points="9 12 11 14 15 10"/>
           </svg>
         </div>
-        <h3 class="font-semibold text-slate-800 text-base mb-2">Pharmacovigilance</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Drug safety monitoring systems, adverse event signal detection, and post-market surveillance using spontaneous reporting databases.</p>
-        <div class="mt-4 flex flex-wrap gap-1.5">
+        <h3 class="font-semibold text-slate-800 text-[0.97rem] mb-2">Pharmacovigilance</h3>
+        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+          Drug safety monitoring, adverse event signal detection via spontaneous reporting systems including FAERS and HIRA post-market surveillance databases.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
           <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Drug Safety</span>
           <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Signal Detection</span>
+          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">HIRA</span>
         </div>
       </div>
 
       <!-- 5. Healthcare AI -->
-      <div class="research-card">
+      <div class="research-card fade-in">
         <div class="icon-wrap">
-          <!-- cpu / brain chip -->
-          <svg width="26" height="26" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/>
-            <line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/>
-            <line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/>
-            <line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/>
-            <line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>
+          <svg width="26" height="26" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="4"  y="4"  width="16" height="16" rx="2"/>
+            <rect x="9"  y="9"  width="6"  height="6"/>
+            <line x1="9"  y1="1"  x2="9"  y2="4"/>
+            <line x1="15" y1="1"  x2="15" y2="4"/>
+            <line x1="9"  y1="20" x2="9"  y2="23"/>
+            <line x1="15" y1="20" x2="15" y2="23"/>
+            <line x1="20" y1="9"  x2="23" y2="9"/>
+            <line x1="20" y1="14" x2="23" y2="14"/>
+            <line x1="1"  y1="9"  x2="4"  y2="9"/>
+            <line x1="1"  y1="14" x2="4"  y2="14"/>
           </svg>
         </div>
-        <h3 class="font-semibold text-slate-800 text-base mb-2">Healthcare AI</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Evaluation of large language models in clinical settings, named entity recognition, and deep learning for patient phenotyping.</p>
-        <div class="mt-4 flex flex-wrap gap-1.5">
-          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">LLM</span>
+        <h3 class="font-semibold text-slate-800 text-[0.97rem] mb-2">Healthcare AI</h3>
+        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+          LLM evaluation in clinical settings, clinical named entity recognition (NER), and deep learning phenotyping for patient characterization.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">LLM Evaluation</span>
           <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Clinical NER</span>
           <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Deep Learning</span>
         </div>
       </div>
 
       <!-- 6. Precision Medicine -->
-      <div class="research-card">
+      <div class="research-card fade-in">
         <div class="icon-wrap">
-          <!-- dna / git-branch-like -->
-          <svg width="26" height="26" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M2 3c4 0 7 3 7 9s3 9 7 9"/><path d="M22 21c-4 0-7-3-7-9s-3-9-7-9"/>
+          <svg width="26" height="26" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2 3c4 0 7 3 7 9s3 9 7 9"/>
+            <path d="M22 21c-4 0-7-3-7-9s-3-9-7-9"/>
             <path d="M5 6h4M15 18h4M5 18h3M16 6h3"/>
           </svg>
         </div>
-        <h3 class="font-semibold text-slate-800 text-base mb-2">Precision Medicine</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Genomic data integration, multi-omics cancer trajectory analysis, and the MOMENTUM study for personalized breast cancer treatment.</p>
-        <div class="mt-4 flex flex-wrap gap-1.5">
+        <h3 class="font-semibold text-slate-800 text-[0.97rem] mb-2">Precision Medicine</h3>
+        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+          Genomic data integration, cancer trajectory analysis, and clinical decision support system (CDSS) development for personalized care.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
           <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Genomics</span>
-          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Multi-Omics</span>
-          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">MOMENTUM</span>
+          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Cancer Trajectory</span>
+          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">CDSS</span>
         </div>
       </div>
 
@@ -461,88 +579,98 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════
-     ACTIVE PROJECTS (timeline cards)
-══════════════════════════════════════════════════ -->
-<section id="projects" class="py-20 bg-white">
+
+<!-- ══════════════════════════════════════════════
+     FEATURED PROJECTS
+═══════════════════════════════════════════════════ -->
+<section id="projects" class="py-20 bg-slate-50">
   <div class="max-w-7xl mx-auto px-6">
 
     <div class="text-center mb-14">
       <p class="section-eyebrow">Current Work</p>
-      <h2 class="section-title">Active Projects</h2>
+      <h2 class="section-title">Featured Projects</h2>
       <div class="section-divider mx-auto"></div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-      <!-- Project 1 -->
-      <div class="rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
-        <div class="h-2 bg-gradient-to-r from-primary to-accent"></div>
+      <!-- Project 1: MOMENTUM -->
+      <div class="fade-in rounded-2xl border border-slate-100 bg-white shadow-sm overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
+        <div class="h-1.5 bg-gradient-to-r from-primary to-accent"></div>
         <div class="p-7 flex flex-col flex-1">
           <div class="flex items-start gap-3 mb-4">
             <span class="mt-0.5 flex-shrink-0 w-9 h-9 rounded-xl bg-primary-xlight flex items-center justify-center">
-              <svg width="18" height="18" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <svg width="18" height="18" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
             </span>
             <div>
-              <span class="text-xs font-semibold text-primary-light uppercase tracking-wider">Multi-Institution Study</span>
-              <h3 class="font-semibold text-slate-800 text-lg leading-tight mt-0.5">MOMENTUM Study</h3>
+              <span class="text-[0.68rem] font-bold text-primary-light uppercase tracking-widest">Multi-Institution · Korea</span>
+              <h3 class="font-bold text-slate-800 text-[1.05rem] leading-tight mt-0.5">MOMENTUM Study</h3>
             </div>
           </div>
-          <p class="text-slate-500 text-sm leading-relaxed flex-1">
-            Investigating metabolic vulnerability and mechanisms of endocrine therapy resistance in breast cancer patients. Integrates AI-driven analysis with real-world clinical data from multiple Korean medical centers.
+          <p class="text-slate-500 text-sm leading-relaxed flex-1 mb-4">
+            Exploring the intersection of metabolic vulnerability and endocrine therapy in breast cancer through AI techniques and real-world data from multi-institutions in Korea.
           </p>
-          <div class="mt-6 pt-5 border-t border-slate-100 flex flex-wrap gap-2">
-            <span class="px-2.5 py-1 bg-primary-xlight text-primary text-xs font-medium rounded-md">AI + RWD</span>
-            <span class="px-2.5 py-1 bg-primary-xlight text-primary text-xs font-medium rounded-md">Breast Cancer</span>
-            <span class="px-2.5 py-1 bg-primary-xlight text-primary text-xs font-medium rounded-md">Korea</span>
+          <div class="text-xs text-slate-400 mb-5">
+            <span class="font-semibold text-slate-500">Collaborators:</span> Samsung Seoul Hospital (Hematology-Oncology) · Kakao Healthcare
+          </div>
+          <div class="pt-4 border-t border-slate-100 flex flex-wrap gap-1.5">
+            <span class="px-2.5 py-1 bg-primary-xlight text-primary text-xs font-medium rounded-md">Clinical Research Platform</span>
+            <span class="px-2.5 py-1 bg-primary-xlight text-primary text-xs font-medium rounded-md">Data Pipelining</span>
+            <span class="px-2.5 py-1 bg-primary-xlight text-primary text-xs font-medium rounded-md">Landscape Study</span>
           </div>
         </div>
       </div>
 
-      <!-- Project 2 -->
-      <div class="rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
-        <div class="h-2 bg-gradient-to-r from-sky-500 to-blue-500"></div>
+      <!-- Project 2: NRF Cancer Trajectory -->
+      <div class="fade-in rounded-2xl border border-slate-100 bg-white shadow-sm overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
+        <div class="h-1.5 bg-gradient-to-r from-sky-500 to-blue-500"></div>
         <div class="p-7 flex flex-col flex-1">
           <div class="flex items-start gap-3 mb-4">
             <span class="mt-0.5 flex-shrink-0 w-9 h-9 rounded-xl bg-sky-50 flex items-center justify-center">
-              <svg width="18" height="18" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <svg width="18" height="18" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             </span>
             <div>
-              <span class="text-xs font-semibold text-sky-500 uppercase tracking-wider">NRF-Funded</span>
-              <h3 class="font-semibold text-slate-800 text-lg leading-tight mt-0.5">AI Cancer Trajectory</h3>
+              <span class="text-[0.68rem] font-bold text-sky-500 uppercase tracking-widest">NRF-Funded Research</span>
+              <h3 class="font-bold text-slate-800 text-[1.05rem] leading-tight mt-0.5">AI Cancer Trajectory Recontextualization</h3>
             </div>
           </div>
-          <p class="text-slate-500 text-sm leading-relaxed flex-1">
-            Deep learning phenotyping models that characterize longitudinal disease trajectories for breast and colorectal cancer patients, leveraging large-scale EHR datasets from Korean hospitals.
+          <p class="text-slate-500 text-sm leading-relaxed flex-1 mb-4">
+            AI-based cancer trajectory recontextualization methodology for person-centered phenotyping — applied to breast and colorectal cancer real-world data from Korean institutions.
           </p>
-          <div class="mt-6 pt-5 border-t border-slate-100 flex flex-wrap gap-2">
+          <div class="text-xs text-slate-400 mb-5">
+            <span class="font-semibold text-slate-500">Funding:</span> National Research Foundation of Korea (NRF)
+          </div>
+          <div class="pt-4 border-t border-slate-100 flex flex-wrap gap-1.5">
+            <span class="px-2.5 py-1 bg-sky-50 text-sky-700 text-xs font-medium rounded-md">Data-Information Value Chain</span>
             <span class="px-2.5 py-1 bg-sky-50 text-sky-700 text-xs font-medium rounded-md">Deep Learning</span>
-            <span class="px-2.5 py-1 bg-sky-50 text-sky-700 text-xs font-medium rounded-md">Phenotyping</span>
-            <span class="px-2.5 py-1 bg-sky-50 text-sky-700 text-xs font-medium rounded-md">NRF Korea</span>
+            <span class="px-2.5 py-1 bg-sky-50 text-sky-700 text-xs font-medium rounded-md">Methodology</span>
           </div>
         </div>
       </div>
 
-      <!-- Project 3 -->
-      <div class="rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
-        <div class="h-2 bg-gradient-to-r from-indigo-500 to-primary"></div>
+      <!-- Project 3: Traffic & Breast Cancer Mortality -->
+      <div class="fade-in rounded-2xl border border-slate-100 bg-white shadow-sm overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
+        <div class="h-1.5 bg-gradient-to-r from-indigo-500 to-primary"></div>
         <div class="p-7 flex flex-col flex-1">
           <div class="flex items-start gap-3 mb-4">
             <span class="mt-0.5 flex-shrink-0 w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center">
-              <svg width="18" height="18" fill="none" stroke="#4338ca" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+              <svg width="18" height="18" fill="none" stroke="#4338ca" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             </span>
             <div>
-              <span class="text-xs font-semibold text-indigo-500 uppercase tracking-wider">Drug Safety</span>
-              <h3 class="font-semibold text-slate-800 text-lg leading-tight mt-0.5">Pharmacovigilance Framework</h3>
+              <span class="text-[0.68rem] font-bold text-indigo-500 uppercase tracking-widest">Social Determinants · GIS</span>
+              <h3 class="font-bold text-slate-800 text-[1.05rem] leading-tight mt-0.5">Traffic Exposure &amp; Breast Cancer Mortality</h3>
             </div>
           </div>
-          <p class="text-slate-500 text-sm leading-relaxed flex-1">
-            Scalable FAERS deduplication pipelines and active drug safety monitoring systems. Applied to Stevens-Johnson syndrome signals and COVID-19 fast-track therapeutic safety profiles.
+          <p class="text-slate-500 text-sm leading-relaxed flex-1 mb-4">
+            Examining the association between area-level traffic exposure and breast cancer mortality by residence using GIS/GWR analysis and multi-institution public data.
           </p>
-          <div class="mt-6 pt-5 border-t border-slate-100 flex flex-wrap gap-2">
-            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-md">FAERS</span>
-            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-md">Signal Detection</span>
-            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-md">COVID-19</span>
+          <div class="text-xs text-slate-400 mb-5">
+            <span class="font-semibold text-slate-500">International collaborators:</span> Harvard University · University of Cincinnati · Tufts University · SKKU
+          </div>
+          <div class="pt-4 border-t border-slate-100 flex flex-wrap gap-1.5">
+            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-md">RWD</span>
+            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-md">GIS / GWR</span>
+            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-md">Public Data</span>
           </div>
         </div>
       </div>
@@ -551,10 +679,11 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════
+
+<!-- ══════════════════════════════════════════════
      PUBLICATIONS
-══════════════════════════════════════════════════ -->
-<section id="publications" class="py-20 bg-slate-50">
+═══════════════════════════════════════════════════ -->
+<section id="publications" class="py-20 bg-white">
   <div class="max-w-7xl mx-auto px-6">
 
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14">
@@ -563,91 +692,149 @@
         <h2 class="section-title">Recent Publications</h2>
         <div class="section-divider"></div>
       </div>
-      <a href="#" class="text-sm font-medium text-primary-light hover:text-primary flex items-center gap-1.5 self-start md:self-auto">
-        View All Publications
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      <a href="https://pubmed.ncbi.nlm.nih.gov/?term=hyo+jung+kim+biomedical" target="_blank" rel="noopener" class="text-sm font-medium text-primary-light hover:text-primary flex items-center gap-1.5 self-start md:self-auto transition-colors">
+        View on PubMed
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
       </a>
     </div>
 
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-5">
 
-      <!-- Pub 1 -->
-      <div class="pub-item bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+      <!-- Pub 1 — 2026 -->
+      <div class="pub-item fade-in bg-slate-50 rounded-xl p-5 md:p-6 hover:shadow-sm transition-shadow">
         <div class="flex flex-col sm:flex-row sm:items-start gap-4">
-          <div class="flex-shrink-0">
-            <span class="inline-block px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg tracking-wide">2026</span>
+          <div class="flex-shrink-0 pt-0.5">
+            <span class="inline-block px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg tracking-wide tabular-nums">2026</span>
           </div>
           <div class="flex-1">
-            <h4 class="font-semibold text-slate-800 text-base leading-snug mb-1.5">
+            <h4 class="font-semibold text-slate-800 text-[0.95rem] leading-snug mb-1.5">
               Enhancing COVID-19 Screening Models With Epidemiological and Mobility Features
             </h4>
             <p class="text-slate-500 text-sm mb-3">
-              Choo et al. &nbsp;·&nbsp; <em>JMIR AI</em>
+              Choo H et al. &nbsp;&middot;&nbsp; <em>JMIR AI</em>, 5(1), e54956
             </p>
-            <div class="flex flex-wrap gap-2">
-              <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">COVID-19</span>
-              <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Screening Models</span>
-              <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Epidemiology</span>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">COVID-19</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Screening</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Epidemiology</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Mobility</span>
             </div>
           </div>
           <div class="flex-shrink-0">
-            <button class="text-slate-400 hover:text-primary transition-colors p-1" title="Copy citation">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
-            </button>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Choo+COVID-19+JMIR+AI+e54956" target="_blank" rel="noopener" class="text-slate-400 hover:text-primary transition-colors p-1.5 block" title="PubMed">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Pub 2 -->
-      <div class="pub-item bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+      <!-- Pub 2 — 2025 -->
+      <div class="pub-item fade-in bg-slate-50 rounded-xl p-5 md:p-6 hover:shadow-sm transition-shadow">
         <div class="flex flex-col sm:flex-row sm:items-start gap-4">
-          <div class="flex-shrink-0">
-            <span class="inline-block px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg tracking-wide">2025</span>
+          <div class="flex-shrink-0 pt-0.5">
+            <span class="inline-block px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg tracking-wide tabular-nums">2025</span>
           </div>
           <div class="flex-1">
-            <h4 class="font-semibold text-slate-800 text-base leading-snug mb-1.5">
+            <h4 class="font-semibold text-slate-800 text-[0.95rem] leading-snug mb-1.5">
               Effectiveness of Adjuvant Capecitabine in Triple-Negative Breast Cancer
             </h4>
             <p class="text-slate-500 text-sm mb-3">
-              Kim MJ et al. &nbsp;·&nbsp; <em>Clinical Breast Cancer</em>
+              Kim MJ, Kim HJ et al. &nbsp;&middot;&nbsp; <em>Clinical Breast Cancer</em>
             </p>
-            <div class="flex flex-wrap gap-2">
-              <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Breast Cancer</span>
-              <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Capecitabine</span>
-              <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">RWE</span>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Breast Cancer</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Capecitabine</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">TNBC</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">RWE</span>
             </div>
           </div>
           <div class="flex-shrink-0">
-            <button class="text-slate-400 hover:text-primary transition-colors p-1" title="Copy citation">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
-            </button>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kim+Capecitabine+Triple-Negative+Breast+Cancer+2025" target="_blank" rel="noopener" class="text-slate-400 hover:text-primary transition-colors p-1.5 block" title="PubMed">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Pub 3 -->
-      <div class="pub-item bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+      <!-- Pub 3 — 2024a -->
+      <div class="pub-item fade-in bg-slate-50 rounded-xl p-5 md:p-6 hover:shadow-sm transition-shadow">
         <div class="flex flex-col sm:flex-row sm:items-start gap-4">
-          <div class="flex-shrink-0">
-            <span class="inline-block px-3 py-1.5 bg-slate-600 text-white text-xs font-bold rounded-lg tracking-wide">2024</span>
+          <div class="flex-shrink-0 pt-0.5">
+            <span class="inline-block px-3 py-1.5 bg-slate-600 text-white text-xs font-bold rounded-lg tracking-wide tabular-nums">2024</span>
           </div>
           <div class="flex-1">
-            <h4 class="font-semibold text-slate-800 text-base leading-snug mb-1.5">
-              Investigating the Safety Profile of Fast-Track COVID-19 Drugs
+            <h4 class="font-semibold text-slate-800 text-[0.95rem] leading-snug mb-1.5">
+              Investigating the Safety Profile of Fast-Track COVID-19 Drugs Using FAERS
             </h4>
-            <p class="text-slate-500 text-sm mb-3">
-              Kim HJ et al. &nbsp;·&nbsp; <em>Pharmacoepidemiology and Drug Safety</em>
+            <p class="text-slate-500 text-sm mb-1">
+              Kim HJ<sup>†</sup>, Yoon JH<sup>†</sup> et al. &nbsp;&middot;&nbsp; <em>Pharmacoepidemiology and Drug Safety</em>, 33(11)
             </p>
-            <div class="flex flex-wrap gap-2">
-              <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Pharmacovigilance</span>
-              <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">COVID-19</span>
-              <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Drug Safety</span>
+            <p class="text-slate-400 text-xs mb-3"><sup>†</sup>Equal contribution</p>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Pharmacovigilance</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">FAERS</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">COVID-19 Drugs</span>
             </div>
           </div>
           <div class="flex-shrink-0">
-            <button class="text-slate-400 hover:text-primary transition-colors p-1" title="Copy citation">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
-            </button>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kim+HJ+Yoon+FAERS+COVID+fast-track+2024" target="_blank" rel="noopener" class="text-slate-400 hover:text-primary transition-colors p-1.5 block" title="PubMed">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pub 4 — 2024b -->
+      <div class="pub-item fade-in bg-slate-50 rounded-xl p-5 md:p-6 hover:shadow-sm transition-shadow">
+        <div class="flex flex-col sm:flex-row sm:items-start gap-4">
+          <div class="flex-shrink-0 pt-0.5">
+            <span class="inline-block px-3 py-1.5 bg-slate-600 text-white text-xs font-bold rounded-lg tracking-wide tabular-nums">2024</span>
+          </div>
+          <div class="flex-1">
+            <h4 class="font-semibold text-slate-800 text-[0.95rem] leading-snug mb-1.5">
+              Long-term hepatobiliary disorder associated with trastuzumab emtansine
+            </h4>
+            <p class="text-slate-500 text-sm mb-1">
+              Kim HJ<sup>†</sup>, Yoon JH<sup>†</sup> et al. &nbsp;&middot;&nbsp; <em>Scientific Reports</em>, 14(1)
+            </p>
+            <p class="text-slate-400 text-xs mb-3"><sup>†</sup>Equal contribution</p>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Drug Safety</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Hepatotoxicity</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">T-DM1</span>
+            </div>
+          </div>
+          <div class="flex-shrink-0">
+            <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kim+HJ+trastuzumab+emtansine+hepatobiliary+2024" target="_blank" rel="noopener" class="text-slate-400 hover:text-primary transition-colors p-1.5 block" title="PubMed">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pub 5 — 2023 -->
+      <div class="pub-item fade-in bg-slate-50 rounded-xl p-5 md:p-6 hover:shadow-sm transition-shadow">
+        <div class="flex flex-col sm:flex-row sm:items-start gap-4">
+          <div class="flex-shrink-0 pt-0.5">
+            <span class="inline-block px-3 py-1.5 bg-slate-500 text-white text-xs font-bold rounded-lg tracking-wide tabular-nums">2023</span>
+          </div>
+          <div class="flex-1">
+            <h4 class="font-semibold text-slate-800 text-[0.95rem] leading-snug mb-1.5">
+              Development and Application of an Active Pharmacovigilance Framework
+            </h4>
+            <p class="text-slate-500 text-sm mb-3">
+              Choe S et al. &nbsp;&middot;&nbsp; <em>Drug Safety</em>, 46(7)
+            </p>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Active Surveillance</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Framework</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Drug Safety</span>
+            </div>
+          </div>
+          <div class="flex-shrink-0">
+            <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Choe+pharmacovigilance+framework+Drug+Safety+2023" target="_blank" rel="noopener" class="text-slate-400 hover:text-primary transition-colors p-1.5 block" title="PubMed">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
           </div>
         </div>
       </div>
@@ -656,10 +843,11 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════
-     TEAM / PI
-══════════════════════════════════════════════════ -->
-<section id="team" class="py-20 bg-white">
+
+<!-- ══════════════════════════════════════════════
+     TEAM — PI + Members
+═══════════════════════════════════════════════════ -->
+<section id="team" class="py-20 bg-slate-50">
   <div class="max-w-7xl mx-auto px-6">
 
     <div class="text-center mb-14">
@@ -669,50 +857,191 @@
     </div>
 
     <!-- PI card -->
-    <div class="max-w-3xl mx-auto bg-gradient-to-br from-slate-50 to-blue-50 border border-blue-100 rounded-2xl p-8 md:p-10 flex flex-col md:flex-row gap-8 items-center md:items-start shadow-sm">
+    <div class="fade-in max-w-4xl mx-auto bg-white border border-blue-100 rounded-2xl p-8 md:p-10 flex flex-col md:flex-row gap-8 items-start shadow-sm mb-14">
 
-      <!-- Avatar placeholder -->
+      <!-- Avatar -->
       <div class="flex-shrink-0">
         <div class="w-28 h-28 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md">
-          <svg width="48" height="48" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          <svg width="50" height="50" fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
           </svg>
         </div>
+        <span class="mt-3 flex justify-center">
+          <span class="px-2.5 py-1 bg-primary text-white text-[0.68rem] font-bold rounded-full uppercase tracking-widest">Principal Investigator</span>
+        </span>
       </div>
 
-      <div>
-        <div class="flex flex-wrap items-center gap-3 mb-1">
-          <h3 class="text-2xl font-bold text-slate-800" style="font-family:'Playfair Display',Georgia,serif">Hyo Jung Kim</h3>
-          <span class="px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full">Principal Investigator</span>
-        </div>
-        <p class="text-primary-light font-medium text-sm mb-4">Assistant Professor, Dept. of Biomedical Software Engineering<br/>The Catholic University of Korea</p>
+      <div class="flex-1 min-w-0">
+        <h3 class="font-bold text-slate-800 text-2xl mb-0.5" style="font-family:'Playfair Display',Georgia,serif;">Hyo Jung Kim</h3>
+        <p class="text-primary-light font-medium text-sm mb-4">Assistant Professor — Dept. of Biomedical Software Engineering, The Catholic University of Korea</p>
 
-        <div class="space-y-2 text-sm text-slate-600 mb-5">
-          <div class="flex items-center gap-2">
-            <svg width="15" height="15" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 10.5V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10.5"/><polyline points="2 6 12 13 22 6"/></svg>
-            <a href="mailto:hyojung.kim@catholic.ac.kr" class="text-primary-light hover:underline">hyojung.kim@catholic.ac.kr</a>
+        <!-- Bio -->
+        <p class="text-slate-600 text-sm leading-relaxed mb-5">
+          Hyo Jung Kim is an associate professor in the Department of Biomedical Software Engineering at The Catholic University of Korea, South Korea. She earned her BSc and MSc in Nursing, and Management &amp; Education from Yonsei University in Seoul, South Korea, and her Ph.D. in Biomedical Informatics from Seoul National University. She is a seasoned clinical informaticist with over 20 years of professional experience across clinical practice, EHR software architecture, and academic research. She focuses on integrative approaches to enhancing continuity and quality of care enabled by the digital landscape from knowledge representation to artificial intelligence system.
+        </p>
+
+        <!-- Education + roles -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5 text-sm">
+          <div>
+            <p class="text-[0.68rem] font-bold uppercase tracking-widest text-slate-400 mb-2">Education</p>
+            <ul class="space-y-1 text-slate-600 text-xs leading-relaxed">
+              <li class="flex items-start gap-1.5"><span class="text-primary mt-0.5">&#x25B8;</span>BSc Nursing — Yonsei University</li>
+              <li class="flex items-start gap-1.5"><span class="text-primary mt-0.5">&#x25B8;</span>MSc Management &amp; Education — Yonsei University</li>
+              <li class="flex items-start gap-1.5"><span class="text-primary mt-0.5">&#x25B8;</span>PhD Biomedical Informatics — Seoul National University (2015–2020)</li>
+            </ul>
           </div>
-          <div class="flex items-start gap-2">
-            <svg width="15" height="15" class="mt-0.5 flex-shrink-0" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/></svg>
-            <span>43, Jibong-ro, Bucheon, 14662, Gyeonggi-do, South Korea</span>
+          <div>
+            <p class="text-[0.68rem] font-bold uppercase tracking-widest text-slate-400 mb-2">Recent Roles</p>
+            <ul class="space-y-1 text-slate-600 text-xs leading-relaxed">
+              <li class="flex items-start gap-1.5"><span class="text-primary mt-0.5">&#x25B8;</span>ML/LLM Senior Data Engineer — Kakao Healthcare</li>
+              <li class="flex items-start gap-1.5"><span class="text-primary mt-0.5">&#x25B8;</span>Research Professor — SAIHST / SKKU</li>
+              <li class="flex items-start gap-1.5"><span class="text-primary mt-0.5">&#x25B8;</span>Postdoctoral Researcher — Samsung Medical Center</li>
+            </ul>
           </div>
         </div>
 
-        <div class="flex flex-wrap gap-2">
-          <span class="px-2.5 py-1 bg-white border border-blue-100 text-slate-600 text-xs rounded-md font-medium shadow-sm">PhD, SNU Biomedical Informatics</span>
-          <span class="px-2.5 py-1 bg-white border border-blue-100 text-slate-600 text-xs rounded-md font-medium shadow-sm">20+ yrs Clinical + EHR Experience</span>
-          <span class="px-2.5 py-1 bg-white border border-blue-100 text-slate-600 text-xs rounded-md font-medium shadow-sm">Pharmacoepidemiology</span>
+        <!-- Committee badge -->
+        <div class="inline-flex items-start gap-2 bg-blue-50 border border-blue-100 rounded-xl px-4 py-2.5 text-xs text-slate-600 mb-5">
+          <svg class="flex-shrink-0 mt-0.5" width="14" height="14" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Member, 2nd Data Disclosure and Utilization Committee, CODA — Korea National Institute of Health</span>
+        </div>
+
+        <!-- Contact -->
+        <div class="flex flex-wrap gap-4 text-sm">
+          <a href="mailto:hyojung.kim@catholic.ac.kr" class="inline-flex items-center gap-1.5 text-primary-light hover:text-primary transition-colors font-medium">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            hyojung.kim@catholic.ac.kr
+          </a>
         </div>
       </div>
+    </div><!-- /PI card -->
+
+    <!-- Lab Members grid -->
+    <div>
+      <p class="text-center text-[0.72rem] font-bold uppercase tracking-widest text-slate-400 mb-7">Undergraduate Researchers</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+
+        <div class="member-card fade-in">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 rounded-xl bg-primary-xlight flex items-center justify-center flex-shrink-0">
+              <svg width="17" height="17" fill="none" stroke="#1e40af" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-800 text-sm leading-tight">Jun Seok Her</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1">
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Biomedical Data Science</span>
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Pharmacovigilance</span>
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Healthcare Data Engineering</span>
+          </div>
+        </div>
+
+        <div class="member-card fade-in">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 rounded-xl bg-primary-xlight flex items-center justify-center flex-shrink-0">
+              <svg width="17" height="17" fill="none" stroke="#1e40af" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-800 text-sm leading-tight">Jin Woo Yoo</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1">
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Health Data Analytics</span>
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Claims Data</span>
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Public Health Data</span>
+          </div>
+        </div>
+
+        <div class="member-card fade-in">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 rounded-xl bg-primary-xlight flex items-center justify-center flex-shrink-0">
+              <svg width="17" height="17" fill="none" stroke="#1e40af" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-800 text-sm leading-tight">Eun Jin Jeong</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1">
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Biomedical Data Science</span>
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Clinical Informatics</span>
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Data Pipelining</span>
+          </div>
+        </div>
+
+        <div class="member-card fade-in">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 rounded-xl bg-primary-xlight flex items-center justify-center flex-shrink-0">
+              <svg width="17" height="17" fill="none" stroke="#1e40af" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-800 text-sm leading-tight">Yeseo Lee</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1">
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Data Harmonization</span>
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Linked Health Data</span>
+          </div>
+        </div>
+
+        <div class="member-card fade-in">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 rounded-xl bg-primary-xlight flex items-center justify-center flex-shrink-0">
+              <svg width="17" height="17" fill="none" stroke="#1e40af" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-800 text-sm leading-tight">Eun Ji Kim</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1">
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Biomedical Data Science</span>
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Pharmacovigilance</span>
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Drug Safety</span>
+          </div>
+        </div>
+
+        <div class="member-card fade-in">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 rounded-xl bg-primary-xlight flex items-center justify-center flex-shrink-0">
+              <svg width="17" height="17" fill="none" stroke="#1e40af" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-800 text-sm leading-tight">Sang Min Lim</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1">
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Clinical Informatics</span>
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Health Services Research</span>
+          </div>
+        </div>
+
+        <div class="member-card fade-in">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 rounded-xl bg-primary-xlight flex items-center justify-center flex-shrink-0">
+              <svg width="17" height="17" fill="none" stroke="#1e40af" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-800 text-sm leading-tight">Jae Hyeok Han</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1">
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Biomedical Data Science</span>
+            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[0.68rem] rounded font-medium">Clinical Data Mgmt</span>
+          </div>
+        </div>
+
+      </div><!-- /members grid -->
     </div>
 
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════
+
+<!-- ══════════════════════════════════════════════
      COLLABORATORS
-══════════════════════════════════════════════════ -->
-<section id="collaborators" class="py-16 bg-slate-50 border-t border-slate-100">
+═══════════════════════════════════════════════════ -->
+<section id="collaborators" class="py-16 bg-white border-t border-slate-100">
   <div class="max-w-7xl mx-auto px-6">
 
     <div class="text-center mb-10">
@@ -721,40 +1050,61 @@
       <div class="section-divider mx-auto"></div>
     </div>
 
-    <div class="flex flex-wrap justify-center gap-3">
+    <div class="flex flex-wrap justify-center gap-2.5 fade-in">
+
+      <!-- Korea -->
       <div class="collab-pill">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Samsung Medical Center
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Samsung Seoul Hospital
       </div>
       <div class="collab-pill">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Ewha Womans University
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Eunpyeong St. Mary's Hospital
       </div>
       <div class="collab-pill">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Bucheon St. Mary's Hospital
+      </div>
+      <div class="collab-pill">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
         Kakao Healthcare
       </div>
       <div class="collab-pill">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        University of Cincinnati
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
+        Sookmyung Women's University
       </div>
       <div class="collab-pill">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
+        Chonnam National University
+      </div>
+      <div class="collab-pill">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
+        Sungkyunkwan University (SKKU)
+      </div>
+
+      <!-- International -->
+      <div class="collab-pill" style="border-color:#bfdbfe;background:#eff6ff;">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         Harvard University
       </div>
-      <div class="collab-pill">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <div class="collab-pill" style="border-color:#bfdbfe;background:#eff6ff;">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        University of Cincinnati
+      </div>
+      <div class="collab-pill" style="border-color:#bfdbfe;background:#eff6ff;">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         Tufts University
       </div>
-    </div>
 
+    </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════
+
+<!-- ══════════════════════════════════════════════
      CONTACT
-══════════════════════════════════════════════════ -->
-<section id="contact" class="py-20 bg-white">
+═══════════════════════════════════════════════════ -->
+<section id="contact" class="py-20 bg-slate-50">
   <div class="max-w-7xl mx-auto px-6">
 
     <div class="text-center mb-14">
@@ -765,66 +1115,69 @@
 
     <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
 
-      <!-- Contact info -->
-      <div class="space-y-6">
-        <div>
-          <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wider mb-4">Lab Information</h3>
-          <div class="space-y-4">
-            <div class="flex gap-3">
-              <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-primary-xlight flex items-center justify-center">
-                <svg width="16" height="16" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 10.5V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10.5"/><polyline points="2 6 12 13 22 6"/></svg>
-              </div>
-              <div>
-                <p class="text-xs text-slate-400 mb-0.5 font-medium uppercase tracking-wider">Email</p>
-                <a href="mailto:hyojung.kim@catholic.ac.kr" class="text-primary-light hover:text-primary text-sm font-medium transition-colors">hyojung.kim@catholic.ac.kr</a>
-              </div>
+      <!-- Info column -->
+      <div class="fade-in space-y-7">
+
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-7 space-y-5">
+          <h3 class="text-[0.7rem] font-bold uppercase tracking-widest text-slate-400">Lab Information</h3>
+
+          <div class="flex gap-3.5">
+            <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-primary-xlight flex items-center justify-center">
+              <svg width="16" height="16" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             </div>
-            <div class="flex gap-3">
-              <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-primary-xlight flex items-center justify-center">
-                <svg width="16" height="16" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/></svg>
-              </div>
-              <div>
-                <p class="text-xs text-slate-400 mb-0.5 font-medium uppercase tracking-wider">Address</p>
-                <p class="text-slate-600 text-sm leading-relaxed">43, Jibong-ro, Bucheon<br/>14662, Gyeonggi-do, South Korea</p>
-              </div>
+            <div>
+              <p class="text-[0.68rem] text-slate-400 mb-0.5 font-semibold uppercase tracking-wider">Email</p>
+              <a href="mailto:hyojung.kim@catholic.ac.kr" class="text-primary-light hover:text-primary text-sm font-medium transition-colors">hyojung.kim@catholic.ac.kr</a>
             </div>
-            <div class="flex gap-3">
-              <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-primary-xlight flex items-center justify-center">
-                <svg width="16" height="16" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-              </div>
-              <div>
-                <p class="text-xs text-slate-400 mb-0.5 font-medium uppercase tracking-wider">Department</p>
-                <p class="text-slate-600 text-sm leading-relaxed">Dept. of Biomedical Software Engineering<br/>The Catholic University of Korea</p>
-              </div>
+          </div>
+
+          <div class="flex gap-3.5">
+            <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-primary-xlight flex items-center justify-center">
+              <svg width="16" height="16" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/></svg>
+            </div>
+            <div>
+              <p class="text-[0.68rem] text-slate-400 mb-0.5 font-semibold uppercase tracking-wider">Address</p>
+              <p class="text-slate-600 text-sm leading-relaxed">43, Jibong-ro, Bucheon<br/>14662, Gyeonggi-do, South Korea</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3.5">
+            <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-primary-xlight flex items-center justify-center">
+              <svg width="16" height="16" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div>
+              <p class="text-[0.68rem] text-slate-400 mb-0.5 font-semibold uppercase tracking-wider">Department</p>
+              <p class="text-slate-600 text-sm leading-relaxed">Dept. of Biomedical Software Engineering<br/>The Catholic University of Korea</p>
             </div>
           </div>
         </div>
 
-        <div class="p-4 bg-blue-50 border border-blue-100 rounded-xl">
-          <p class="text-primary-dark font-semibold text-sm mb-1">Interested in Joining?</p>
-          <p class="text-slate-600 text-xs leading-relaxed">We welcome motivated graduate students and postdoctoral researchers interested in health informatics, clinical AI, and pharmacoepidemiology.</p>
+        <div class="bg-primary-xlight border border-blue-200 rounded-xl p-5">
+          <p class="text-primary-dark font-semibold text-sm mb-1.5">Interested in Joining PHI Lab?</p>
+          <p class="text-slate-600 text-xs leading-relaxed">We welcome motivated undergraduate and graduate students interested in health informatics, clinical AI, and pharmacoepidemiology. Reach out with your CV and research interests.</p>
         </div>
+
       </div>
 
-      <!-- Quick contact form (static prototype) -->
-      <div class="bg-slate-50 rounded-2xl border border-slate-100 p-7">
-        <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wider mb-5">Send a Message</h3>
+      <!-- Contact form (static prototype) -->
+      <div class="fade-in bg-white rounded-2xl border border-slate-100 shadow-sm p-7">
+        <h3 class="text-[0.7rem] font-bold uppercase tracking-widest text-slate-400 mb-5">Send a Message</h3>
         <div class="space-y-4">
           <div>
-            <label class="block text-xs font-medium text-slate-500 mb-1.5">Name</label>
-            <input type="text" placeholder="Your name" class="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition" />
+            <label class="block text-xs font-medium text-slate-500 mb-1.5" for="cf-name">Name</label>
+            <input id="cf-name" type="text" placeholder="Your name" class="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition" />
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-500 mb-1.5">Email</label>
-            <input type="email" placeholder="you@institution.edu" class="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition" />
+            <label class="block text-xs font-medium text-slate-500 mb-1.5" for="cf-email">Email</label>
+            <input id="cf-email" type="email" placeholder="you@institution.edu" class="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition" />
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-500 mb-1.5">Subject</label>
-            <input type="text" placeholder="Collaboration / Inquiry" class="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition" />
+            <label class="block text-xs font-medium text-slate-500 mb-1.5" for="cf-subject">Subject</label>
+            <input id="cf-subject" type="text" placeholder="Collaboration / Research inquiry" class="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition" />
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-500 mb-1.5">Message</label>
-            <textarea rows="4" placeholder="Your message…" class="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition resize-none"></textarea>
+            <label class="block text-xs font-medium text-slate-500 mb-1.5" for="cf-message">Message</label>
+            <textarea id="cf-message" rows="4" placeholder="Your message…" class="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition resize-none"></textarea>
           </div>
           <button class="w-full bg-primary hover:bg-primary-dark text-white text-sm font-semibold py-3 rounded-lg transition-colors shadow-sm">
             Send Message
@@ -836,65 +1189,86 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════
+
+<!-- ══════════════════════════════════════════════
      FOOTER
-══════════════════════════════════════════════════ -->
-<footer class="py-10 px-6">
-  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+═══════════════════════════════════════════════════ -->
+<footer class="py-12 px-6">
+  <div class="max-w-7xl mx-auto">
 
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-lg bg-primary/80 flex items-center justify-center">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 pb-10 border-b border-slate-700/60">
+
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+          <span class="text-white font-bold text-lg leading-none" style="font-family:'Playfair Display',Georgia,serif;">φ</span>
+        </div>
+        <div>
+          <p class="text-white font-bold text-[0.95rem] leading-tight">PHI Lab</p>
+          <p class="text-slate-400 text-xs mt-0.5">Precision &amp; Provenance Health Informatics Lab</p>
+        </div>
       </div>
-      <div>
-        <p class="text-white font-semibold text-sm">PHI Lab</p>
-        <p class="text-slate-400 text-xs">Precision &amp; Provenance Health Informatics Lab</p>
+
+      <div class="text-center hidden md:block">
+        <p class="text-slate-400 text-xs">The Catholic University of Korea &nbsp;&middot;&nbsp; Dept. of Biomedical Software Engineering</p>
+        <p class="text-slate-500 text-xs mt-0.5">43, Jibong-ro, Bucheon, 14662, Gyeonggi-do, South Korea</p>
       </div>
+
+      <nav class="flex flex-wrap gap-x-6 gap-y-2" aria-label="Footer">
+        <a href="#about"          class="text-slate-400 hover:text-slate-200 text-xs transition-colors">About</a>
+        <a href="#research"       class="text-slate-400 hover:text-slate-200 text-xs transition-colors">Research</a>
+        <a href="#projects"       class="text-slate-400 hover:text-slate-200 text-xs transition-colors">Projects</a>
+        <a href="#publications"   class="text-slate-400 hover:text-slate-200 text-xs transition-colors">Publications</a>
+        <a href="#team"           class="text-slate-400 hover:text-slate-200 text-xs transition-colors">Team</a>
+        <a href="#contact"        class="text-slate-400 hover:text-slate-200 text-xs transition-colors">Contact</a>
+      </nav>
     </div>
 
-    <div class="text-center">
-      <p class="text-slate-400 text-xs">The Catholic University of Korea &nbsp;·&nbsp; Dept. of Biomedical Software Engineering</p>
-      <p class="text-slate-500 text-xs mt-1">&copy; 2026 PHI Lab. All rights reserved.</p>
+    <div class="pt-6 flex flex-col md:flex-row items-center justify-between gap-2">
+      <p class="text-slate-500 text-xs">&copy; 2026 PHI Lab, The Catholic University of Korea. All rights reserved.</p>
+      <p class="text-slate-600 text-xs italic">"Data is the new soil, not oil." — David McCandless</p>
     </div>
 
-    <div class="flex gap-4">
-      <a href="#research"      class="text-slate-400 hover:text-slate-200 text-xs transition-colors">Research</a>
-      <a href="#publications"  class="text-slate-400 hover:text-slate-200 text-xs transition-colors">Publications</a>
-      <a href="#contact"       class="text-slate-400 hover:text-slate-200 text-xs transition-colors">Contact</a>
-    </div>
   </div>
 </footer>
 
-<!-- ═══════════════════════════════════════════════
+
+<!-- ══════════════════════════════════════════════
      JAVASCRIPT
-══════════════════════════════════════════════════ -->
+═══════════════════════════════════════════════════ -->
 <script>
-  /* ── Carousel ── */
+/* ─── Carousel ─── */
+(function () {
   const TOTAL = 3;
   let current = 0;
   let autoTimer = null;
 
   function updateCarousel() {
-    document.getElementById('carousel-track').style.transform = `translateX(-${current * (100/3)}%)`;
-    document.querySelectorAll('.carousel-dot').forEach((d, i) => {
+    // Each slide is 1/3 of the track width (track = 300%)
+    // Moving by 100/3 % of the TRACK per step = exactly one slide width
+    document.getElementById('carousel-track').style.transform =
+      'translateX(-' + (current * (100 / 3)) + '%)';
+
+    const dots = document.querySelectorAll('.carousel-dot');
+    dots.forEach(function (d, i) {
       d.classList.toggle('active', i === current);
+      d.setAttribute('aria-selected', i === current ? 'true' : 'false');
     });
   }
 
-  function moveCarousel(dir) {
+  window.moveCarousel = function (dir) {
     current = (current + dir + TOTAL) % TOTAL;
     updateCarousel();
     resetAuto();
-  }
+  };
 
-  function goToSlide(idx) {
+  window.goToSlide = function (idx) {
     current = idx;
     updateCarousel();
     resetAuto();
-  }
+  };
 
   function startAuto() {
-    autoTimer = setInterval(() => moveCarousel(1), 4000);
+    autoTimer = setInterval(function () { window.moveCarousel(1); }, 5000);
   }
 
   function resetAuto() {
@@ -904,42 +1278,49 @@
 
   startAuto();
 
-  /* Pause on hover */
-  const hero = document.querySelector('section');
-  hero.addEventListener('mouseenter', () => clearInterval(autoTimer));
-  hero.addEventListener('mouseleave', () => startAuto());
+  // Pause on hover
+  var heroSection = document.getElementById('hero');
+  heroSection.addEventListener('mouseenter', function () { clearInterval(autoTimer); });
+  heroSection.addEventListener('mouseleave', function () { startAuto(); });
+}());
 
-  /* ── Navbar shadow on scroll ── */
-  window.addEventListener('scroll', () => {
-    document.getElementById('navbar').style.boxShadow =
-      window.scrollY > 8 ? '0 2px 16px rgba(0,0,0,.08)' : '';
-  }, { passive: true });
+/* ─── Navbar shadow on scroll ─── */
+window.addEventListener('scroll', function () {
+  document.getElementById('navbar').style.boxShadow =
+    window.scrollY > 10 ? '0 2px 20px rgba(0,0,0,.09)' : '';
+}, { passive: true });
 
-  /* ── Mobile menu ── */
-  document.getElementById('mob-menu-btn').addEventListener('click', () => {
-    document.getElementById('mob-menu').classList.toggle('hidden');
-  });
-  function closeMob() {
-    document.getElementById('mob-menu').classList.add('hidden');
-  }
+/* ─── Mobile menu ─── */
+(function () {
+  var btn  = document.getElementById('mob-menu-btn');
+  var menu = document.getElementById('mob-menu');
 
-  /* ── Intersection Observer — fade-in on scroll ── */
-  const fadeStyle = document.createElement('style');
-  fadeStyle.textContent = `
-    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .55s ease, transform .55s ease; }
-    .fade-in.visible { opacity: 1; transform: none; }
-  `;
-  document.head.appendChild(fadeStyle);
-
-  document.querySelectorAll('.research-card, .pub-item, .collab-pill').forEach(el => {
-    el.classList.add('fade-in');
+  btn.addEventListener('click', function () {
+    var open = menu.classList.toggle('hidden') === false;
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-  }, { threshold: 0.12 });
+  window.closeMob = function () {
+    menu.classList.add('hidden');
+    btn.setAttribute('aria-expanded', 'false');
+  };
+}());
 
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+/* ─── IntersectionObserver — fade-in on scroll ─── */
+(function () {
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(function (el) {
+    observer.observe(el);
+  });
+}());
 </script>
 
 </body>
