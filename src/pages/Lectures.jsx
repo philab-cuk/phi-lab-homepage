@@ -1,4 +1,4 @@
-import { BookOpen, GraduationCap, Tag } from 'lucide-react'
+import { BookOpen, GraduationCap, Tag, Code2 } from 'lucide-react'
 import lecturesData from '../data/lectures.json'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -8,6 +8,14 @@ function semesterOrder(s) {
   const [term, year] = s.split(' ')
   const termRank = { Spring: 0, Summer: 1, Fall: 2 }
   return parseInt(year) * 10 + (termRank[term] ?? 5)
+}
+
+// LIVE Korean semester heading shown beside the English form.
+// Map: Spring→1학기, Summer→여름학기, Fall→2학기.
+const SEMESTER_KO = {
+  'Spring 2026': '2026학년도 1학기',
+  'Fall 2025': '2025학년도 2학기',
+  'Spring 2025': '2025학년도 1학기',
 }
 
 function groupBySemester(courses) {
@@ -44,35 +52,87 @@ function LevelBadge({ level }) {
   )
 }
 
-function CourseCard({ code, titleEn, titleKo, level, description, tags }) {
+function LanguageBadge({ language }) {
+  if (!language) return null
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md hover:border-brand-200 transition-all group">
+    <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+      <Code2 size={11} />
+      {language}
+    </span>
+  )
+}
+
+// Render images: 1 = full width, 2-3 = grid of equal columns.
+function CourseImages({ images }) {
+  if (!images || images.length === 0) return null
+  const count = images.length
+  const gridCls =
+    count === 1
+      ? 'grid grid-cols-1'
+      : count === 2
+        ? 'grid grid-cols-2 gap-2'
+        : 'grid grid-cols-3 gap-2'
+  return (
+    <div className={`${gridCls} mb-4 rounded-lg overflow-hidden`}>
+      {images.map((src) => (
+        <img
+          key={src}
+          src={src}
+          alt=""
+          role="presentation"
+          loading="lazy"
+          decoding="async"
+          className={count === 1 ? 'w-full h-auto object-cover' : 'w-full aspect-square object-cover'}
+        />
+      ))}
+    </div>
+  )
+}
+
+function CourseCard({ course }) {
+  const { code, titleEn, titleKo, level, language, description, objectives, images, tags } = course
+  const paragraphs = description ? description.split('\n\n').filter(Boolean) : []
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md hover:border-brand-200 transition-all group flex flex-col">
+      {/* Images */}
+      <CourseImages images={images} />
+
       {/* Header row */}
-      <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
-        <div className="flex items-center gap-2">
-          {code && (
-            <span className="text-xs font-bold text-brand-600 bg-brand-50 px-2.5 py-0.5 rounded font-mono">
-              {code}
-            </span>
-          )}
-          <LevelBadge level={level} />
-        </div>
-        <div className="w-9 h-9 rounded-lg bg-brand-50 flex items-center justify-center group-hover:bg-brand-100 transition-colors flex-shrink-0">
-          <BookOpen size={18} className="text-brand-600" />
-        </div>
+      <div className="flex flex-wrap items-start gap-2 mb-3">
+        {code && (
+          <span className="text-xs font-bold text-brand-600 bg-brand-50 px-2.5 py-0.5 rounded font-mono">
+            {code}
+          </span>
+        )}
+        <LevelBadge level={level} />
+        <LanguageBadge language={language} />
       </div>
 
-      {/* Title (EN + KO) */}
-      <h3 className="font-semibold text-gray-900 text-base leading-snug mb-1">{titleEn}</h3>
-      {titleKo && (
-        <p className="text-gray-500 text-sm leading-snug mb-2">{titleKo}</p>
+      {/* Title (KO + EN) */}
+      <h3 className="font-bold text-gray-900 text-lg leading-snug mb-1">{titleKo}</h3>
+      <p className="text-gray-500 text-sm leading-snug mb-4">{titleEn}</p>
+
+      {/* Description paragraphs */}
+      {paragraphs.length > 0 && (
+        <div className="space-y-3 text-gray-700 text-sm leading-relaxed mb-4">
+          {paragraphs.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+        </div>
       )}
 
-      {/* Description */}
-      <p className="text-gray-500 text-sm leading-relaxed mb-4">{description}</p>
+      {/* Objectives bullets */}
+      {objectives && objectives.length > 0 && (
+        <ul className="list-disc list-inside text-gray-700 text-sm leading-relaxed space-y-1 mb-4 marker:text-brand-600">
+          {objectives.map((o, i) => (
+            <li key={i}>{o}</li>
+          ))}
+        </ul>
+      )}
 
       {/* Tags */}
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
         {tags.map((tag) => (
           <span
             key={tag}
@@ -88,18 +148,20 @@ function CourseCard({ code, titleEn, titleKo, level, description, tags }) {
 }
 
 function SemesterSection({ semester, courses }) {
+  const ko = SEMESTER_KO[semester]
   return (
     <section>
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex items-baseline gap-3 mb-6">
         <h2 className="text-xl font-bold text-gray-800">{semester}</h2>
+        {ko && <span className="text-sm text-gray-500">{ko}</span>}
         <div className="flex-1 h-px bg-gray-200" />
         <span className="text-xs text-gray-400 font-medium">
           {courses.length} {courses.length === 1 ? 'course' : 'courses'}
         </span>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
         {courses.map((course) => (
-          <CourseCard key={course.id} {...course} />
+          <CourseCard key={course.id} course={course} />
         ))}
       </div>
     </section>
