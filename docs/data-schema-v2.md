@@ -263,3 +263,59 @@
 3. **Task 5** (research.json) → `Research.jsx` 신규 필드 표시 (옵션, 점진)
 4. **Task 6** (lectures.json) → `Lectures.jsx` `title`→`titleEn` 한 줄 수정
 5. **Task 7** (PI 정체성 + About 통합)
+
+---
+
+## 9. v2.1 (2026-05-14 추가) — `experience` 객체 확장
+
+배경: Professor 페이지를 라이브 사이트(philabcuk.org/people/) 와 1:1 매칭시키기 위해 work experience 항목에 카테고리 그룹핑·focus·details·외부 링크 정보가 필요. 기존 평면 6 항목 + period/role/organization/location 만으로는 누락이 큼.
+
+### 변경 (members.json#current[0].experience 객체)
+
+```js
+{
+  // 기존 필드 (유지)
+  period: "03/2024 – 02/2025",
+  role: "ML/LLM Senior Data Engineer",
+  organization: "Kakao Healthcare, Technological Lab",
+  location: "Pankyo, South Korea",
+
+  // 신규 필드 (모두 옵션)
+  category: "academic" | "technical" | "clinical",   // [신규] UI 그룹 헤더
+  focus: "EMR Development and Maintenance",          // [신규] 한 줄 핵심 (라이브의 'Focus:' 라벨)
+  details: [                                         // [신규] 다중 bullet (라이브의 'Details:' 라벨)
+    "Person in charge of CPOE and CDW",
+    "Database and application design",
+    "Workflow analysis for digital transformation"
+  ],
+  externalLinks: [                                   // [신규] 외부 참조 URL
+    { label: "Google Cloud customer story", url: "https://cloud.google.com/customers/kakao-healthcare-federated-learning" }
+  ]
+}
+```
+
+### 카테고리 매핑 (라이브 페이지 그룹 헤더와 일치)
+
+| category 값 | UI 헤더 |
+|---|---|
+| `academic` | "Academic Experience" |
+| `technical` | "Technical Leadership & Hands-On Experience" |
+| `clinical` | "Clinical Experience" |
+
+### 필드 채우기 정책 (라이브 1:1)
+
+- **focus**: 라이브에 'Focus:' 라벨이 붙은 경우 그 텍스트를 verbatim 입력
+- **details**: 라이브에 'Details:' 라벨로 bullet 목록이 있는 경우 각 bullet 을 array 원소로
+- **externalLinks**: 라이브 본문 어디든 외부 URL 이 명시된 경우 (예: 'Notable External Reference: Google blog' 식)
+- **category**: 모든 항목 필수 부여 (academic/technical/clinical 중 하나)
+
+### Professor.jsx UI 매핑
+
+- experience 배열을 `category` 별로 group → 3 sub-section 헤더 렌더
+- 각 항목 카드 안에서 `focus` (Focus 라벨 + 한 줄), `details` (불릿 ul), `externalLinks` (a 태그) 순으로 표시
+- 데이터에 category 가 없는 항목은 폴백 그룹 'Experience' 로
+
+### 적용 범위
+
+- 본 v2.1 변경은 PI(`hkim`) experience 만 영향. 학생 멤버 객체에는 experience 필드 자체가 없음 → 영향 없음
+- v2.0 의 다른 모든 필드(`title`, `bioShort`, `bioFull`, `education[]`, `service[]`, `researchInterests[]`, `nameKo` 등) 그대로 유지
