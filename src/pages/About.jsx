@@ -41,9 +41,9 @@ const LAB_VALUES = [
 
 function ValueCard({ icon: Icon, title, description }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 flex gap-4 hover:shadow-sm hover:border-blue-200 transition-all">
-      <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-        <Icon size={20} className="text-blue-600" />
+    <div className="bg-white rounded-xl border border-gray-200 p-6 flex gap-4 hover:shadow-sm hover:border-brand-200 transition-all">
+      <div className="w-10 h-10 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0">
+        <Icon size={20} className="text-brand-600" />
       </div>
       <div>
         <h3 className="font-semibold text-gray-900 text-base mb-1">{title}</h3>
@@ -56,7 +56,7 @@ function ValueCard({ icon: Icon, title, description }) {
 function SectionHeader({ label, title, subtitle }) {
   return (
     <div className="mb-10">
-      <span className="inline-block bg-blue-50 text-blue-700 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+      <span className="inline-block bg-brand-50 text-brand-700 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
         {label}
       </span>
       <h2 className="text-3xl font-bold text-gray-900 mb-2">{title}</h2>
@@ -73,7 +73,7 @@ export default function About() {
   return (
     <>
       {/* ── Page Header ── */}
-      <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white relative overflow-hidden">
+      <section className="bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 text-white relative overflow-hidden">
         <div
           aria-hidden="true"
           className="absolute inset-0 opacity-10 pointer-events-none"
@@ -83,16 +83,16 @@ export default function About() {
             backgroundSize: '40px 40px',
           }}
         />
-        <div aria-hidden="true" className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-blue-600 opacity-20 blur-3xl" />
+        <div aria-hidden="true" className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-brand-600 opacity-20 blur-3xl" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 relative">
-          <span className="inline-flex items-center gap-1.5 bg-blue-600/40 border border-blue-400/40 text-blue-100 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
+          <span className="inline-flex items-center gap-1.5 bg-brand-600/40 border border-brand-400/40 text-brand-100 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
             About Lab
           </span>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">
             Precision &amp; Provenance<br className="hidden sm:block" /> Health Informatics Lab
           </h1>
-          <p className="text-blue-200 text-base max-w-2xl leading-relaxed">
+          <p className="text-brand-200 text-base max-w-2xl leading-relaxed">
             PHI (φ) Lab at The Catholic University of Korea — advancing precision medicine and
             digital healthcare through data-driven interdisciplinary research.
           </p>
@@ -139,7 +139,7 @@ export default function About() {
             {/* Contact details */}
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h3 className="font-semibold text-gray-900 text-base mb-4 flex items-center gap-2">
-                <Mail size={16} className="text-blue-600" />
+                <Mail size={16} className="text-brand-600" />
                 Contact Information
               </h3>
               <address className="not-italic text-sm text-gray-600 space-y-2">
@@ -149,7 +149,7 @@ export default function About() {
                 <p className="pt-2">
                   <a
                     href={`mailto:${PI_EMAIL}`}
-                    className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                    className="text-brand-600 hover:text-brand-800 font-medium transition-colors"
                   >
                     {PI_EMAIL}
                   </a>
@@ -157,7 +157,7 @@ export default function About() {
               </address>
               <a
                 href={`mailto:${PI_EMAIL}?subject=Lab%20Inquiry`}
-                className="mt-5 inline-flex items-center gap-2 bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-800 transition-colors text-sm shadow-sm"
+                className="mt-5 inline-flex items-center gap-2 bg-brand-700 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-brand-800 transition-colors text-sm shadow-sm"
               >
                 <Mail size={14} />
                 Send Inquiry
@@ -166,9 +166,9 @@ export default function About() {
 
             {/* Address card */}
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col">
-              <div className="flex-1 bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col items-center justify-center gap-4 p-10 min-h-64">
-                <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-                  <MapPin size={28} className="text-blue-600" />
+              <div className="flex-1 bg-gradient-to-br from-brand-50 to-gray-100 flex flex-col items-center justify-center gap-4 p-10 min-h-64">
+                <div className="w-16 h-16 rounded-full bg-brand-100 flex items-center justify-center">
+                  <MapPin size={28} className="text-brand-600" />
                 </div>
                 <div className="text-center">
                   <p className="font-semibold text-gray-800 text-base">
@@ -179,7 +179,7 @@ export default function About() {
               </div>
               <div className="p-5 border-t border-gray-100">
                 <div className="flex items-start gap-3">
-                  <MapPin size={16} className="text-blue-600 mt-0.5 flex-shrink-0" />
+                  <MapPin size={16} className="text-brand-600 mt-0.5 flex-shrink-0" />
                   <address className="not-italic text-sm text-gray-600 leading-relaxed">
                     Department of Biomedical Software Engineering<br />
                     The Catholic University of Korea<br />

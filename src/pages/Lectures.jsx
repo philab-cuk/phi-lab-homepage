@@ -46,19 +46,19 @@ function LevelBadge({ level }) {
 
 function CourseCard({ code, titleEn, titleKo, level, description, tags }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md hover:border-blue-200 transition-all group">
+    <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md hover:border-brand-200 transition-all group">
       {/* Header row */}
       <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
         <div className="flex items-center gap-2">
           {code && (
-            <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded font-mono">
+            <span className="text-xs font-bold text-brand-600 bg-brand-50 px-2.5 py-0.5 rounded font-mono">
               {code}
             </span>
           )}
           <LevelBadge level={level} />
         </div>
-        <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors flex-shrink-0">
-          <BookOpen size={18} className="text-blue-600" />
+        <div className="w-9 h-9 rounded-lg bg-brand-50 flex items-center justify-center group-hover:bg-brand-100 transition-colors flex-shrink-0">
+          <BookOpen size={18} className="text-brand-600" />
         </div>
       </div>
 
@@ -118,13 +118,13 @@ export default function Lectures() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
       {/* Page header */}
       <div className="mb-12">
-        <span className="inline-block bg-blue-50 text-blue-700 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+        <span className="inline-block bg-brand-50 text-brand-700 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
           Teaching
         </span>
         <h1 className="text-4xl font-extrabold text-gray-900 mb-2 tracking-tight">
           Lectures &amp; Courses
         </h1>
-        <div className="w-16 h-1 bg-blue-600 rounded mb-5" />
+        <div className="w-16 h-1 bg-brand-600 rounded mb-5" />
         <p className="text-gray-500 text-base max-w-2xl leading-relaxed">
           Courses taught by PHI Lab faculty and researchers, spanning graduate seminars and
           undergraduate modules in health informatics, biomedical data science, and clinical AI.
@@ -133,7 +133,7 @@ export default function Lectures() {
         {/* Summary chips */}
         <div className="flex flex-wrap gap-3 mt-6">
           <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm shadow-sm">
-            <BookOpen size={14} className="text-blue-600" />
+            <BookOpen size={14} className="text-brand-600" />
             <span className="font-semibold text-gray-800">{lecturesData.length}</span>
             <span className="text-gray-500">Total Courses</span>
           </div>

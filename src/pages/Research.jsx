@@ -56,11 +56,11 @@ function ProjectCard({ project }) {
       : `${project.startYear} – Present`
 
   return (
-    <article className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md hover:border-blue-200 transition-all group flex flex-col gap-4">
+    <article className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md hover:border-brand-200 transition-all group flex flex-col gap-4">
       {/* Header row */}
       <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-100 transition-colors">
-          <ProjectIcon icon={project.icon} className="text-blue-600" />
+        <div className="w-12 h-12 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0 group-hover:bg-brand-100 transition-colors">
+          <ProjectIcon icon={project.icon} className="text-brand-600" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1">
@@ -76,7 +76,7 @@ function ProjectCard({ project }) {
 
       {/* Funding */}
       {project.fundingAgency && (
-        <p className="text-xs text-blue-700 font-medium">
+        <p className="text-xs text-brand-700 font-medium">
           Funded by: <span className="font-semibold">{project.fundingAgency}</span>
         </p>
       )}
@@ -123,7 +123,7 @@ export default function Research() {
   return (
     <>
       {/* ── Page Header ── */}
-      <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white relative overflow-hidden">
+      <section className="bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 text-white relative overflow-hidden">
         <div
           aria-hidden="true"
           className="absolute inset-0 opacity-10 pointer-events-none"
@@ -134,21 +134,21 @@ export default function Research() {
           }}
         />
         {/* Decorative blobs */}
-        <div aria-hidden="true" className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-blue-600 opacity-20 blur-3xl" />
-        <div aria-hidden="true" className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-blue-500 opacity-15 blur-3xl" />
+        <div aria-hidden="true" className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-brand-600 opacity-20 blur-3xl" />
+        <div aria-hidden="true" className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-brand-500 opacity-15 blur-3xl" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 relative">
-          <span className="inline-flex items-center gap-1.5 bg-blue-600/40 border border-blue-400/40 text-blue-100 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
+          <span className="inline-flex items-center gap-1.5 bg-brand-600/40 border border-brand-400/40 text-brand-100 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
             <Microscope size={13} />
             Our Research
           </span>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">Research Projects</h1>
-          <p className="text-blue-200 text-base max-w-xl leading-relaxed mb-6">
+          <p className="text-brand-200 text-base max-w-xl leading-relaxed mb-6">
             Our work spans clinical NLP, data provenance, federated learning, and precision
             medicine — bridging computational methods with real-world clinical challenges.
           </p>
           {/* Stats */}
-          <div className="flex flex-wrap gap-6 text-sm text-blue-100">
+          <div className="flex flex-wrap gap-6 text-sm text-brand-100">
             <span>
               <strong className="text-white text-xl font-bold">{active.length}</strong>{' '}
               Active Projects
@@ -182,14 +182,14 @@ export default function Research() {
               className="w-full flex items-center gap-3 mb-6 group"
               aria-expanded={completedOpen}
             >
-              <span className="text-xs font-semibold uppercase tracking-widest text-gray-400 whitespace-nowrap group-hover:text-blue-600 transition-colors">
+              <span className="text-xs font-semibold uppercase tracking-widest text-gray-400 whitespace-nowrap group-hover:text-brand-600 transition-colors">
                 Completed Projects
               </span>
-              <div className="flex-1 h-px bg-gray-200 group-hover:bg-blue-200 transition-colors" />
-              <span className="text-xs text-gray-400 font-medium whitespace-nowrap group-hover:text-blue-600 transition-colors">
+              <div className="flex-1 h-px bg-gray-200 group-hover:bg-brand-200 transition-colors" />
+              <span className="text-xs text-gray-400 font-medium whitespace-nowrap group-hover:text-brand-600 transition-colors">
                 {completed.length} {completed.length === 1 ? 'project' : 'projects'}
               </span>
-              <span className="text-gray-400 group-hover:text-blue-600 transition-colors flex-shrink-0">
+              <span className="text-gray-400 group-hover:text-brand-600 transition-colors flex-shrink-0">
                 {completedOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </span>
             </button>

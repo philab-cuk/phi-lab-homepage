@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+/*
+ * Brand palette — derived from the LIVE site (philabcuk.org).
+ * brand-700 = #1279BE  ← exact link/accent colour observed via DevTools
+ * on the live nav (verified 2026-05-14). The 50–900 scale below is
+ * built around this hue (HSL ~204°, 84% sat) so the lighter shades
+ * become tints and the darker shades deepen for backgrounds.
+ */
+@theme {
+  --color-brand-50:  #ebf3fa;
+  --color-brand-100: #d4e7f5;
+  --color-brand-200: #a4cbe9;
+  --color-brand-300: #75afdc;
+  --color-brand-400: #4593d0;
+  --color-brand-500: #228ace;
+  --color-brand-600: #1782c5;
+  --color-brand-700: #1279be;
+  --color-brand-800: #0d5e94;
+  --color-brand-900: #08446b;
+}

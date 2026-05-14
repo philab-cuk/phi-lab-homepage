@@ -18,10 +18,10 @@ const TYPE_CONFIG = {
   conference: {
     label: 'Conference',
     icon: Layers,
-    bg: 'bg-blue-50',
-    text: 'text-blue-700',
-    border: 'border-blue-200',
-    activeBg: 'bg-blue-600',
+    bg: 'bg-brand-50',
+    text: 'text-brand-700',
+    border: 'border-brand-200',
+    activeBg: 'bg-brand-600',
   },
   workshop: {
     label: 'Workshop',
@@ -104,7 +104,7 @@ function CopyBibtexButton({ pub }) {
       className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md border transition-colors ${
         copied
           ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-          : 'bg-white text-gray-500 border-gray-200 hover:border-blue-300 hover:text-blue-600'
+          : 'bg-white text-gray-500 border-gray-200 hover:border-brand-300 hover:text-brand-600'
       }`}
     >
       {copied ? (
@@ -124,7 +124,7 @@ function CopyBibtexButton({ pub }) {
 
 function PublicationCard({ pub }) {
   return (
-    <article className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-blue-200 transition-all">
+    <article className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-brand-200 transition-all">
       {/* Title */}
       <h3 className="font-bold text-gray-900 text-base leading-snug mb-1.5">{pub.title}</h3>
 
@@ -165,7 +165,7 @@ function PublicationCard({ pub }) {
             href={`https://doi.org/${pub.doi}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md border bg-white text-gray-500 border-gray-200 hover:border-blue-300 hover:text-blue-600 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md border bg-white text-gray-500 border-gray-200 hover:border-brand-300 hover:text-brand-600 transition-colors"
           >
             <ExternalLink size={12} />
             DOI
@@ -176,7 +176,7 @@ function PublicationCard({ pub }) {
             href={pub.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md border bg-white text-gray-500 border-gray-200 hover:border-blue-300 hover:text-blue-600 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md border bg-white text-gray-500 border-gray-200 hover:border-brand-300 hover:text-brand-600 transition-colors"
           >
             <ExternalLink size={12} />
             Link
@@ -191,8 +191,8 @@ function YearGroup({ year, pubs }) {
   return (
     <section>
       <div className="flex items-center gap-3 mb-4">
-        <span className="text-lg font-bold text-blue-800">{year}</span>
-        <div className="flex-1 h-px bg-blue-100" />
+        <span className="text-lg font-bold text-brand-800">{year}</span>
+        <div className="flex-1 h-px bg-brand-100" />
         <span className="text-xs text-gray-400 font-medium">
           {pubs.length} {pubs.length === 1 ? 'publication' : 'publications'}
         </span>
@@ -215,8 +215,8 @@ function TypeFilterButton({ type, active, count, onClick }) {
         active
           ? cfg
             ? `${cfg.activeBg} text-white border-transparent shadow-sm`
-            : 'bg-blue-700 text-white border-transparent shadow-sm'
-          : 'bg-white text-gray-600 border-gray-200 hover:border-blue-300 hover:text-blue-700'
+            : 'bg-brand-700 text-white border-transparent shadow-sm'
+          : 'bg-white text-gray-600 border-gray-200 hover:border-brand-300 hover:text-brand-700'
       }`}
     >
       {cfg && (() => { const Icon = cfg.icon; return <Icon size={13} /> })()}
@@ -292,7 +292,7 @@ export default function Publications() {
   return (
     <>
       {/* ── Page Header ── */}
-      <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white relative overflow-hidden">
+      <section className="bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 text-white relative overflow-hidden">
         <div
           aria-hidden="true"
           className="absolute inset-0 opacity-10 pointer-events-none"
@@ -303,26 +303,26 @@ export default function Publications() {
           }}
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 relative">
-          <span className="inline-flex items-center gap-1.5 bg-blue-600/40 border border-blue-400/40 text-blue-100 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
+          <span className="inline-flex items-center gap-1.5 bg-brand-600/40 border border-brand-400/40 text-brand-100 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
             <BookOpen size={13} />
             Research Output
           </span>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">Publications</h1>
-          <p className="text-blue-200 text-base max-w-xl leading-relaxed">
+          <p className="text-brand-200 text-base max-w-xl leading-relaxed">
             Peer-reviewed research from the PHI Lab spanning health informatics, clinical NLP,
             EHR data provenance, and privacy-preserving AI.
           </p>
-          <div className="mt-6 flex flex-wrap gap-4 text-sm text-blue-100">
+          <div className="mt-6 flex flex-wrap gap-4 text-sm text-brand-100">
             <span className="flex items-center gap-1.5">
-              <BookOpen size={14} className="text-blue-300" />
+              <BookOpen size={14} className="text-brand-300" />
               <strong className="text-white">{publicationsData.filter((p) => p.type === 'journal').length}</strong> Journal Articles
             </span>
             <span className="flex items-center gap-1.5">
-              <Layers size={14} className="text-blue-300" />
+              <Layers size={14} className="text-brand-300" />
               <strong className="text-white">{publicationsData.filter((p) => p.type === 'conference').length}</strong> Conference Papers
             </span>
             <span className="flex items-center gap-1.5">
-              <FileText size={14} className="text-blue-300" />
+              <FileText size={14} className="text-brand-300" />
               <strong className="text-white">{publicationsData.filter((p) => p.type === 'workshop').length}</strong> Workshop Papers
             </span>
           </div>
@@ -341,7 +341,7 @@ export default function Publications() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search title, author, tag…"
-              className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent placeholder-gray-400"
+              className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent placeholder-gray-400"
             />
           </div>
 
@@ -356,7 +356,7 @@ export default function Publications() {
                 const v = e.target.value
                 setYearFilter(v === 'All' ? 'All' : Number(v))
               }}
-              className="text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-700"
+              className="text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent text-gray-700"
             >
               {ALL_YEARS.map((y) => (
                 <option key={y} value={y}>
@@ -394,7 +394,7 @@ export default function Publications() {
           {(yearFilter !== 'All' || typeFilter !== 'All' || query) && (
             <button
               onClick={() => { setYearFilter('All'); setTypeFilter('All'); setQuery('') }}
-              className="ml-3 text-blue-600 hover:text-blue-800 font-medium underline underline-offset-2"
+              className="ml-3 text-brand-600 hover:text-brand-800 font-medium underline underline-offset-2"
             >
               Clear filters
             </button>
@@ -410,8 +410,8 @@ export default function Publications() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-4">
-              <Search size={24} className="text-blue-400" />
+            <div className="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mb-4">
+              <Search size={24} className="text-brand-400" />
             </div>
             <h3 className="text-lg font-semibold text-gray-800 mb-1">No publications found</h3>
             <p className="text-gray-500 text-sm max-w-xs leading-relaxed">
@@ -419,7 +419,7 @@ export default function Publications() {
             </p>
             <button
               onClick={() => { setYearFilter('All'); setTypeFilter('All'); setQuery('') }}
-              className="mt-5 inline-flex items-center gap-2 bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-800 transition-colors text-sm"
+              className="mt-5 inline-flex items-center gap-2 bg-brand-700 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-brand-800 transition-colors text-sm"
             >
               Reset filters
             </button>

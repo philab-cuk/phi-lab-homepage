@@ -28,7 +28,7 @@ const STUDENTS = membersData.current.filter((m) => m.role !== 'Principal Investi
 
 function HomeSectionHeader({ children }) {
   return (
-    <h2 className="text-xl font-bold text-gray-900 mb-6 border-l-[3px] border-blue-700 pl-3">
+    <h2 className="text-xl font-bold text-gray-900 mb-6 border-l-[3px] border-brand-700 pl-3">
       {children}
     </h2>
   )
@@ -37,7 +37,7 @@ function HomeSectionHeader({ children }) {
 function ViewAllLink({ to, label }) {
   return (
     <p className="text-sm text-gray-400 mt-4">
-      <Link to={to} className="text-blue-700 hover:underline">
+      <Link to={to} className="text-brand-700 hover:underline">
         {label} →
       </Link>
     </p>
@@ -78,7 +78,7 @@ function HomeProjectCard({ project }) {
 
 function YearBadge({ year, latest }) {
   const cls = latest
-    ? 'bg-blue-700 text-white'
+    ? 'bg-brand-700 text-white'
     : 'bg-gray-400 text-white'
   return (
     <span className={`text-xs font-medium px-2 py-0.5 rounded-sm mr-2 ${cls}`}>{year}</span>
@@ -105,7 +105,7 @@ function HomePubItem({ pub, latestYear }) {
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          className="ml-1 text-xs text-blue-700 hover:underline"
+          className="ml-1 text-xs text-brand-700 hover:underline"
         >
           [{pub.doi ? 'DOI' : 'Link'}]
         </a>
@@ -130,7 +130,7 @@ function HomePIBlock() {
         </p>
         <p className="text-sm text-gray-600 leading-relaxed mb-2">{PI.bioShort}</p>
         <p className="text-xs">
-          <a href={`mailto:${PI.email}`} className="text-blue-700 hover:underline">
+          <a href={`mailto:${PI.email}`} className="text-brand-700 hover:underline">
             {PI.email}
           </a>
         </p>
@@ -345,7 +345,7 @@ export default function Home() {
               <p className="text-sm mt-3">
                 <a
                   href={`mailto:${PI.email}`}
-                  className="text-blue-700 hover:underline inline-flex items-center gap-1"
+                  className="text-brand-700 hover:underline inline-flex items-center gap-1"
                 >
                   <Mail size={13} />
                   {PI.email}
