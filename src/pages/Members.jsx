@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Mail, Link2, BookOpen, GraduationCap, Users, Building2 } from 'lucide-react'
 import membersData from '../data/members.json'
 
@@ -33,7 +34,7 @@ function ResearchTag({ tag }) {
 
 function ProfessorCard({ member }) {
   return (
-    <div className="bg-white rounded-2xl border border-brand-100 shadow-sm p-6 sm:p-8 flex flex-col sm:flex-row gap-6 items-start hover:shadow-md transition-shadow">
+    <div id={member.id} className="bg-white rounded-2xl border border-brand-100 shadow-sm p-6 sm:p-8 flex flex-col sm:flex-row gap-6 items-start hover:shadow-md transition-shadow scroll-mt-24">
       {/* Photo */}
       <div className="flex-shrink-0">
         <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden ring-4 ring-brand-100 shadow-sm">
@@ -90,7 +91,7 @@ function ProfessorCard({ member }) {
 
 function StudentCard({ member }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5 flex flex-col hover:shadow-md hover:border-brand-200 transition-all group">
+    <div id={member.id} className="bg-white rounded-xl border border-gray-200 p-5 flex flex-col hover:shadow-md hover:border-brand-200 transition-all group scroll-mt-24">
       {/* Photo + name row */}
       <div className="flex items-center gap-4 mb-4">
         <div className="w-16 h-16 rounded-xl overflow-hidden ring-2 ring-gray-100 group-hover:ring-brand-100 transition-all flex-shrink-0">
@@ -145,7 +146,7 @@ function StudentCard({ member }) {
 
 function AlumnusRow({ member }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-start gap-4 hover:shadow-sm hover:border-brand-200 transition-all group">
+    <div id={member.id} className="bg-white rounded-xl border border-gray-200 p-5 flex items-start gap-4 hover:shadow-sm hover:border-brand-200 transition-all group scroll-mt-24">
       {/* Avatar */}
       <div className="w-12 h-12 rounded-xl overflow-hidden ring-2 ring-gray-100 group-hover:ring-brand-100 transition-all flex-shrink-0">
         <img
@@ -220,10 +221,27 @@ function TabButton({ label, active, count, onClick }) {
 
 export default function Members() {
   const [activeTab, setActiveTab] = useState(TABS[0])
+  const location = useLocation()
 
   const professor = membersData.current.find((m) => m.role === 'Principal Investigator')
   const students = membersData.current.filter((m) => m.role !== 'Principal Investigator')
   const alumni = membersData.alumni
+
+  // Hash navigation: if URL has #<id>, force the tab that contains that
+  // member into view, then smooth-scroll to the card.
+  useEffect(() => {
+    if (!location.hash) return
+    const id = location.hash.slice(1)
+    const inAlumni = alumni.some((m) => m.id === id)
+    // Sync tab to URL hash (intentional URL→state sync, not a cascading render).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setActiveTab(inAlumni ? 'Alumni' : 'Current Members')
+    // Defer to next frame so the freshly-rendered tab content is in the DOM.
+    requestAnimationFrame(() => {
+      const el = document.getElementById(id)
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }, [location.hash, alumni])
 
   return (
     <>

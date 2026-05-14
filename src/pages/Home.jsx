@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { Mail } from 'lucide-react'
-import { useLanguage } from '../i18n/useLanguage.js'
 import researchData from '../data/research.json'
 import publicationsData from '../data/publications.json'
 import lecturesData from '../data/lectures.json'
@@ -76,21 +75,32 @@ function HomeProjectCard({ project }) {
   )
 }
 
-function YearBadge({ year, latest }) {
-  const cls = latest
-    ? 'bg-brand-700 text-white'
-    : 'bg-gray-400 text-white'
+// Year badge — newest year is vivid brand blue (LIVE site colour),
+// older years rotate through distinct hues that also fade with age,
+// 5+ years back drops to muted gray as "history".
+function yearBadgeClass(age) {
+  if (age <= 0) return 'bg-brand-700 text-white'      // 0y — brand blue
+  if (age === 1) return 'bg-emerald-600 text-white'   // 1y — emerald
+  if (age === 2) return 'bg-amber-500 text-white'     // 2y — amber
+  if (age === 3) return 'bg-violet-400 text-white'    // 3y — violet
+  if (age === 4) return 'bg-rose-300 text-rose-900'   // 4y — rose, fading
+  return 'bg-gray-300 text-gray-700'                  // 5y+ — gray history
+}
+
+function YearBadge({ year, latestYear }) {
+  const age = latestYear - year
   return (
-    <span className={`text-xs font-medium px-2 py-0.5 rounded-sm mr-2 ${cls}`}>{year}</span>
+    <span className={`text-xs font-medium px-2 py-0.5 rounded-sm mr-2 ${yearBadgeClass(age)}`}>
+      {year}
+    </span>
   )
 }
 
 function HomePubItem({ pub, latestYear }) {
-  const isLatest = pub.year === latestYear
   const link = pub.doi ? `https://doi.org/${pub.doi}` : pub.url
   return (
     <div className="py-3.5 border-b border-gray-200 last:border-b-0 leading-relaxed">
-      <YearBadge year={pub.year} latest={isLatest} />
+      <YearBadge year={pub.year} latestYear={latestYear} />
       {pub.authors.map((a, i) => (
         <span key={`${a.name}-${i}`}>
           {a.isPi ? <strong>{a.name}</strong> : a.name}
@@ -122,7 +132,9 @@ function HomePIBlock() {
       </div>
       <div className="min-w-0">
         <h3 className="font-bold text-gray-900 text-base mb-0.5">
-          {PI.name}, {PI.degree.includes('Ph.D.') ? 'PhD' : PI.degree}
+          <Link to="/professor" className="hover:text-brand-700 hover:underline transition-colors">
+            {PI.name}, {PI.degree.includes('Ph.D.') ? 'PhD' : PI.degree}
+          </Link>
         </h3>
         <p className="text-sm text-gray-600 mb-0.5">{PI.title}</p>
         <p className="text-sm text-gray-500 mb-2">
@@ -141,13 +153,16 @@ function HomePIBlock() {
 
 function HomeStudentChip({ member }) {
   return (
-    <div className="bg-white border border-gray-200 p-4 text-center">
+    <Link
+      to={`/members#${member.id}`}
+      className="block bg-white border border-gray-200 p-4 text-center hover:border-brand-300 hover:shadow-sm transition-all"
+    >
       <div className="w-10 h-10 rounded-full overflow-hidden mx-auto mb-2 ring-1 ring-gray-200">
         <img src={member.photo} alt={member.name} className="w-full h-full object-cover" />
       </div>
       <p className="text-sm font-medium text-gray-900">{member.name}</p>
       <p className="text-xs text-gray-400 mt-0.5">{member.role}</p>
-    </div>
+    </Link>
   )
 }
 
@@ -168,19 +183,68 @@ function HomeLectureItem({ course }) {
 
 // ─── Page ────────────────────────────────────────────────────────────────
 
-export default function Home() {
-  const { t } = useLanguage()
-  const h = t.hero
-  const home = t.home
+// Hero copy & section labels — preserved from prof's WP site (philabcuk.org).
+const HERO = {
+  kicker: 'PHI Lab @ CUK — Precision & Provenance Health Informatics',
+  headline:
+    'Contribute to digital healthcare innovation with data-intensive approaches based on real-world demands',
+  tagline: 'from precision medicine to social determinants of health',
+  cta: 'Learn more',
+}
 
+const STATS_LABELS = {
+  projects: 'Active Projects',
+  publications: 'Publications',
+  collaborators: 'Collaborating Institutions',
+}
+
+const SECTION_TITLES = {
+  researchAreas: 'Research Areas',
+  activeProjects: 'Current Research',
+  recentPublications: 'Recent Publications',
+  labMembers: 'Lab Members',
+  lectures: 'Recent Lectures',
+  about: 'About the Lab',
+}
+
+const VIEW_ALL = {
+  projects: 'View all projects',
+  publications: 'View all publications',
+  members: 'View all members',
+  lectures: 'View all lectures',
+  about: 'Read more',
+}
+
+const PILLARS = {
+  kr: {
+    title: 'Knowledge Representation',
+    body: 'Data modeling, biomedical ontology, clinical data engineering, pipeline construction, and governance for precision medicine. Includes clinical genome data modeling (cGDM) and interoperability frameworks.',
+  },
+  rwd: {
+    title: 'Real-World Data (RWD)',
+    body: 'Secondary use of electronic health records (EHR), clinical data warehouses (CDW), FAERS, and Korean claims data (HIRA). Registry construction, cohort definition, and data quality management for multi-institutional studies.',
+  },
+  rwe: {
+    title: 'Real-World Evidence (RWE)',
+    body: 'Scientific data processing for evidence generation and causal inference. Pharmacovigilance signal detection, treatment effectiveness evaluation, and integration of social determinants of health with clinical outcomes.',
+  },
+}
+
+const ABOUT_BODY =
+  'PHI (Precision & Provenance Health Informatics) Lab at The Catholic University of Korea advances precision medicine and digital healthcare through data-driven interdisciplinary research — spanning EHR engineering, real-world evidence generation, and information structure design.'
+
+export default function Home() {
   // Stats (computed from JSON)
   const activeProjectsCount = researchData.filter((p) => p.status === 'active').length
-  const publicationsCount = publicationsData.length
+  // Stats strip + Recent Publications section both restrict to peer-reviewed articles only
+  // (presentations live on the dedicated /publications page).
+  const articles = publicationsData.filter((p) => p.category === 'article')
+  const publicationsCount = articles.length
   const collaboratorsCount = `${COLLABORATING_INSTITUTIONS.length}+`
 
   // Body data slices
-  const featuredProjects = researchData.filter((p) => p.status === 'active').slice(0, 8)
-  const recentPubs = [...publicationsData].sort((a, b) => b.year - a.year).slice(0, 8)
+  const featuredProjects = researchData.filter((p) => p.status === 'active').slice(0, 4)
+  const recentPubs = [...articles].sort((a, b) => b.year - a.year).slice(0, 5)
   const latestYear = recentPubs.length > 0 ? Math.max(...recentPubs.map((p) => p.year)) : null
 
   // Lectures: most recent semester only
@@ -208,19 +272,19 @@ export default function Home() {
         />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-44">
           <p className="text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-amber-300 mb-8">
-            {h.kicker}
+            {HERO.kicker}
           </p>
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-8 max-w-5xl drop-shadow-sm">
-            {h.headline}
+            {HERO.headline}
           </h1>
           <p className="italic text-lg sm:text-xl md:text-2xl text-white/90 mb-10 max-w-3xl">
-            {h.tagline}
+            {HERO.tagline}
           </p>
           <a
             href="#research-areas"
             className="inline-block bg-amber-400 hover:bg-amber-300 text-gray-900 font-semibold px-8 py-3.5 rounded-md transition-colors text-base shadow-sm"
           >
-            {h.cta}
+            {HERO.cta}
           </a>
         </div>
       </section>
@@ -230,17 +294,17 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-wrap items-center gap-x-8 gap-y-2 text-sm text-gray-500">
           <div>
             <span className="text-xl font-bold text-gray-900">{activeProjectsCount}</span>
-            &nbsp;{home.stats.projects}
+            &nbsp;{STATS_LABELS.projects}
           </div>
           <span className="text-gray-300 hidden sm:inline">|</span>
           <div>
             <span className="text-xl font-bold text-gray-900">{publicationsCount}</span>
-            &nbsp;{home.stats.publications}
+            &nbsp;{STATS_LABELS.publications}
           </div>
           <span className="text-gray-300 hidden sm:inline">|</span>
           <div>
             <span className="text-xl font-bold text-gray-900">{collaboratorsCount}</span>
-            &nbsp;{home.stats.collaborators}
+            &nbsp;{STATS_LABELS.collaborators}
           </div>
         </div>
       </section>
@@ -248,12 +312,12 @@ export default function Home() {
       {/* ── 1. Research Areas (3 pillars) ───────────────────────── */}
       <section id="research-areas" className="bg-white border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <HomeSectionHeader>{home.sections.researchAreas}</HomeSectionHeader>
+          <HomeSectionHeader>{SECTION_TITLES.researchAreas}</HomeSectionHeader>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {['kr', 'rwd', 'rwe'].map((k) => (
               <div key={k}>
-                <h3 className="font-semibold text-gray-900 mb-2">{home.pillars[k].title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{home.pillars[k].body}</p>
+                <h3 className="font-semibold text-gray-900 mb-2">{PILLARS[k].title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{PILLARS[k].body}</p>
               </div>
             ))}
           </div>
@@ -263,52 +327,52 @@ export default function Home() {
       {/* ── 2. Active Projects ───────────────────────────────────── */}
       <section className="bg-[#f8fafc] border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <HomeSectionHeader>{home.sections.activeProjects}</HomeSectionHeader>
+          <HomeSectionHeader>{SECTION_TITLES.activeProjects}</HomeSectionHeader>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {featuredProjects.map((project) => (
               <HomeProjectCard key={project.id} project={project} />
             ))}
           </div>
-          <ViewAllLink to="/research" label={home.viewAll.projects} />
+          <ViewAllLink to="/research" label={VIEW_ALL.projects} />
         </div>
       </section>
 
       {/* ── 3. Recent Publications ────────────────────────────── */}
       <section className="bg-white border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <HomeSectionHeader>{home.sections.recentPublications}</HomeSectionHeader>
+          <HomeSectionHeader>{SECTION_TITLES.recentPublications}</HomeSectionHeader>
           <div>
             {recentPubs.map((pub) => (
               <HomePubItem key={pub.id} pub={pub} latestYear={latestYear} />
             ))}
           </div>
-          <ViewAllLink to="/publications" label={home.viewAll.publications} />
+          <ViewAllLink to="/publications" label={VIEW_ALL.publications} />
         </div>
       </section>
 
       {/* ── 4. Lab Members ────────────────────────────────────── */}
       <section className="bg-[#f8fafc] border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <HomeSectionHeader>{home.sections.labMembers}</HomeSectionHeader>
+          <HomeSectionHeader>{SECTION_TITLES.labMembers}</HomeSectionHeader>
 
           <HomePIBlock />
 
           <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            {home.members.students}
+            Undergraduate Researchers
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {STUDENTS.map((s) => (
               <HomeStudentChip key={s.id} member={s} />
             ))}
           </div>
-          <ViewAllLink to="/members" label={home.viewAll.members} />
+          <ViewAllLink to="/members" label={VIEW_ALL.members} />
         </div>
       </section>
 
       {/* ── 5. Lectures (most recent semester) ─────────────────── */}
       <section className="bg-white border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <HomeSectionHeader>{home.sections.lectures}</HomeSectionHeader>
+          <HomeSectionHeader>{SECTION_TITLES.lectures}</HomeSectionHeader>
           <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
             {currentSemester}
           </h3>
@@ -317,24 +381,24 @@ export default function Home() {
               <HomeLectureItem key={c.id} course={c} />
             ))}
           </ul>
-          <ViewAllLink to="/lectures" label={home.viewAll.lectures} />
+          <ViewAllLink to="/lectures" label={VIEW_ALL.lectures} />
         </div>
       </section>
 
       {/* ── 6. About / Contact ──────────────────────────────────── */}
       <section id="about" className="bg-[#f8fafc] border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <HomeSectionHeader>{home.sections.about}</HomeSectionHeader>
+          <HomeSectionHeader>{SECTION_TITLES.about}</HomeSectionHeader>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <p className="text-gray-700 leading-relaxed mb-4">{home.about.body}</p>
-              <ViewAllLink to="/about" label={home.viewAll.about} />
+              <p className="text-gray-700 leading-relaxed mb-4">{ABOUT_BODY}</p>
+              <ViewAllLink to="/about" label={VIEW_ALL.about} />
             </div>
 
             <div>
               <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-                {home.about.contact}
+                Contact
               </h3>
               <p className="text-sm text-gray-700 leading-relaxed">
                 Department of Biomedical Software Engineering<br />
@@ -353,7 +417,7 @@ export default function Home() {
               </p>
 
               <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mt-5 mb-3">
-                {home.about.collaborators}
+                Collaborating Institutions
               </h3>
               <p className="text-xs text-gray-500 leading-relaxed">
                 {COLLABORATING_INSTITUTIONS.join(' · ')}
