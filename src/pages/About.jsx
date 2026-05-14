@@ -29,7 +29,7 @@ export default function About() {
       <section className="bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
           {/* Paragraph 1 (Korean) */}
-          <p className="text-gray-700 text-base leading-relaxed mb-8">
+          <p className="text-gray-700 text-lg md:text-xl leading-relaxed mb-8">
             <strong>
               가톨릭대학교 PHI(φ, Precision &amp; Provenance Health Informatics Lab) 연구실
             </strong>
@@ -42,7 +42,7 @@ export default function About() {
           </p>
 
           {/* Paragraph 2 (English part 1) — curly U+2019 in lab’s */}
-          <p className="text-gray-700 text-base leading-relaxed mb-8 border-t border-gray-100 pt-8">
+          <p className="text-gray-700 text-lg md:text-xl leading-relaxed mb-8 border-t border-gray-100 pt-8">
             <strong>
               PHI (Precision &amp; Provenance Health Informatics Lab) at the Catholic University of
               Korea
@@ -57,7 +57,7 @@ export default function About() {
           {/* Paragraph 3 (English part 2) — LIVE inserts a <br> between
               "outcomes." and "This" with no intervening space; replicated here
               so DOM textContent matches LIVE byte-for-byte. */}
-          <p className="text-gray-700 text-base leading-relaxed">
+          <p className="text-gray-700 text-lg md:text-xl leading-relaxed">
             The lab collaborates with various medical institutions and schools both domestically
             and internationally to engage in vibrant research activities. These include engineering
             real-world data (RWD), constructing data pipelines, generating real-world evidence
