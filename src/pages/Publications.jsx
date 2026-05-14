@@ -49,9 +49,9 @@ const CATEGORY_LABEL = {
   'national-presentation': 'NATIONAL PRESENTATION',
 }
 const CATEGORY_BADGE = {
-  'article': 'bg-emerald-100 text-emerald-800 border-emerald-200',
-  'international-presentation': 'bg-violet-100 text-violet-800 border-violet-200',
-  'national-presentation': 'bg-amber-100 text-amber-800 border-amber-200',
+  'article': 'bg-emerald-600 text-white',
+  'international-presentation': 'bg-violet-600 text-white',
+  'national-presentation': 'bg-amber-100 text-gray-900',
 }
 
 // ─── BibTeX generation (per-category) ───────────────────────────────────────
@@ -110,7 +110,7 @@ function CategoryBadge({ category }) {
   const label = CATEGORY_LABEL[category] ?? category
   return (
     <span
-      className={`inline-flex items-center text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm border ${cls}`}
+      className={`inline-flex items-center text-xs font-semibold uppercase tracking-wider px-2.5 py-1 rounded-sm ${cls}`}
     >
       {label}
     </span>
