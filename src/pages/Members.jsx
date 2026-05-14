@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Mail, Link2, BookOpen, GraduationCap, Users, Building2 } from 'lucide-react'
+import { Mail, Link2, BookOpen, GraduationCap, Building2 } from 'lucide-react'
 import membersData from '../data/members.json'
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -256,16 +256,8 @@ export default function Members() {
             backgroundSize: '40px 40px',
           }}
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 relative">
-          <span className="inline-flex items-center gap-1.5 bg-brand-600/40 border border-brand-400/40 text-brand-100 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-            <Users size={13} />
-            Our Team
-          </span>
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">Lab Members</h1>
-          <p className="text-brand-200 text-base max-w-xl leading-relaxed">
-            Meet the researchers and students who make PHI Lab's mission possible — advancing
-            health informatics through rigorous, collaborative science.
-          </p>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 relative">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Lab Members</h1>
         </div>
       </section>
 
