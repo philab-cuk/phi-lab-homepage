@@ -1,5 +1,10 @@
-import { BookOpen, GraduationCap, Tag, Code2 } from 'lucide-react'
+import { useState, useEffect, createContext, useContext } from 'react'
+import { BookOpen, GraduationCap, Tag, Code2, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import lecturesData from '../data/lectures.json'
+
+// Context lets nested CourseImages open the page-level lightbox without
+// prop-drilling through SemesterSection → CourseCard.
+const LightboxContext = createContext(() => {})
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -63,7 +68,10 @@ function LanguageBadge({ language }) {
 }
 
 // Render images: 1 = full width, 2-3 = grid of equal columns.
+// Each image is a button; clicking opens the page-level lightbox at that
+// index, and the lightbox lets the user step through siblings.
 function CourseImages({ images }) {
+  const openLightbox = useContext(LightboxContext)
   if (!images || images.length === 0) return null
   const count = images.length
   const gridCls =
@@ -74,17 +82,114 @@ function CourseImages({ images }) {
         : 'grid grid-cols-3 gap-2'
   return (
     <div className={`${gridCls} mb-4 rounded-lg overflow-hidden`}>
-      {images.map((src) => (
-        <img
+      {images.map((src, i) => (
+        <button
           key={src}
-          src={src}
-          alt=""
-          role="presentation"
-          loading="lazy"
-          decoding="async"
-          className={count === 1 ? 'w-full h-auto object-cover' : 'w-full aspect-square object-cover'}
-        />
+          type="button"
+          onClick={() => openLightbox(images, i)}
+          aria-label="Enlarge image"
+          className="block w-full p-0 m-0 border-0 bg-transparent cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-brand-500"
+        >
+          <img
+            src={src}
+            alt=""
+            role="presentation"
+            loading="lazy"
+            decoding="async"
+            className={
+              count === 1
+                ? 'w-full h-auto object-cover hover:opacity-95 transition-opacity'
+                : 'w-full aspect-square object-cover hover:opacity-95 transition-opacity'
+            }
+          />
+        </button>
       ))}
+    </div>
+  )
+}
+
+// Full-screen lightbox overlay with prev/next navigation.
+// state: { images: string[], index: number } | null
+// Backdrop click / X / Escape close. Left/right arrow keys + on-screen
+// chevron buttons step through `images` (wraps around at edges).
+function Lightbox({ state, setState, onClose }) {
+  useEffect(() => {
+    if (!state) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      else if (e.key === 'ArrowLeft') setState((s) => s && { ...s, index: (s.index - 1 + s.images.length) % s.images.length })
+      else if (e.key === 'ArrowRight') setState((s) => s && { ...s, index: (s.index + 1) % s.images.length })
+    }
+    document.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [state, setState, onClose])
+
+  if (!state) return null
+  const { images, index } = state
+  const total = images.length
+  const hasMultiple = total > 1
+  const goPrev = () => setState((s) => s && { ...s, index: (s.index - 1 + s.images.length) % s.images.length })
+  const goNext = () => setState((s) => s && { ...s, index: (s.index + 1) % s.images.length })
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={onClose}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 sm:p-8 cursor-zoom-out"
+    >
+      {/* Close */}
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close"
+        className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center transition-colors cursor-pointer"
+      >
+        <X size={22} />
+      </button>
+
+      {/* Prev */}
+      {hasMultiple && (
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); goPrev() }}
+          aria-label="Previous image"
+          className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center transition-colors cursor-pointer"
+        >
+          <ChevronLeft size={28} />
+        </button>
+      )}
+
+      {/* Next */}
+      {hasMultiple && (
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); goNext() }}
+          aria-label="Next image"
+          className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center transition-colors cursor-pointer"
+        >
+          <ChevronRight size={28} />
+        </button>
+      )}
+
+      {/* Index counter */}
+      {hasMultiple && (
+        <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-sm font-medium select-none">
+          {index + 1} / {total}
+        </p>
+      )}
+
+      <img
+        src={images[index]}
+        alt=""
+        onClick={(e) => e.stopPropagation()}
+        className="max-w-full max-h-full object-contain shadow-2xl cursor-default"
+      />
     </div>
   )
 }
@@ -172,12 +277,16 @@ function SemesterSection({ semester, courses }) {
 
 export default function Lectures() {
   const grouped = groupBySemester(lecturesData)
+  // lightbox state: { images: string[], index: number } | null
+  const [lightbox, setLightbox] = useState(null)
+  const openLightbox = (images, index) => setLightbox({ images, index })
 
   const gradCount = lecturesData.filter((c) => c.level === 'graduate').length
   const undergradCount = lecturesData.filter((c) => c.level === 'undergraduate').length
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    <LightboxContext.Provider value={openLightbox}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
       {/* Page header */}
       <div className="mb-12">
         <span className="inline-block bg-brand-50 text-brand-700 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
@@ -218,6 +327,8 @@ export default function Lectures() {
           <SemesterSection key={semester} semester={semester} courses={courses} />
         ))}
       </div>
-    </div>
+      </div>
+      <Lightbox state={lightbox} setState={setLightbox} onClose={() => setLightbox(null)} />
+    </LightboxContext.Provider>
   )
 }
