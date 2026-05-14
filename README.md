@@ -1,16 +1,51 @@
-# React + Vite
+<p align="center">
+  <img src="public/logo.jpg" alt="PHI Lab — Precision & Provenance Health Informatics Lab, Catholic University of Korea" width="240" />
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# PHI Lab Homepage
 
-Currently, two official plugins are available:
+**Precision & Provenance Health Informatics Lab (PHI Lab, φ)**
+The Catholic University of Korea — Department of Biomedical Software Engineering
+PI: Prof. Hyo Jung Kim · hyojung.kim@catholic.ac.kr
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+React-based rebuild of the lab homepage (currently at <https://philabcuk.org>), replacing the legacy WordPress site with a modern, JSON-driven, bilingual (KO/EN) static site.
 
-## React Compiler
+## Quick start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+corepack enable          # one-time, activates pnpm via packageManager field
+pnpm install
+pnpm dev                 # http://localhost:5173
+pnpm build
+pnpm preview
+```
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React 19 + Vite 8
+- Tailwind CSS v4 (`@tailwindcss/vite`)
+- `react-router-dom` v7 (`createBrowserRouter`)
+- `lucide-react` icons
+- Custom React Context for i18n (`src/i18n/`)
+- Content as JSON (`src/data/`) — students can submit content updates via PR
+
+## Project layout
+
+```
+src/
+  components/Layout.jsx     # Header (nav + KO/EN toggle) + Footer
+  pages/                    # Home, About, Members, Research,
+                            # Publications, News, Lectures, NotFound
+  data/                     # members / publications / research / news / lectures (JSON)
+  i18n/                     # LanguageContext + strings table
+docs/
+  PLANNING.md               # rebuild plan
+  prototype-design-criteria.md
+  phi-lab-content/          # source-of-truth content scraped from philabcuk.org
+prototypes/                 # round-01..03 standalone HTML design explorations
+public/
+  logo.jpg                  # brand logo (Catholic Univ. of Korea PHI Lab)
+  favicon.svg
+```
+
+See `docs/PLANNING.md` for the full rebuild rationale and roadmap.

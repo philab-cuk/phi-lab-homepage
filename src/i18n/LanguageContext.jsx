@@ -1,7 +1,6 @@
-import { createContext, useContext, useState } from 'react'
+import { useState } from 'react'
 import strings from './strings.js'
-
-const LanguageContext = createContext(null)
+import { LanguageContext } from './LanguageContextValue.js'
 
 export function LanguageProvider({ children }) {
   const [lang, setLang] = useState('en')
@@ -15,11 +14,4 @@ export function LanguageProvider({ children }) {
       {children}
     </LanguageContext.Provider>
   )
-}
-
-/** Returns { lang, toggle, t } where t is the full translated string object. */
-export function useLanguage() {
-  const ctx = useContext(LanguageContext)
-  if (!ctx) throw new Error('useLanguage must be used inside <LanguageProvider>')
-  return ctx
 }

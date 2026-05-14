@@ -1,7 +1,7 @@
 import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
-import { Menu, X, FlaskConical } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { useLanguage } from '../i18n/LanguageContext.jsx'
+import { useLanguage } from '../i18n/useLanguage.js'
 
 // Ordered list of nav route keys that map to t.nav
 const NAV_ROUTES = [
@@ -47,28 +47,19 @@ function LanguageToggle() {
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { t } = useLanguage()
-  const location = useLocation()
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileOpen(false)
-  }, [location.pathname])
+  const closeMobile = () => setMobileOpen(false)
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo / Lab name */}
-          <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
-            <div className="w-9 h-9 rounded-lg bg-blue-700 flex items-center justify-center shadow-sm group-hover:bg-blue-800 transition-colors">
-              <FlaskConical size={20} className="text-white" />
-            </div>
-            <div className="leading-tight">
-              <span className="font-bold text-blue-800 text-lg tracking-tight">PHI Lab</span>
-              <p className="text-gray-500 text-xs hidden sm:block">
-                Precision &amp; Provenance Health Informatics
-              </p>
-            </div>
+          {/* Logo */}
+          <Link to="/" className="flex items-center flex-shrink-0" aria-label="PHI Lab — Catholic University of Korea">
+            <img
+              src="/logo.jpg"
+              alt="PHI Lab — Precision & Provenance Health Informatics Lab, Catholic University of Korea"
+              className="h-10 w-auto"
+            />
           </Link>
 
           {/* Desktop nav + language toggle */}
@@ -118,6 +109,7 @@ function Header() {
                 key={to}
                 to={to}
                 end={to === '/'}
+                onClick={closeMobile}
                 className={({ isActive }) =>
                   `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     isActive
@@ -145,11 +137,12 @@ function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
-                <FlaskConical size={16} className="text-white" />
-              </div>
-              <span className="font-bold text-white text-lg">PHI Lab</span>
+            <div className="bg-white rounded-md inline-block p-2 mb-3">
+              <img
+                src="/logo.jpg"
+                alt="PHI Lab — Precision & Provenance Health Informatics Lab, Catholic University of Korea"
+                className="h-9 w-auto"
+              />
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">{f.tagline}</p>
           </div>
