@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { Mail } from 'lucide-react'
 import researchData from '../data/research.json'
 import publicationsData from '../data/publications.json'
 import lecturesData from '../data/lectures.json'
@@ -291,8 +290,10 @@ const PILLARS = {
   },
 }
 
+// LIVE verbatim — philabcuk.org/about/ first English paragraph,
+// per docs/phi-lab-content/06_about.md §36–40. Curly apostrophe U+2019 preserved.
 const ABOUT_BODY =
-  'PHI (Precision & Provenance Health Informatics) Lab at The Catholic University of Korea advances precision medicine and digital healthcare through data-driven interdisciplinary research — spanning EHR engineering, real-world evidence generation, and information structure design.'
+  'PHI (Precision & Provenance Health Informatics Lab) at the Catholic University of Korea is dedicated to advancing precision medicine and digital healthcare through data-driven interdisciplinary research. The lab’s work spans from public data to EHR (Electronic Health Records) data, emphasizing the utilization of trustworthy data, knowledge generation via data science, and supporting decision-making through data-based digital healthcare systems.'
 
 export default function Home() {
   // Stats (computed from JSON)
@@ -448,45 +449,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 6. About / Contact ──────────────────────────────────── */}
+      {/* ── 6. About — Contact/Collaborators moved to global Footer ─── */}
       <section id="about" className="bg-[#f8fafc] border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <HomeSectionHeader>{SECTION_TITLES.about}</HomeSectionHeader>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <p className="text-gray-700 leading-relaxed mb-4">{ABOUT_BODY}</p>
-              <ViewAllLink to="/about" label={VIEW_ALL.about} />
-            </div>
-
-            <div>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-                Contact
-              </h3>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                Department of Biomedical Software Engineering<br />
-                The Catholic University of Korea<br />
-                43, Jibong-ro, Bucheon<br />
-                14662, Gyeonggi-do, South Korea
-              </p>
-              <p className="text-sm mt-3">
-                <a
-                  href={`mailto:${PI.email}`}
-                  className="text-brand-700 hover:underline inline-flex items-center gap-1"
-                >
-                  <Mail size={13} />
-                  {PI.email}
-                </a>
-              </p>
-
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mt-5 mb-3">
-                Collaborating Institutions
-              </h3>
-              <p className="text-xs text-gray-500 leading-relaxed">
-                {COLLABORATING_INSTITUTIONS.join(' · ')}
-              </p>
-            </div>
-          </div>
+          <p className="text-gray-700 leading-relaxed mb-4">{ABOUT_BODY}</p>
+          <ViewAllLink to="/about" label={VIEW_ALL.about} />
         </div>
       </section>
     </>

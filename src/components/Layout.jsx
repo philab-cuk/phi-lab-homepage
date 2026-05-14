@@ -14,15 +14,29 @@ const NAV_ROUTES = [
 
 const FOOTER = {
   tagline:
-    'Precision & Provenance Health Informatics Lab — advancing data-driven methods for trustworthy clinical decision support.',
-  quickLinks: 'Quick Links',
+    'Precision & Provenance Health Informatics Lab at the Catholic University of Korea',
   contact: 'Contact',
-  profName: 'Prof. Hyo Jung Kim',
-  department:
-    'Department of Biomedical Software Engineering, The Catholic University of Korea',
+  department: 'Department of Biomedical Software Engineering',
+  institution: 'The Catholic University of Korea',
+  addressLine1: '43, Jibong-ro, Bucheon',
+  addressLine2: '14662, Gyeonggi-do, South Korea',
   email: 'hyojung.kim@catholic.ac.kr',
+  collaborators: 'Collaborating Institutions',
   copyright: 'PHI Lab. All rights reserved.',
 }
+
+const COLLABORATING_INSTITUTIONS = [
+  'Samsung Medical Center',
+  'Kakao Healthcare',
+  "Eunpyeong St. Mary's Hospital",
+  "Bucheon St. Mary's Hospital",
+  "Sookmyung Women's University",
+  'Chonnam National University',
+  'University of Cincinnati',
+  'Harvard University',
+  'Tufts University',
+  'Sungkyunkwan University (SKKU)',
+]
 
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -107,43 +121,33 @@ function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <div className="bg-white rounded-md inline-block p-2 mb-3">
-              <img
-                src="/logo.jpg"
-                alt="PHI Lab — Precision & Provenance Health Informatics Lab, Catholic University of Korea"
-                className="h-9 w-auto"
-              />
-            </div>
+            <h3 className="font-semibold text-white mb-3">PHI Lab</h3>
             <p className="text-sm text-gray-400 leading-relaxed">{FOOTER.tagline}</p>
           </div>
 
           <div>
-            <h3 className="font-semibold text-white mb-3">{FOOTER.quickLinks}</h3>
-            <ul className="space-y-2 text-sm">
-              {NAV_ROUTES.map(({ to, label }) => (
-                <li key={to}>
-                  <Link to={to} className="text-gray-400 hover:text-brand-400 transition-colors">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
             <h3 className="font-semibold text-white mb-3">{FOOTER.contact}</h3>
-            <address className="not-italic text-sm text-gray-400 space-y-1">
-              <p>{FOOTER.profName}</p>
+            <address className="not-italic text-sm text-gray-400 leading-relaxed space-y-1">
               <p>{FOOTER.department}</p>
-              <p className="mt-2">
+              <p>{FOOTER.institution}</p>
+              <p>{FOOTER.addressLine1}</p>
+              <p>{FOOTER.addressLine2}</p>
+              <p className="mt-3">
                 <a
                   href={`mailto:${FOOTER.email}`}
-                  className="hover:text-brand-400 transition-colors"
+                  className="text-amber-300 hover:text-amber-200 underline underline-offset-2 decoration-amber-300/60 hover:decoration-amber-200 font-medium transition-colors"
                 >
                   {FOOTER.email}
                 </a>
               </p>
             </address>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-white mb-3">{FOOTER.collaborators}</h3>
+            <p className="text-sm text-gray-400 leading-relaxed">
+              {COLLABORATING_INSTITUTIONS.join(' · ')}
+            </p>
           </div>
         </div>
 
