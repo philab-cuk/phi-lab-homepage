@@ -75,6 +75,27 @@ function HomeProjectCard({ project }) {
   )
 }
 
+function HomePillarCard({ pillar }) {
+  return (
+    <article className="bg-white border border-gray-200 rounded-md overflow-hidden flex flex-col">
+      <img
+        src={pillar.image}
+        alt=""
+        role="presentation"
+        loading="lazy"
+        decoding="async"
+        className="w-full aspect-square object-cover"
+      />
+      <div className="p-6 flex-1">
+        <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 leading-tight">
+          {pillar.title}
+        </h3>
+        <p className="text-base text-gray-700 leading-relaxed">{pillar.body}</p>
+      </div>
+    </article>
+  )
+}
+
 // Year badge — newest year is vivid brand blue (LIVE site colour),
 // older years rotate through distinct hues that also fade with age,
 // 5+ years back drops to muted gray as "history".
@@ -215,18 +236,23 @@ const VIEW_ALL = {
   about: 'Read more',
 }
 
+// LIVE verbatim — philabcuk.org Home, do not paraphrase or expand.
+// Casing and grammar preserved as-is ('representation' lc, 'Real-world' hy, 'We deciphering').
 const PILLARS = {
   kr: {
-    title: 'Knowledge Representation',
-    body: 'Data modeling, biomedical ontology, clinical data engineering, pipeline construction, and governance for precision medicine. Includes clinical genome data modeling (cGDM) and interoperability frameworks.',
+    title: 'Knowledge representation',
+    body: 'Data modeling, Data engineering, Pipeline construction, Data management & governance.',
+    image: '/photos/research/kr.jpg',
   },
   rwd: {
-    title: 'Real-World Data (RWD)',
-    body: 'Secondary use of electronic health records (EHR), clinical data warehouses (CDW), FAERS, and Korean claims data (HIRA). Registry construction, cohort definition, and data quality management for multi-institutional studies.',
+    title: 'Real-world Data (RWD)',
+    body: 'Secondary use of real-world data including EHR/CDW data, public big data repositories such as FAERS.',
+    image: '/photos/research/rwd.jpg',
   },
   rwe: {
-    title: 'Real-World Evidence (RWE)',
-    body: 'Scientific data processing for evidence generation and causal inference. Pharmacovigilance signal detection, treatment effectiveness evaluation, and integration of social determinants of health with clinical outcomes.',
+    title: 'Real-world Evidence (RWE)',
+    body: 'We deciphering scientific data processing, analytics methods for systematic evidence generation.',
+    image: '/photos/research/rwe.jpg',
   },
 }
 
@@ -309,16 +335,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 1. Research Areas (3 pillars) ───────────────────────── */}
-      <section id="research-areas" className="bg-white border-b border-gray-100">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* ── 1. Research Areas (3 pillars) — image-card grid, LIVE-style ─── */}
+      <section id="research-areas" className="bg-gray-50 border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <HomeSectionHeader>{SECTION_TITLES.researchAreas}</HomeSectionHeader>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {['kr', 'rwd', 'rwe'].map((k) => (
-              <div key={k}>
-                <h3 className="font-semibold text-gray-900 mb-2">{PILLARS[k].title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{PILLARS[k].body}</p>
-              </div>
+              <HomePillarCard key={k} pillar={PILLARS[k]} />
             ))}
           </div>
         </div>
