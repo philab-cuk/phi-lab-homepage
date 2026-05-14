@@ -262,6 +262,81 @@ So **unique projects = 19** in JSON terms:
 
 ---
 
+## phi-* CSS tokens (LIVE verbatim)
+
+Source: `https://philabcuk.org/?custom-css=af4ce1fa81` (WordPress Custom CSS).
+
+### phi-card container
+- `background: #fff`
+- `border: 1px solid #e8e8e8`
+- `border-radius: 12px`
+- `padding: 1rem 1.1rem`
+- `border-left: 3px solid {data-inst color}` (see below)
+- `gap: 8px` (between children, flex column)
+- `font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`
+
+### phi-card border-left color by `data-inst`
+| data-inst | hex | role |
+|---|---|---|
+| 연구실 | `#378ADD` | PHI Lab |
+| 가톨릭 | `#378ADD` | (same as PHI Lab) |
+| 카카오 | `#FAC775` | Kakao Healthcare |
+| 은평성모 | `#5DCAA5` | Eunpyeong St. Mary's |
+| 부천성모 | `#5DCAA5` | (same as Eunpyeong) |
+| 삼성서울 | `#D4537E` | Samsung Seoul |
+| 숙명여대 | `#AFA9EC` | Sookmyung Women's |
+| 전남대 | `#F0997B` | Chonnam National |
+
+### phi-badge (institution badge) — bg + text color
+| class | bg | text |
+|---|---|---|
+| phi-ib-lab | `#E6F1FB` | `#185FA5` |
+| phi-ib-kakao | `#FAEEDA` | `#854F0B` |
+| phi-ib-eunp | `#E1F5EE` | `#0F6E56` |
+| phi-ib-buch | `#E1F5EE` | `#0F6E56` |
+| phi-ib-smc | `#FBEAF0` | `#993556` |
+| phi-ib-sook | `#EEEDFE` | `#534AB7` |
+| phi-ib-jnu | `#FAECE7` | `#993C1D` |
+
+phi-badge sizing: `font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 6px`.
+
+### phi-tag (chip) — bg + text color
+| class | bg | text |
+|---|---|---|
+| (default — no extra class) | `#f3f3f3` | `#555` |
+| .rwd | `#EAF3DE` | `#3B6D11` |
+| .hira | `#E6F1FB` | `#185FA5` |
+| .faers | `#FAEEDA` | `#854F0B` |
+| .llm | `#EEEDFE` | `#534AB7` |
+| .ml | `#EEEDFE` | `#534AB7` |
+| .multi | `#FBEAF0` | `#993556` |
+
+phi-tag sizing: `font-size: 10px; padding: 2px 6px; border-radius: 6px`.
+
+### phi-fb (filter button)
+- default: `bg transparent; border 1px solid #ddd; color #666; font-size 12px; padding 5px 12px; border-radius 20px`
+- .on (active): `bg #111; color #fff; border #111`
+- :hover (not .on): `bg #f5f5f5`
+
+### phi-card-title / phi-card-sub
+- title: `font-size 13px; font-weight 600; color #111; line-height 1.45`
+- sub: `font-size 11px; color #555; line-height 1.5; margin-top 1px`
+
+### phi-collab
+- `font-size 10px; color #888; line-height 1.5; margin-top 2px`
+
+### phi-grid
+- `grid-template-columns: repeat(2, minmax(0, 1fr))` — 2 column on all viewports
+- `gap: 0.875rem`
+
+### phi-count
+- `font-size 12px; color #999; margin-bottom 1rem`
+
+### Tailwind 매핑 정책
+색은 LIVE hex 그대로 사용 (Tailwind arbitrary value `bg-[#E6F1FB]` 형식). 사이즈는 가장 근접한 Tailwind 토큰 (`text-xs ≈ 12px`, `text-[10px]` for 10px). 정확한 LIVE 재현 우선.
+
+---
+
 ## Tags glossary (observed across LIVE)
 
 | Tag | Source | Notes |
