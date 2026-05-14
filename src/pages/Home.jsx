@@ -96,6 +96,39 @@ function HomePillarCard({ pillar }) {
   )
 }
 
+// Author spelling corrected to 'McCandless' (LIVE shows 'Maccandless').
+// Body copy and quote preserved verbatim from philabcuk.org per
+// docs/phi-lab-content/01_home.md (Featured Quote section).
+function HomeQuoteBlock() {
+  return (
+    <section className="bg-white border-y border-gray-100">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-24">
+        <blockquote className="text-center">
+          <p className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight tracking-tight">
+            &ldquo;Data is the new soil, not oil.&rdquo;
+          </p>
+          <footer className="mt-8 space-y-1 text-sm tracking-wider text-gray-500 uppercase">
+            <div>David McCandless</div>
+            <div className="text-gray-400">(Author of Information is Beautiful)</div>
+          </footer>
+        </blockquote>
+
+        <div className="max-w-3xl mx-auto mt-12 md:mt-16 space-y-5 font-bold text-gray-800 text-base md:text-lg leading-relaxed">
+          <p>Oil is valuable and tradable.</p>
+          <p>
+            Data only becomes valuable with considerable effort. In the data-driven era,
+            the effectiveness of AI machines depends on the granularity and precision of the data.
+          </p>
+          <p>
+            We focus on optimal informative transformation with the right application, so that could
+            be a medium that bridges the gap between raw data and actionable knowledge.
+          </p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // Year badge — newest year is vivid brand blue (LIVE site colour),
 // older years rotate through distinct hues that also fade with age,
 // 5+ years back drops to muted gray as "history".
@@ -372,6 +405,9 @@ export default function Home() {
           <ViewAllLink to="/publications" label={VIEW_ALL.publications} />
         </div>
       </section>
+
+      {/* ── 3b. Featured Quote (LIVE Featured Quote block) ────── */}
+      <HomeQuoteBlock />
 
       {/* ── 4. Lab Members ────────────────────────────────────── */}
       <section className="bg-[#f8fafc] border-b border-gray-200">
