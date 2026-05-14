@@ -393,3 +393,51 @@ Recent Publications 섹션은 article 만 5건 유지. presentation 노출 X.
 - 신규 24 presentation entry 추가 (international 11 + national 13)
 - 최종 publications.json 항목 수: 40
 - members.json / lectures.json / research.json 등 다른 데이터 파일 영향 없음
+
+---
+
+## 11. v2.3 (2026-05-14 추가) — `lectures.json` 이미지 + 학습목표 + 언어 필드
+
+배경: LIVE philabcuk.org/lecture/ 는 강의별로 (1) 본문 multi-paragraph 설명, (2) "Learning Objectives" bullet 목록, (3) 강의 이미지 1~3장, (4) 사용 언어/도구 인라인 표기를 모두 노출. 우리는 한 줄 요약만 있고 이미지/목표 0 — 학생이 강의 내용을 시각적으로 파악하기 어려움.
+
+### 변경 (각 lectures.json entry)
+
+```js
+{
+  // 기존 필드 (모두 유지)
+  id, code, titleEn, titleKo, semester, level, description, tags,
+
+  // 신규 옵션 필드
+  images: ['https://i0.wp.com/...png?...&ssl=1', ...],   // [신규] LIVE WP 이미지 URL 핫링크 0~3장
+  objectives: [                                          // [신규] 학습 목표 bullet (옵션)
+    'Understand Medical Data Ecosystems: Navigate complex healthcare data structures...',
+    'Apply Statistical Methods: Perform regression analysis...',
+    ...
+  ],
+  language: 'Python, TensorFlow, Keras',                 // [신규] 사용 언어/도구 (옵션)
+}
+```
+
+### 필드 채우기 정책 (LIVE 1:1)
+
+- **images**: LIVE 의 `<img>` URL 그대로 (`https://i0.wp.com/philabcuk.org/wp-content/uploads/...`). 결정 #1: 핫링크 그대로 사용 — 우리 레포에 다운로드 안 함.
+- **objectives**: LIVE bullet 항목들. LIVE 는 한국어 'ㄴ' 문자를 bullet 으로 쓰지만 데이터에는 순수 텍스트만 (마커 없음). UI 가 ul/li 로 렌더하며 표준 '•' bullet 표시 (결정 #4).
+- **language**: LIVE 의 인라인 표기 (`/학부, python` → 'Python', `/ 의료인공지능대학원` 은 graduate level 이므로 language 가 아니라 level 정보). 추출 시 신중히 분리.
+- **description**: LIVE multi-paragraph verbatim (\n\n 으로 단락 구분). prerequisites (예: 'Recommended Prerequisites: Introductory understanding to Statistics') 는 별도 필드 아니고 description 마지막 단락에 포함 (결정 #5).
+
+### Lectures.jsx UI 매핑
+
+- images.length === 0 → 이미지 영역 자체 생략
+- images.length === 1 → full-width 이미지 (자연 비율)
+- images.length === 2 → grid grid-cols-2 gap-2
+- images.length === 3 → grid grid-cols-3 gap-2
+- description → split('\\n\\n') → 각 단락 별도 <p>
+- objectives 가 있으면 description 다음에 'Learning Objectives:' 라벨 + ul/li (표준 '•' bullet)
+- language (있으면) — title 옆 또는 카드 메타 영역에 표시
+
+### 적용 범위
+
+- lectures.json 의 9 entry 모두 description 을 LIVE 풀 텍스트로 교체
+- images 는 LIVE 에 이미지가 있는 entry 만 (~7개 추정 — 추출 후 확정)
+- objectives 는 Fall 2025 의료빅데이터분석/머신러닝/Programming for AI 등에 추가
+- members.json / publications.json / research.json 은 영향 없음
