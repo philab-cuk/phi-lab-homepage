@@ -17,18 +17,17 @@
       "googleScholar": null,
       "researchInterests": [
         "Healthcare big data management",
-        "Clinical Decision Support Systems (CDSS)",
-        "Cancer care continuum",
-        "Social determinants of health",
-        "Real-world data (RWD) engineering",
-        "Real-world evidence (RWE)",
-        "Knowledge representation",
-        "Precision medicine implementation",
-        "Federated learning for healthcare"
+        "Clinical Decision Support Systems (CDSS) algorithms",
+        "Cancer care continuum (therapeutic effectiveness to social determinants)",
+        "EHR software architecture",
+        "Genomic research clinical integration",
+        "Real-world data representation",
+        "Workflow analysis & process innovation",
+        "Knowledge representation & AI systems"
       ],
       "status": "current",
       "bioShort": "Clinical informaticist with over 20 years of professional experience across clinical practice, EHR architecture, and academic research. PhD in Biomedical Informatics, Seoul National University. Former ML/LLM Senior Data Engineer at Kakao Healthcare; postdoctoral researcher at Samsung Medical Center and Sungkyunkwan University SAIHST. Member, 2nd Data Disclosure and Utilization Committee, CODA, Korea National Institute of Health.",
-      "bioFull": "Hyo Jung Kim is an associate professor in the Department of Biomedical Software Engineering at The Catholic University of Korea, South Korea. She earned her BSc and MSc in Nursing, and Management & Education from Yonsei University in Seoul, South Korea, and her Ph.D. in Biomedical Informatics from Seoul National University. She is a seasoned clinical informaticist with over 20 years of professional experience across clinical practice, EHR software architecture, and academic research. She focuses on integrative approaches to enhancing continuity and quality of care enabled by the digital landscape from knowledge representation to artificial intelligence system. She has achieved outstanding performance in workflow analysis, process innovation applying IT technology, and data management of tens of terabytes within hospital information systems.\n\nDr. Kim is passionate about conducting data-driven multidisciplinary research and innovative activities that advance healthcare information circulation. Her research bridges data science and implementation science, integrating genomic research into clinical practice and constructing meaningful representations of real-world data. Her areas of expertise include healthcare big data management, developing algorithms such as CDSS, and representing the cancer care continuum from therapeutic effectiveness research to social determinants of health. She has been actively involved in both international and national research collaborations with major hospitals in South Korea.",
+      "bioFull": "Hyo Jung Kim is an associate professor in the Department of Biomedical Software Engineering at The Catholic University of Korea, South Korea. She earned her BSc and MSc in Nursing, and Management & Education from Yonsei University in Seoul, South Korea, and her Ph.D. in Biomedical Informatics from Seoul National University. She is a seasoned clinical informaticist with over 20 years of professional experience across clinical practice, EHR software architecture, and academic research.\n\nShe focuses on integrative approaches to enhancing continuity and quality of care enabled by the digital landscape from knowledge representation to artificial intelligence system. She has achieved outstanding performance in workflow analysis, process innovation applying IT technology, and data management of tens of terabytes within hospital information systems.\n\nDr. Kim is passionate about conducting data-driven multidisciplinary research and innovative activities that advance healthcare information circulation. Her research bridges data science and implementation science, integrating genomic research into clinical practice and constructing meaningful representations of real-world data. Her areas of expertise include healthcare big data management, developing algorithms such as CDSS, and representing the cancer care continuum from therapeutic effectiveness research to social determinants of health. She has been actively involved in both international and national research collaborations with major hospitals in South Korea. Additionally, she serves as a Member of the 2nd Data Disclosure and Utilization Committee, Clinical & Omics Data Archive (CODA), The Korea National Institute of Health.",
       "education": [
         { "degree": "BSc", "field": "Nursing", "institution": "Yonsei University, Seoul" },
         { "degree": "MSc", "field": "Nursing", "institution": "Yonsei University, Seoul" },
@@ -36,12 +35,66 @@
         { "degree": "Ph.D.", "field": "Biomedical Informatics", "institution": "Seoul National University", "period": "2015.3 – 2020.8" }
       ],
       "experience": [
-        { "period": "03/2024 – 02/2025", "role": "ML/LLM Senior Data Engineer", "organization": "Kakao Healthcare, Technological Lab", "location": "Pankyo, South Korea" },
-        { "period": "09/2021 – 03/2024", "role": "Research Professor", "organization": "Department of Digital Health, SAIHST, Sungkyunkwan University", "location": "Seoul, South Korea" },
-        { "period": "09/2020 – 03/2024", "role": "Postdoctoral Researcher", "organization": "Center for Research Resource Standardization, Samsung Medical Center", "location": "South Korea" },
-        { "period": "09/2020 – 08/2021", "role": "Postdoctoral Researcher", "organization": "Department of Digital Health, SAIHST, Sungkyunkwan University", "location": "Seoul, South Korea" },
-        { "period": "09/2008 – 01/2014", "role": "Hospital Information System Architect / DB Developer", "organization": "Yonsei University Health System", "location": "Seoul, South Korea" },
-        { "period": "04/2004 – 08/2008", "role": "Staff Nurse, Neonatal Intensive Care Unit", "organization": "Severance Children's Hospital, Yonsei University Health System", "location": "Seoul, South Korea" }
+        {
+          "category": "academic",
+          "period": "09/2021 – 03/2024",
+          "role": "Research Professor",
+          "organization": "Department of Digital Health, Samsung Advanced Institute for Health Science and Technology (SAIHST), Sungkyunkwan University",
+          "location": "Seoul, South Korea",
+          "focus": "Real-world Data Research Platform Implementation"
+        },
+        {
+          "category": "academic",
+          "period": "09/2020 – 03/2024",
+          "role": "Postdoctoral Researcher",
+          "organization": "Center for Research Resource Standardization (former Big Data Research Center), Research Institute for Future Medicine, Samsung Medical Center",
+          "location": "South Korea",
+          "focus": "Standardization Strategies for Clinical Genomic Information Delivery"
+        },
+        {
+          "category": "academic",
+          "period": "09/2020 – 08/2021",
+          "role": "Postdoctoral Researcher",
+          "organization": "Department of Digital Health, Samsung Advanced Institute for Health Science and Technology (SAIHST), Sungkyunkwan University",
+          "location": "Seoul, South Korea",
+          "focus": "Breast Cancer Registry Construction using Clinical Data Warehouse"
+        },
+        {
+          "category": "technical",
+          "period": "03/2024 – 02/2025",
+          "role": "ML/LLM Senior Data Engineer",
+          "organization": "Kakaohealthcare, Technological Lab",
+          "location": "Pankyo, South Korea",
+          "details": [
+            "Multi-institution data engineering for federated learning (FL)",
+            "Fine-tuned LLM data pipeline R&D for Healthcare Data Research Suite (HRS)",
+            "Multi-institutional research projects using clinical research data platforms"
+          ],
+          "externalLinks": [
+            { "label": "Google Cloud customer story — Kakao Healthcare federated learning", "url": "https://cloud.google.com/customers/kakao-healthcare-federated-learning" }
+          ]
+        },
+        {
+          "category": "technical",
+          "period": "09/2008 – 01/2014",
+          "role": "Hospital Information System Architect / DB Developer",
+          "organization": "Division of Medical Information and Technology, Yonsei University Health System",
+          "location": "Seoul, South Korea",
+          "focus": "Electronic Medical Records Development and Maintenance",
+          "details": [
+            "Person in charge of Computerized Physician Order Entry (CPOE) and Clinical Data Warehouse (CDW)",
+            "Database and application design / overall process management",
+            "Workflow/process analysis for digital transformation"
+          ]
+        },
+        {
+          "category": "clinical",
+          "period": "04/2004 – 08/2008",
+          "role": "Staff Nurse",
+          "organization": "Neonatal Intensive Care Unit, Severance Children's Hospital, Yonsei University Health System",
+          "location": "Seoul, South Korea",
+          "focus": "Nursing, QA/QI team projects"
+        }
       ],
       "service": [
         "Member, 2nd Data Disclosure and Utilization Committee, Clinical & Omics Data Archive (CODA), The Korea National Institute of Health"
