@@ -1,53 +1,60 @@
 import { useState, useMemo } from 'react'
-import { Search, Copy, Check, ExternalLink, BookOpen, FileText, Layers } from 'lucide-react'
+import { Search, Copy, Check, ExternalLink, BookOpen } from 'lucide-react'
 import publicationsData from '../data/publications.json'
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-const ALL_YEARS = ['All', 2026, 2025, 2024, 2023, 2022, 2021, 2020]
+const ALL_YEARS_OPTION = 'All'
 
-const TYPE_CONFIG = {
-  journal: {
-    label: 'Journal',
-    icon: BookOpen,
-    bg: 'bg-emerald-50',
-    text: 'text-emerald-700',
-    border: 'border-emerald-200',
-    activeBg: 'bg-emerald-600',
-  },
-  conference: {
-    label: 'Conference',
-    icon: Layers,
-    bg: 'bg-brand-50',
-    text: 'text-brand-700',
-    border: 'border-brand-200',
-    activeBg: 'bg-brand-600',
-  },
-  workshop: {
-    label: 'Workshop',
-    icon: FileText,
-    bg: 'bg-amber-50',
-    text: 'text-amber-700',
-    border: 'border-amber-200',
-    activeBg: 'bg-amber-500',
-  },
+// LIVE-faithful uppercase headings + per-category badge styling.
+const CATEGORY_LABEL = {
+  'article': 'ARTICLE, PEER-REVIEWED',
+  'international-presentation': 'INTERNATIONAL PRESENTATION',
+  'national-presentation': 'NATIONAL PRESENTATION',
+}
+const CATEGORY_BADGE = {
+  'article': 'bg-emerald-100 text-emerald-800 border-emerald-200',
+  'international-presentation': 'bg-violet-100 text-violet-800 border-violet-200',
+  'national-presentation': 'bg-amber-100 text-amber-800 border-amber-200',
 }
 
-// ─── BibTeX generation ────────────────────────────────────────────────────────
+// ─── BibTeX generation (per-category) ───────────────────────────────────────
 
 function buildBibtex(pub) {
   const citeKey = pub.id
   const authorStr = pub.authors.map((a) => a.name).join(' and ')
-  const doiLine = pub.doi ? `  doi       = {${pub.doi}},\n` : ''
-  const urlLine = !pub.doi && pub.url ? `  url       = {${pub.url}},\n` : ''
+  const doiLine = pub.doi ? `  doi          = {${pub.doi}},\n` : ''
+  const urlLine = !pub.doi && pub.url ? `  url          = {${pub.url}},\n` : ''
 
-  if (pub.type === 'journal') {
-    return `@article{${citeKey},\n  author    = {${authorStr}},\n  title     = {{${pub.title}}},\n  journal   = {${pub.venue}},\n  year      = {${pub.year}},\n${doiLine}${urlLine}}`
+  if (pub.category === 'article') {
+    return (
+      `@article{${citeKey},\n` +
+      `  author       = {${authorStr}},\n` +
+      `  title        = {{${pub.title}}},\n` +
+      `  journal      = {${pub.venue}},\n` +
+      `  year         = {${pub.year}},\n` +
+      doiLine + urlLine +
+      `}`
+    )
   }
-  return `@inproceedings{${citeKey},\n  author    = {${authorStr}},\n  title     = {{${pub.title}}},\n  booktitle = {${pub.venue}},\n  year      = {${pub.year}},\n${doiLine}${urlLine}}`
+  // Presentation → @misc with howpublished + venue + location + date
+  const howpublishedParts = [pub.venue]
+  if (pub.location) howpublishedParts.push(pub.location)
+  if (pub.date) howpublishedParts.push(pub.date)
+  const howpublished = howpublishedParts.join(', ')
+  return (
+    `@misc{${citeKey},\n` +
+    `  author       = {${authorStr}},\n` +
+    `  title        = {{${pub.title}}},\n` +
+    `  howpublished = {${howpublished}},\n` +
+    `  year         = {${pub.year}},\n` +
+    `  note         = {${pub.category === 'international-presentation' ? 'International presentation' : 'National presentation'}},\n` +
+    `}`
+  )
 }
 
-// Render author list with PI bold + † for co-first authors
+// ─── Sub-components ──────────────────────────────────────────────────────────
+
 function AuthorList({ authors }) {
   return (
     <>
@@ -62,26 +69,14 @@ function AuthorList({ authors }) {
   )
 }
 
-// ─── Sub-components ──────────────────────────────────────────────────────────
-
-function TypeBadge({ type }) {
-  const cfg = TYPE_CONFIG[type]
-  if (!cfg) return null
-  const Icon = cfg.icon
+function CategoryBadge({ category }) {
+  const cls = CATEGORY_BADGE[category] ?? 'bg-gray-100 text-gray-700 border-gray-200'
+  const label = CATEGORY_LABEL[category] ?? category
   return (
     <span
-      className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full border ${cfg.bg} ${cfg.text} ${cfg.border}`}
+      className={`inline-flex items-center text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm border ${cls}`}
     >
-      <Icon size={11} />
-      {cfg.label}
-    </span>
-  )
-}
-
-function KeywordTag({ tag }) {
-  return (
-    <span className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full">
-      {tag}
+      {label}
     </span>
   )
 }
@@ -123,8 +118,15 @@ function CopyBibtexButton({ pub }) {
 }
 
 function PublicationCard({ pub }) {
+  const isArticle = pub.category === 'article'
   return (
     <article className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-brand-200 transition-all">
+      {/* Category badge + year */}
+      <div className="flex flex-wrap items-center gap-2 mb-2">
+        <CategoryBadge category={pub.category} />
+        <span className="text-gray-400 text-xs font-medium">{pub.year}</span>
+      </div>
+
       {/* Title */}
       <h3 className="font-bold text-gray-900 text-base leading-snug mb-1.5">{pub.title}</h3>
 
@@ -133,29 +135,19 @@ function PublicationCard({ pub }) {
         <AuthorList authors={pub.authors} />
       </p>
 
-      {/* Venue + details + year + type badge */}
-      <div className="flex flex-wrap items-center gap-2 mb-3">
+      {/* Venue + (article: venueDetails / presentation: location + date) */}
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-3">
         <span className="text-gray-500 text-sm italic">{pub.venue}</span>
-        {pub.venueDetails && (
+        {isArticle && pub.venueDetails && (
           <span className="text-gray-400 text-sm">{pub.venueDetails}</span>
         )}
-        <span className="text-gray-400 text-sm">&middot; {pub.year}</span>
-        <TypeBadge type={pub.type} />
+        {!isArticle && pub.location && (
+          <span className="text-gray-400 text-sm">· {pub.location}</span>
+        )}
+        {!isArticle && pub.date && (
+          <span className="text-gray-400 text-sm">· {pub.date}</span>
+        )}
       </div>
-
-      {/* Abstract (optional) */}
-      {pub.abstract && (
-        <p className="text-gray-500 text-sm leading-relaxed mb-3">{pub.abstract}</p>
-      )}
-
-      {/* Tags */}
-      {pub.tags && pub.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {pub.tags.map((tag) => (
-            <KeywordTag key={tag} tag={tag} />
-          ))}
-        </div>
-      )}
 
       {/* Action row */}
       <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
@@ -194,7 +186,7 @@ function YearGroup({ year, pubs }) {
         <span className="text-lg font-bold text-brand-800">{year}</span>
         <div className="flex-1 h-px bg-brand-100" />
         <span className="text-xs text-gray-400 font-medium">
-          {pubs.length} {pubs.length === 1 ? 'publication' : 'publications'}
+          {pubs.length} {pubs.length === 1 ? 'entry' : 'entries'}
         </span>
       </div>
       <div className="flex flex-col gap-4">
@@ -206,88 +198,59 @@ function YearGroup({ year, pubs }) {
   )
 }
 
-function TypeFilterButton({ type, active, count, onClick }) {
-  const cfg = type === 'All' ? null : TYPE_CONFIG[type.toLowerCase()]
-  return (
-    <button
-      onClick={onClick}
-      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold border transition-all ${
-        active
-          ? cfg
-            ? `${cfg.activeBg} text-white border-transparent shadow-sm`
-            : 'bg-brand-700 text-white border-transparent shadow-sm'
-          : 'bg-white text-gray-600 border-gray-200 hover:border-brand-300 hover:text-brand-700'
-      }`}
-    >
-      {cfg && (() => { const Icon = cfg.icon; return <Icon size={13} /> })()}
-      {type}
-      <span
-        className={`inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-xs font-bold ${
-          active ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'
-        }`}
-      >
-        {count}
-      </span>
-    </button>
-  )
-}
-
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default function Publications() {
-  const [yearFilter, setYearFilter] = useState('All')
-  const [typeFilter, setTypeFilter] = useState('All')
+  const [yearFilter, setYearFilter] = useState(ALL_YEARS_OPTION)
   const [query, setQuery] = useState('')
 
-  // Derived counts for type filter buttons (ignoring type filter itself)
-  const typeCounts = useMemo(() => {
-    const base = publicationsData.filter((p) => {
-      const matchYear = yearFilter === 'All' || p.year === yearFilter
-      const matchQuery =
-        query === '' ||
-        p.title.toLowerCase().includes(query.toLowerCase()) ||
-        p.authors.some((a) => a.name.toLowerCase().includes(query.toLowerCase())) ||
-        (p.tags && p.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()))) ||
-        p.venue.toLowerCase().includes(query.toLowerCase())
-      return matchYear && matchQuery
+  // Counts per category (for header summary)
+  const counts = useMemo(() => {
+    const c = { article: 0, intl: 0, national: 0 }
+    publicationsData.forEach((p) => {
+      if (p.category === 'article') c.article++
+      else if (p.category === 'international-presentation') c.intl++
+      else if (p.category === 'national-presentation') c.national++
     })
-    return {
-      All: base.length,
-      Journal: base.filter((p) => p.type === 'journal').length,
-      Conference: base.filter((p) => p.type === 'conference').length,
-      Workshop: base.filter((p) => p.type === 'workshop').length,
-    }
-  }, [yearFilter, query])
+    return c
+  }, [])
 
-  // Filtered list
+  // All distinct years (descending)
+  const years = useMemo(() => {
+    const set = new Set(publicationsData.map((p) => p.year))
+    return [...set].sort((a, b) => b - a)
+  }, [])
+
+  // Filtered list — search across title / authors / venue / location
   const filtered = useMemo(() => {
     return publicationsData.filter((p) => {
-      const matchYear = yearFilter === 'All' || p.year === yearFilter
-      const matchType = typeFilter === 'All' || p.type === typeFilter.toLowerCase()
-      const q = query.toLowerCase()
+      const matchYear = yearFilter === ALL_YEARS_OPTION || p.year === yearFilter
+      const q = query.toLowerCase().trim()
       const matchQuery =
         q === '' ||
         p.title.toLowerCase().includes(q) ||
         p.authors.some((a) => a.name.toLowerCase().includes(q)) ||
-        (p.tags && p.tags.some((t) => t.toLowerCase().includes(q))) ||
-        p.venue.toLowerCase().includes(q)
-      return matchYear && matchType && matchQuery
+        p.venue.toLowerCase().includes(q) ||
+        (p.location && p.location.toLowerCase().includes(q))
+      return matchYear && matchQuery
     })
-  }, [yearFilter, typeFilter, query])
+  }, [yearFilter, query])
 
-  // Group by year descending
+  // Group by year descending (sub-sort within: article first, then int'l, then national)
   const grouped = useMemo(() => {
     const map = {}
     filtered.forEach((p) => {
       if (!map[p.year]) map[p.year] = []
       map[p.year].push(p)
     })
+    const order = { 'article': 0, 'international-presentation': 1, 'national-presentation': 2 }
     return Object.entries(map)
       .sort(([a], [b]) => Number(b) - Number(a))
-      .map(([year, pubs]) => ({ year: Number(year), pubs }))
+      .map(([year, pubs]) => ({
+        year: Number(year),
+        pubs: pubs.sort((a, b) => (order[a.category] ?? 9) - (order[b.category] ?? 9)),
+      }))
   }, [filtered])
-
-  const typeOptions = ['All', 'Journal', 'Conference', 'Workshop']
 
   return (
     <>
@@ -309,23 +272,14 @@ export default function Publications() {
           </span>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">Publications</h1>
           <p className="text-brand-200 text-base max-w-xl leading-relaxed">
-            Peer-reviewed research from the PHI Lab spanning health informatics, clinical NLP,
-            EHR data provenance, and privacy-preserving AI.
+            Peer-reviewed research and conference presentations from the PHI Lab spanning health
+            informatics, clinical NLP, EHR data provenance, and pharmacovigilance.
           </p>
-          <div className="mt-6 flex flex-wrap gap-4 text-sm text-brand-100">
-            <span className="flex items-center gap-1.5">
-              <BookOpen size={14} className="text-brand-300" />
-              <strong className="text-white">{publicationsData.filter((p) => p.type === 'journal').length}</strong> Journal Articles
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Layers size={14} className="text-brand-300" />
-              <strong className="text-white">{publicationsData.filter((p) => p.type === 'conference').length}</strong> Conference Papers
-            </span>
-            <span className="flex items-center gap-1.5">
-              <FileText size={14} className="text-brand-300" />
-              <strong className="text-white">{publicationsData.filter((p) => p.type === 'workshop').length}</strong> Workshop Papers
-            </span>
-          </div>
+          <p className="mt-6 text-sm text-brand-100">
+            <strong className="text-white">{counts.article}</strong> articles, peer-reviewed &middot;{' '}
+            <strong className="text-white">{counts.intl}</strong> international presentations &middot;{' '}
+            <strong className="text-white">{counts.national}</strong> national presentations
+          </p>
         </div>
       </section>
 
@@ -340,7 +294,7 @@ export default function Publications() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search title, author, tag…"
+              placeholder="Search title, author, venue, location…"
               className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent placeholder-gray-400"
             />
           </div>
@@ -354,35 +308,23 @@ export default function Publications() {
               value={yearFilter}
               onChange={(e) => {
                 const v = e.target.value
-                setYearFilter(v === 'All' ? 'All' : Number(v))
+                setYearFilter(v === ALL_YEARS_OPTION ? ALL_YEARS_OPTION : Number(v))
               }}
               className="text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent text-gray-700"
             >
-              {ALL_YEARS.map((y) => (
+              <option value={ALL_YEARS_OPTION}>All</option>
+              {years.map((y) => (
                 <option key={y} value={y}>
                   {y}
                 </option>
               ))}
             </select>
           </div>
-
-          {/* Type filter buttons */}
-          <div className="flex items-center gap-2 flex-wrap">
-            {typeOptions.map((t) => (
-              <TypeFilterButton
-                key={t}
-                type={t}
-                active={typeFilter === t}
-                count={typeCounts[t] ?? 0}
-                onClick={() => setTypeFilter(t)}
-              />
-            ))}
-          </div>
         </div>
       </div>
 
       {/* ── Main Content ── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 max-w-4xl">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
         {/* Count display */}
         <p className="text-sm text-gray-500 mb-8">
@@ -390,10 +332,10 @@ export default function Publications() {
           <span className="font-semibold text-gray-800">{filtered.length}</span>{' '}
           of{' '}
           <span className="font-semibold text-gray-800">{publicationsData.length}</span>{' '}
-          publication{publicationsData.length !== 1 ? 's' : ''}
-          {(yearFilter !== 'All' || typeFilter !== 'All' || query) && (
+          {publicationsData.length === 1 ? 'entry' : 'entries'}
+          {(yearFilter !== ALL_YEARS_OPTION || query) && (
             <button
-              onClick={() => { setYearFilter('All'); setTypeFilter('All'); setQuery('') }}
+              onClick={() => { setYearFilter(ALL_YEARS_OPTION); setQuery('') }}
               className="ml-3 text-brand-600 hover:text-brand-800 font-medium underline underline-offset-2"
             >
               Clear filters
@@ -413,12 +355,12 @@ export default function Publications() {
             <div className="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mb-4">
               <Search size={24} className="text-brand-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-1">No publications found</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-1">No entries found</h3>
             <p className="text-gray-500 text-sm max-w-xs leading-relaxed">
-              Try adjusting your search term, year, or publication type filter.
+              Try adjusting your search term or year filter.
             </p>
             <button
-              onClick={() => { setYearFilter('All'); setTypeFilter('All'); setQuery('') }}
+              onClick={() => { setYearFilter(ALL_YEARS_OPTION); setQuery('') }}
               className="mt-5 inline-flex items-center gap-2 bg-brand-700 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-brand-800 transition-colors text-sm"
             >
               Reset filters

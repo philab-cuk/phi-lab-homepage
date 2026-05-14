@@ -319,3 +319,77 @@
 
 - 본 v2.1 변경은 PI(`hkim`) experience 만 영향. 학생 멤버 객체에는 experience 필드 자체가 없음 → 영향 없음
 - v2.0 의 다른 모든 필드(`title`, `bioShort`, `bioFull`, `education[]`, `service[]`, `researchInterests[]`, `nameKo` 등) 그대로 유지
+
+---
+
+## 10. v2.2 (2026-05-14 추가) — `publications.json` 카테고리 + 발표 entry 지원
+
+배경: LIVE philabcuk.org/publications/ 에는 ARTICLES, PEER-REVIEWED 16건 + INTERNATIONAL PRESENTATIONS 11건 + NATIONAL PRESENTATIONS 13건 = **총 40 entries** 가 존재. v2.1 의 `type` 필드(이미 v2.1.5에서 제거됨)와 별개로, entry 종류를 구분할 `category` + 발표 전용 필드(`location`, `date`)가 필요.
+
+### 변경
+
+**기존 entry (article)**:
+```js
+{
+  id, title, authors[{name, isPi?, coFirst?}], venue, venueDetails?, year, doi?, url?,
+  category: 'article'    // [신규 필수]
+}
+```
+
+**신규 entry (presentation)**:
+```js
+{
+  id, title, authors[{name, isPi?, coFirst?}],
+  venue,                                  // 학회/심포지엄 명 (e.g. "ESMO 2023")
+  venueDetails: null,                     // presentation 에는 보통 미사용
+  year,                                   // parsed integer
+  category: 'international-presentation' | 'national-presentation',  // [신규 필수]
+  location: 'Madrid, Spain',              // [신규 옵션] 도시 + 국가
+  date: 'October 21, 2023',               // [신규 옵션] verbatim 풀 날짜
+  doi: null,                              // 보통 없음
+  url: null                               // 보통 없음
+}
+```
+
+### 카테고리 enum (UI 헤딩 매핑 — LIVE CAPS)
+
+| category 값 | LIVE 헤딩 |
+|---|---|
+| `article` | "ARTICLES, PEER-REVIEWED" |
+| `international-presentation` | "INTERNATIONAL PRESENTATIONS" |
+| `national-presentation` | "NATIONAL PRESENTATIONS" |
+
+### 필드별 적용 매트릭스
+
+| 필드 | article | international-presentation | national-presentation |
+|---|---|---|---|
+| id | ✓ 필수 | ✓ 필수 | ✓ 필수 |
+| title | ✓ 필수 | ✓ 필수 | ✓ 필수 |
+| authors | ✓ 필수 | ✓ 필수 | ✓ 필수 |
+| venue | ✓ 학술지명 | ✓ 학회/심포지엄명 | ✓ 학회명 |
+| venueDetails | ✓ vol/issue/pages | – null | – null |
+| year | ✓ 필수 | ✓ 필수 | ✓ 필수 |
+| category | ✓ 'article' | ✓ enum | ✓ enum |
+| location | – | ✓ 'City, Country' | ✓ 옵션 |
+| date | – | ✓ 'Month DD, YYYY' | ✓ 'Month DD, YYYY' |
+| doi | ✓ 옵션 | – null | – null |
+| url | ✓ 옵션 | – null | – null |
+
+### Publications.jsx UI 매핑 (사용자 결정 #2: 연도 우선 + 카테고리 배지)
+
+- 그룹핑: 연도 역순 (2026 → 2025 → ...) — LIVE 의 카테고리 우선과 다름 (사용자 선호)
+- 각 entry 카드에 카테고리 배지 표시 (Article / Int'l Presentation / National Presentation)
+- 페이지 헤더에 LIVE 와 동일한 3 카테고리 카운트 텍스트 표시 (예: "16 articles · 11 international presentations · 13 national presentations")
+- 검색은 통합 (title/authors/venue/location)
+- BibTeX (사용자 결정 #5): article → @article, presentation → @misc (with howpublished + venue + location + date)
+
+### Home.jsx (사용자 결정 #4): 변경 없음
+
+Recent Publications 섹션은 article 만 5건 유지. presentation 노출 X.
+
+### 적용 범위
+
+- publications.json 의 16 article 에 `category: 'article'` 일괄 추가
+- 신규 24 presentation entry 추가 (international 11 + national 13)
+- 최종 publications.json 항목 수: 40
+- members.json / lectures.json / research.json 등 다른 데이터 파일 영향 없음
