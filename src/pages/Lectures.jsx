@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react'
-import { BookOpen, GraduationCap, Tag, Code2, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { BookOpen, GraduationCap, Tag, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import lecturesData from '../data/lectures.json'
 
 // Context lets nested CourseImages open the page-level lightbox without
@@ -35,34 +35,16 @@ function groupBySemester(courses) {
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 const levelMeta = {
-  graduate: {
-    label: 'Graduate',
-    className: 'bg-purple-50 text-purple-700 border border-purple-200',
-  },
-  undergraduate: {
-    label: 'Undergraduate',
-    className: 'bg-green-50 text-green-700 border border-green-200',
-  },
+  graduate: { label: 'Graduate', className: 'text-purple-700' },
+  undergraduate: { label: 'Undergraduate', className: 'text-green-700' },
 }
 
 function LevelBadge({ level }) {
-  const meta = levelMeta[level] ?? { label: level, className: 'bg-gray-100 text-gray-600' }
+  const meta = levelMeta[level] ?? { label: level, className: 'text-gray-600' }
   return (
-    <span
-      className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full ${meta.className}`}
-    >
+    <span className={`inline-flex items-center gap-1 text-xs font-semibold ${meta.className}`}>
       <GraduationCap size={11} />
       {meta.label}
-    </span>
-  )
-}
-
-function LanguageBadge({ language }) {
-  if (!language) return null
-  return (
-    <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
-      <Code2 size={11} />
-      {language}
     </span>
   )
 }
@@ -195,7 +177,7 @@ function Lightbox({ state, setState, onClose }) {
 }
 
 function CourseCard({ course }) {
-  const { code, titleEn, titleKo, level, language, description, objectives, images, tags } = course
+  const { code, titleEn, titleKo, level, description, objectives, images, tags } = course
   const paragraphs = description ? description.split('\n\n').filter(Boolean) : []
 
   return (
@@ -208,7 +190,6 @@ function CourseCard({ course }) {
           </span>
         )}
         <LevelBadge level={level} />
-        <LanguageBadge language={language} />
       </div>
 
       {/* Title (KO + EN) */}
@@ -291,17 +272,10 @@ export default function Lectures() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
       {/* Page header */}
       <div className="mb-12">
-        <span className="inline-block bg-brand-50 text-brand-700 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
-          Teaching
-        </span>
         <h1 className="text-4xl font-extrabold text-gray-900 mb-2 tracking-tight">
           Lectures &amp; Courses
         </h1>
         <div className="w-16 h-1 bg-brand-600 rounded mb-5" />
-        <p className="text-gray-500 text-base max-w-2xl leading-relaxed">
-          Courses taught by PHI Lab faculty and researchers, spanning graduate seminars and
-          undergraduate modules in health informatics, biomedical data science, and clinical AI.
-        </p>
 
         {/* Summary chips */}
         <div className="flex flex-wrap gap-3 mt-6">
