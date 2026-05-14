@@ -304,10 +304,9 @@ export default function Home() {
   const collaboratorsCount = COLLABORATING_INSTITUTIONS.length
 
   // Body data slices
-  // Featured 항목(MOMENTUM, AI-Trajectory) 을 우선 상단에 노출
-  const featuredProjects = [...researchData]
+  // research.json 배열 순서 = LIVE phi-card DOM 순서. 자체 정렬 없이 첫 4건 노출.
+  const featuredProjects = researchData
     .filter((p) => p.status === 'active')
-    .sort((a, b) => Number(b.featured) - Number(a.featured))
     .slice(0, 4)
   const recentPubs = [...articles].sort((a, b) => b.year - a.year).slice(0, 5)
   const latestYear = recentPubs.length > 0 ? Math.max(...recentPubs.map((p) => p.year)) : null
