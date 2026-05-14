@@ -3,15 +3,15 @@ import { Menu, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useLanguage } from '../i18n/useLanguage.js'
 
-// Ordered list of nav route keys that map to t.nav
+// Ordered list of nav route keys that map to t.nav.
+// Order mirrors the original philabcuk.org navigation.
 const NAV_ROUTES = [
-  { to: '/', key: 'home' },
+  { to: '/professor', key: 'professor' },
+  { to: '/publications', key: 'publications' },
+  { to: '/lectures', key: 'lectures' },
+  { to: '/research', key: 'research' },
   { to: '/about', key: 'about' },
   { to: '/members', key: 'members' },
-  { to: '/research', key: 'research' },
-  { to: '/publications', key: 'publications' },
-  { to: '/news', key: 'news' },
-  { to: '/lectures', key: 'lectures' },
 ]
 
 function LanguageToggle() {

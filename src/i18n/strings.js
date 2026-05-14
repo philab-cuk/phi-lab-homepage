@@ -4,15 +4,14 @@
  */
 const strings = {
   en: {
-    // ── Navigation ────────────────────────────────────────────────────────
+    // ── Navigation (mirrors philabcuk.org menu order/labels) ──────────────
     nav: {
-      home: 'Home',
-      about: 'About',
+      professor: 'Professor',
+      publications: 'Publication',
+      lectures: 'Lecture',
+      research: 'Current Research',
+      about: 'About Lab',
       members: 'Members',
-      research: 'Research',
-      publications: 'Publications',
-      news: 'News',
-      lectures: 'Lectures',
     },
 
     // ── Hero (Home page) — copy & hierarchy preserved from prof's WP site ──
@@ -82,15 +81,14 @@ const strings = {
   },
 
   ko: {
-    // ── Navigation ────────────────────────────────────────────────────────
+    // ── Navigation (mirrors philabcuk.org menu order/labels) ──────────────
     nav: {
-      home: '홈',
-      about: '소개',
-      members: '구성원',
-      research: '연구',
+      professor: '교수',
       publications: '논문',
-      news: '소식',
       lectures: '강의',
+      research: '현재 연구',
+      about: '연구실 소개',
+      members: '구성원',
     },
 
     // ── Hero (Home page) — copy & hierarchy preserved from prof's WP site ──

@@ -1,23 +1,14 @@
-import {
-  Mail,
-  ExternalLink,
-  MapPin,
-  Target,
-  Eye,
-  Users,
-  Lightbulb,
-  GraduationCap,
-  Briefcase,
-  Award,
-} from 'lucide-react'
-import membersData from '../data/members.json'
+import { Mail, MapPin, Target, Eye, Users, Lightbulb } from 'lucide-react'
 
-const PI = membersData.current.find((m) => m.role === 'Principal Investigator')
+const PI_EMAIL = 'hyojung.kim@catholic.ac.kr'
 
-// ─── Static lab content (sourced from docs/phi-lab-content/06_about.md) ─────
+// ─── Lab content (sourced from docs/phi-lab-content/06_about.md) ────────────
 
 const LAB_DESCRIPTION_EN =
   "PHI (Precision & Provenance Health Informatics Lab) at the Catholic University of Korea is dedicated to advancing precision medicine and digital healthcare through data-driven interdisciplinary research. The lab's work spans from public data to EHR (Electronic Health Records) data, emphasizing the utilization of trustworthy data, knowledge generation via data science, and supporting decision-making through data-based digital healthcare systems. The lab collaborates with various medical institutions and schools both domestically and internationally to engage in vibrant research activities — including engineering real-world data (RWD), constructing data pipelines, generating real-world evidence (RWE), and designing information structures."
+
+const LAB_DESCRIPTION_KO =
+  '가톨릭대학교 PHI(φ, Precision & Provenance Health Informatics Lab) 연구실에서는 정밀의료와 디지털 헬스케어 구현을 위한 데이터 기반 다학제연구를 수행합니다. 공공데이터부터 EHR 데이터까지 포괄적으로 연구하며, 신뢰할 수 있는 데이터의 활용, 데이터 과학을 통한 지식 창출, 의사결정을 지원하는 데이터 기반 디지털 헬스케어 시스템 전반을 연구합니다. 국내외 의료기관 및 학교들과 교류하며 실세계데이터(RWD) 엔지니어링, 데이터 파이프라인 구축, 실사용 근거(RWE) 창출, 정보구조 설계 연구를 활발히 수행하고 있습니다.'
 
 const LAB_VALUES = [
   {
@@ -48,14 +39,6 @@ const LAB_VALUES = [
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-function ResearchTag({ label }) {
-  return (
-    <span className="inline-block bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1 rounded-full border border-blue-100">
-      {label}
-    </span>
-  )
-}
-
 function ValueCard({ icon: Icon, title, description }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6 flex gap-4 hover:shadow-sm hover:border-blue-200 transition-all">
@@ -77,7 +60,9 @@ function SectionHeader({ label, title, subtitle }) {
         {label}
       </span>
       <h2 className="text-3xl font-bold text-gray-900 mb-2">{title}</h2>
-      {subtitle && <p className="text-gray-500 text-base leading-relaxed max-w-2xl">{subtitle}</p>}
+      {subtitle && (
+        <p className="text-gray-500 text-base leading-relaxed max-w-2xl">{subtitle}</p>
+      )}
     </div>
   )
 }
@@ -102,7 +87,7 @@ export default function About() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 relative">
           <span className="inline-flex items-center gap-1.5 bg-blue-600/40 border border-blue-400/40 text-blue-100 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-            About PHI Lab
+            About Lab
           </span>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">
             Precision &amp; Provenance<br className="hidden sm:block" /> Health Informatics Lab
@@ -114,148 +99,14 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── Mission / Description ── */}
+      {/* ── Lab Description (EN + KO) ── */}
       <section className="bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-          <SectionHeader label="Who We Are" title="Mission" />
-          <p className="text-gray-700 text-base leading-relaxed">{LAB_DESCRIPTION_EN}</p>
-        </div>
-      </section>
-
-      {/* ── Professor profile ── */}
-      <section className="bg-gray-50 border-y border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <SectionHeader label="Principal Investigator" title="Meet the Lab Director" />
-
-          <div className="bg-white rounded-2xl border border-blue-100 shadow-sm p-6 sm:p-10 flex flex-col lg:flex-row gap-10 items-start">
-            {/* Photo */}
-            <div className="flex-shrink-0 flex flex-col items-center gap-4">
-              <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-2xl overflow-hidden ring-4 ring-blue-100 shadow-md">
-                <img
-                  src={PI.photo}
-                  alt={`Prof. ${PI.name}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* Quick links */}
-              <div className="flex items-center gap-3">
-                <a
-                  href={`mailto:${PI.email}`}
-                  aria-label="Email"
-                  className="w-9 h-9 rounded-lg bg-gray-100 hover:bg-blue-50 hover:text-blue-600 flex items-center justify-center text-gray-500 transition-colors"
-                >
-                  <Mail size={16} />
-                </a>
-                {PI.personalSite && (
-                  <a
-                    href={PI.personalSite}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Personal site"
-                    className="w-9 h-9 rounded-lg bg-gray-100 hover:bg-blue-50 hover:text-blue-600 flex items-center justify-center text-gray-500 transition-colors"
-                  >
-                    <ExternalLink size={16} />
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {/* Bio */}
-            <div className="flex-1 min-w-0">
-              <div className="flex flex-wrap items-center gap-2 mb-2">
-                <span className="inline-flex items-center gap-1 bg-blue-700 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">
-                  <GraduationCap size={12} />
-                  Principal Investigator
-                </span>
-              </div>
-              <h2 className="text-3xl font-extrabold text-gray-900 mt-1">
-                {PI.name}
-                {PI.nameKo && <span className="text-gray-400 text-2xl font-medium ml-2">({PI.nameKo})</span>}
-              </h2>
-              <p className="text-blue-600 font-semibold text-sm mt-1">
-                {PI.title} — {PI.department}
-              </p>
-              <p className="text-gray-500 text-sm font-medium mt-0.5">{PI.institution}</p>
-
-              <div className="mt-5 space-y-3 text-gray-600 text-sm leading-relaxed whitespace-pre-line">
-                {PI.bioFull}
-              </div>
-
-              {/* Research areas */}
-              <div className="mt-6">
-                <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
-                  Research Areas
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {PI.researchInterests.map((area) => (
-                    <ResearchTag key={area} label={area} />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Education & Experience ── */}
-      <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            {/* Education */}
-            <div>
-              <div className="flex items-center gap-2 mb-5">
-                <GraduationCap size={20} className="text-blue-700" />
-                <h3 className="text-xl font-bold text-gray-900">Education</h3>
-              </div>
-              <ul className="space-y-3">
-                {PI.education.map((ed, i) => (
-                  <li key={i} className="border-l-2 border-blue-100 pl-4 py-1">
-                    <p className="font-semibold text-gray-800 text-sm">
-                      {ed.degree} in {ed.field}
-                    </p>
-                    <p className="text-gray-500 text-sm">{ed.institution}</p>
-                    {ed.period && <p className="text-gray-400 text-xs mt-0.5">{ed.period}</p>}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Experience */}
-            <div>
-              <div className="flex items-center gap-2 mb-5">
-                <Briefcase size={20} className="text-blue-700" />
-                <h3 className="text-xl font-bold text-gray-900">Professional Experience</h3>
-              </div>
-              <ul className="space-y-3">
-                {PI.experience.map((ex, i) => (
-                  <li key={i} className="border-l-2 border-blue-100 pl-4 py-1">
-                    <p className="text-gray-400 text-xs font-medium">{ex.period}</p>
-                    <p className="font-semibold text-gray-800 text-sm leading-snug">{ex.role}</p>
-                    <p className="text-gray-500 text-sm leading-snug">{ex.organization}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Service */}
-          {PI.service && PI.service.length > 0 && (
-            <div className="mt-10 pt-10 border-t border-gray-200">
-              <div className="flex items-center gap-2 mb-4">
-                <Award size={20} className="text-blue-700" />
-                <h3 className="text-xl font-bold text-gray-900">Service</h3>
-              </div>
-              <ul className="space-y-2 text-gray-600 text-sm leading-relaxed">
-                {PI.service.map((s, i) => (
-                  <li key={i} className="flex gap-2">
-                    <span className="text-gray-300">•</span>
-                    {s}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <SectionHeader label="Who We Are" title="About the Lab" />
+          <p className="text-gray-700 text-base leading-relaxed mb-8">{LAB_DESCRIPTION_EN}</p>
+          <p className="text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-6">
+            {LAB_DESCRIPTION_KO}
+          </p>
         </div>
       </section>
 
@@ -286,57 +137,31 @@ export default function About() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Contact details */}
-            <div className="space-y-6">
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <h3 className="font-semibold text-gray-900 text-base mb-4 flex items-center gap-2">
-                  <Mail size={16} className="text-blue-600" />
-                  Contact Information
-                </h3>
-                <address className="not-italic text-sm text-gray-600 space-y-2">
-                  <p className="font-semibold text-gray-800">Prof. {PI.name}</p>
-                  <p>{PI.department}</p>
-                  <p>{PI.institution}</p>
-                  <p className="pt-2">
-                    <a
-                      href={`mailto:${PI.email}`}
-                      className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                    >
-                      {PI.email}
-                    </a>
-                  </p>
-                  {PI.personalSite && (
-                    <p>
-                      <a
-                        href={PI.personalSite}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                      >
-                        Personal site ↗
-                      </a>
-                    </p>
-                  )}
-                </address>
-              </div>
-
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <h3 className="font-semibold text-gray-900 text-base mb-4 flex items-center gap-2">
-                  <Users size={16} className="text-blue-600" />
-                  Prospective Students
-                </h3>
-                <p className="text-sm text-gray-500 leading-relaxed mb-4">
-                  We welcome motivated students and researchers passionate about health informatics,
-                  clinical AI, and real-world data engineering. Please email Prof. Kim with your CV
-                  and a brief research statement.
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="font-semibold text-gray-900 text-base mb-4 flex items-center gap-2">
+                <Mail size={16} className="text-blue-600" />
+                Contact Information
+              </h3>
+              <address className="not-italic text-sm text-gray-600 space-y-2">
+                <p className="font-semibold text-gray-800">Prof. Hyo Jung Kim</p>
+                <p>Department of Biomedical Software Engineering</p>
+                <p>The Catholic University of Korea</p>
+                <p className="pt-2">
+                  <a
+                    href={`mailto:${PI_EMAIL}`}
+                    className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                  >
+                    {PI_EMAIL}
+                  </a>
                 </p>
-                <a
-                  href={`mailto:${PI.email}?subject=Prospective%20Student%20Inquiry`}
-                  className="inline-flex items-center gap-2 bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-800 transition-colors text-sm shadow-sm"
-                >
-                  <Mail size={14} />
-                  Send Application Inquiry
-                </a>
-              </div>
+              </address>
+              <a
+                href={`mailto:${PI_EMAIL}?subject=Lab%20Inquiry`}
+                className="mt-5 inline-flex items-center gap-2 bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-800 transition-colors text-sm shadow-sm"
+              >
+                <Mail size={14} />
+                Send Inquiry
+              </a>
             </div>
 
             {/* Address card */}
@@ -346,7 +171,9 @@ export default function About() {
                   <MapPin size={28} className="text-blue-600" />
                 </div>
                 <div className="text-center">
-                  <p className="font-semibold text-gray-800 text-base">The Catholic University of Korea</p>
+                  <p className="font-semibold text-gray-800 text-base">
+                    The Catholic University of Korea
+                  </p>
                   <p className="text-gray-500 text-sm mt-1">Bucheon Campus</p>
                 </div>
               </div>
