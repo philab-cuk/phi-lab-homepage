@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 
-import { LanguageProvider } from './i18n/LanguageContext.jsx'
 import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
 import About from './pages/About.jsx'
@@ -33,8 +32,6 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <LanguageProvider>
-      <RouterProvider router={router} />
-    </LanguageProvider>
+    <RouterProvider router={router} />
   </StrictMode>,
 )

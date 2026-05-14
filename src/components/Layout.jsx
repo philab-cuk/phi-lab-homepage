@@ -1,52 +1,31 @@
 import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { useLanguage } from '../i18n/useLanguage.js'
 
-// Ordered list of nav route keys that map to t.nav.
-// Order mirrors the original philabcuk.org navigation.
+// Ordered list of nav items mirroring philabcuk.org menu order/labels.
 const NAV_ROUTES = [
-  { to: '/professor', key: 'professor' },
-  { to: '/publications', key: 'publications' },
-  { to: '/lectures', key: 'lectures' },
-  { to: '/research', key: 'research' },
-  { to: '/about', key: 'about' },
-  { to: '/members', key: 'members' },
+  { to: '/professor', label: 'Professor' },
+  { to: '/publications', label: 'Publication' },
+  { to: '/lectures', label: 'Lecture' },
+  { to: '/research', label: 'Current Research' },
+  { to: '/about', label: 'About Lab' },
+  { to: '/members', label: 'Members' },
 ]
 
-function LanguageToggle() {
-  const { lang, toggle } = useLanguage()
-  return (
-    <div className="flex items-center gap-0.5 bg-gray-100 rounded-md p-0.5 text-xs font-semibold">
-      <button
-        onClick={() => toggle('en')}
-        className={`px-2.5 py-1 rounded transition-colors ${
-          lang === 'en'
-            ? 'bg-white text-brand-700 shadow-sm'
-            : 'text-gray-500 hover:text-gray-700'
-        }`}
-        aria-pressed={lang === 'en'}
-      >
-        EN
-      </button>
-      <button
-        onClick={() => toggle('ko')}
-        className={`px-2.5 py-1 rounded transition-colors ${
-          lang === 'ko'
-            ? 'bg-white text-brand-700 shadow-sm'
-            : 'text-gray-500 hover:text-gray-700'
-        }`}
-        aria-pressed={lang === 'ko'}
-      >
-        KO
-      </button>
-    </div>
-  )
+const FOOTER = {
+  tagline:
+    'Precision & Provenance Health Informatics Lab — advancing data-driven methods for trustworthy clinical decision support.',
+  quickLinks: 'Quick Links',
+  contact: 'Contact',
+  profName: 'Prof. Hyo Jung Kim',
+  department:
+    'Department of Biomedical Software Engineering, The Catholic University of Korea',
+  email: 'hyojung.kim@catholic.ac.kr',
+  copyright: 'PHI Lab. All rights reserved.',
 }
 
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { t } = useLanguage()
   const closeMobile = () => setMobileOpen(false)
 
   return (
@@ -62,41 +41,35 @@ function Header() {
             />
           </Link>
 
-          {/* Desktop nav + language toggle */}
-          <div className="hidden md:flex items-center gap-3">
-            <nav className="flex items-center gap-1">
-              {NAV_ROUTES.map(({ to, key }) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  end={to === '/'}
-                  className={({ isActive }) =>
-                    `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-brand-50 text-brand-700'
-                        : 'text-gray-600 hover:text-brand-700 hover:bg-gray-50'
-                    }`
-                  }
-                >
-                  {t.nav[key]}
-                </NavLink>
-              ))}
-            </nav>
-            <LanguageToggle />
-          </div>
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            {NAV_ROUTES.map(({ to, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                end={to === '/'}
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md text-base font-semibold transition-colors ${
+                    isActive
+                      ? 'bg-brand-50 text-brand-700'
+                      : 'text-gray-700 hover:text-brand-700 hover:bg-gray-50'
+                  }`
+                }
+              >
+                {label}
+              </NavLink>
+            ))}
+          </nav>
 
-          {/* Mobile: language toggle + hamburger */}
-          <div className="md:hidden flex items-center gap-2">
-            <LanguageToggle />
-            <button
-              className="p-2 rounded-md text-gray-600 hover:text-brand-700 hover:bg-gray-100 transition-colors"
-              onClick={() => setMobileOpen((o) => !o)}
-              aria-label="Toggle menu"
-              aria-expanded={mobileOpen}
-            >
-              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
-          </div>
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden p-2 rounded-md text-gray-600 hover:text-brand-700 hover:bg-gray-100 transition-colors"
+            onClick={() => setMobileOpen((o) => !o)}
+            aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
+          >
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
       </div>
 
@@ -104,21 +77,21 @@ function Header() {
       {mobileOpen && (
         <div className="md:hidden border-t border-gray-200 bg-white">
           <nav className="flex flex-col px-4 py-2 gap-1">
-            {NAV_ROUTES.map(({ to, key }) => (
+            {NAV_ROUTES.map(({ to, label }) => (
               <NavLink
                 key={to}
                 to={to}
                 end={to === '/'}
                 onClick={closeMobile}
                 className={({ isActive }) =>
-                  `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  `px-3 py-2 rounded-md text-base font-semibold transition-colors ${
                     isActive
                       ? 'bg-brand-50 text-brand-700'
-                      : 'text-gray-600 hover:text-brand-700 hover:bg-gray-50'
+                      : 'text-gray-700 hover:text-brand-700 hover:bg-gray-50'
                   }`
                 }
               >
-                {t.nav[key]}
+                {label}
               </NavLink>
             ))}
           </nav>
@@ -129,9 +102,6 @@ function Header() {
 }
 
 function Footer() {
-  const { t } = useLanguage()
-  const f = t.footer
-
   return (
     <footer className="bg-gray-900 text-gray-300 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -144,16 +114,16 @@ function Footer() {
                 className="h-9 w-auto"
               />
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed">{f.tagline}</p>
+            <p className="text-sm text-gray-400 leading-relaxed">{FOOTER.tagline}</p>
           </div>
 
           <div>
-            <h3 className="font-semibold text-white mb-3">{f.quickLinks}</h3>
+            <h3 className="font-semibold text-white mb-3">{FOOTER.quickLinks}</h3>
             <ul className="space-y-2 text-sm">
-              {NAV_ROUTES.map(({ to, key }) => (
+              {NAV_ROUTES.map(({ to, label }) => (
                 <li key={to}>
                   <Link to={to} className="text-gray-400 hover:text-brand-400 transition-colors">
-                    {t.nav[key]}
+                    {label}
                   </Link>
                 </li>
               ))}
@@ -161,16 +131,16 @@ function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-white mb-3">{f.contact}</h3>
+            <h3 className="font-semibold text-white mb-3">{FOOTER.contact}</h3>
             <address className="not-italic text-sm text-gray-400 space-y-1">
-              <p>{f.profName}</p>
-              <p>{f.department}</p>
+              <p>{FOOTER.profName}</p>
+              <p>{FOOTER.department}</p>
               <p className="mt-2">
                 <a
-                  href={`mailto:${f.email}`}
+                  href={`mailto:${FOOTER.email}`}
                   className="hover:text-brand-400 transition-colors"
                 >
-                  {f.email}
+                  {FOOTER.email}
                 </a>
               </p>
             </address>
@@ -178,7 +148,7 @@ function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-10 pt-6 text-center text-xs text-gray-500">
-          &copy; {new Date().getFullYear()} {f.copyright}
+          &copy; {new Date().getFullYear()} {FOOTER.copyright}
         </div>
       </div>
     </footer>
