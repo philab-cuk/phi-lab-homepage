@@ -56,8 +56,8 @@ function ProfessorCard({ member }) {
         <h2 className="text-2xl font-bold text-gray-900 mt-1">{member.name}</h2>
         <p className="text-blue-600 font-medium text-sm mt-0.5">{member.degree}</p>
 
-        {member.bio && (
-          <p className="text-gray-500 text-sm leading-relaxed mt-3 max-w-2xl">{member.bio}</p>
+        {member.bioShort && (
+          <p className="text-gray-500 text-sm leading-relaxed mt-3 max-w-2xl">{member.bioShort}</p>
         )}
 
         {/* Research interests */}
@@ -120,14 +120,18 @@ function StudentCard({ member }) {
 
       {/* Footer: email + socials */}
       <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-        <a
-          href={`mailto:${member.email}`}
-          className="flex items-center gap-1.5 text-gray-500 hover:text-blue-600 transition-colors text-xs truncate"
-          aria-label={`Email ${member.name}`}
-        >
-          <Mail size={13} className="flex-shrink-0" />
-          <span className="truncate">{member.email}</span>
-        </a>
+        {member.email ? (
+          <a
+            href={`mailto:${member.email}`}
+            className="flex items-center gap-1.5 text-gray-500 hover:text-blue-600 transition-colors text-xs truncate"
+            aria-label={`Email ${member.name}`}
+          >
+            <Mail size={13} className="flex-shrink-0" />
+            <span className="truncate">{member.email}</span>
+          </a>
+        ) : (
+          <span className="text-xs text-gray-300">—</span>
+        )}
         <div className="flex items-center gap-2 ml-2 flex-shrink-0">
           <SocialLink href={member.googleScholar} icon={BookOpen} label="Google Scholar" />
           <SocialLink href={member.linkedin} icon={Link2} label="LinkedIn" />
@@ -328,7 +332,7 @@ export default function Members() {
             clinical AI, and data provenance. Reach out to learn about open positions.
           </p>
           <a
-            href="mailto:hyojung.kim@university.edu"
+            href="mailto:hyojung.kim@catholic.ac.kr"
             className="inline-flex items-center gap-2 bg-white text-blue-800 font-semibold px-7 py-3 rounded-lg hover:bg-blue-50 transition-colors text-sm shadow-sm"
           >
             <Mail size={15} />

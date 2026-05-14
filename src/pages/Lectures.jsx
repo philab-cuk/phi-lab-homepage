@@ -44,15 +44,17 @@ function LevelBadge({ level }) {
   )
 }
 
-function CourseCard({ code, title, level, description, tags }) {
+function CourseCard({ code, titleEn, titleKo, level, description, tags }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md hover:border-blue-200 transition-all group">
       {/* Header row */}
       <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded font-mono">
-            {code}
-          </span>
+          {code && (
+            <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded font-mono">
+              {code}
+            </span>
+          )}
           <LevelBadge level={level} />
         </div>
         <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors flex-shrink-0">
@@ -60,8 +62,11 @@ function CourseCard({ code, title, level, description, tags }) {
         </div>
       </div>
 
-      {/* Title */}
-      <h3 className="font-semibold text-gray-900 text-base leading-snug mb-2">{title}</h3>
+      {/* Title (EN + KO) */}
+      <h3 className="font-semibold text-gray-900 text-base leading-snug mb-1">{titleEn}</h3>
+      {titleKo && (
+        <p className="text-gray-500 text-sm leading-snug mb-2">{titleKo}</p>
+      )}
 
       {/* Description */}
       <p className="text-gray-500 text-sm leading-relaxed mb-4">{description}</p>

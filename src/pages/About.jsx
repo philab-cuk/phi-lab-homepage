@@ -1,52 +1,48 @@
 import {
   Mail,
-  BookOpen,
-  Link2,
+  ExternalLink,
   MapPin,
   Target,
   Eye,
   Users,
   Lightbulb,
   GraduationCap,
+  Briefcase,
+  Award,
 } from 'lucide-react'
+import membersData from '../data/members.json'
 
-// ─── Static data ─────────────────────────────────────────────────────────────
+const PI = membersData.current.find((m) => m.role === 'Principal Investigator')
 
-const RESEARCH_AREAS = [
-  'Clinical Natural Language Processing',
-  'Data Provenance Engineering',
-  'Federated Learning for Healthcare',
-  'EHR Phenotyping',
-  'Precision Medicine',
-  'Trustworthy & Explainable AI',
-  'Large Language Models in Clinical Settings',
-  'Biomedical Knowledge Graphs',
-]
+// ─── Static lab content (sourced from docs/phi-lab-content/06_about.md) ─────
+
+const LAB_DESCRIPTION_EN =
+  "PHI (Precision & Provenance Health Informatics Lab) at the Catholic University of Korea is dedicated to advancing precision medicine and digital healthcare through data-driven interdisciplinary research. The lab's work spans from public data to EHR (Electronic Health Records) data, emphasizing the utilization of trustworthy data, knowledge generation via data science, and supporting decision-making through data-based digital healthcare systems. The lab collaborates with various medical institutions and schools both domestically and internationally to engage in vibrant research activities — including engineering real-world data (RWD), constructing data pipelines, generating real-world evidence (RWE), and designing information structures."
 
 const LAB_VALUES = [
   {
     icon: Lightbulb,
-    title: 'Rigorous Science',
+    title: 'Trustworthy Data',
     description:
-      'We hold our work to the highest standards of methodological rigour, reproducibility, and transparency.',
+      'We prioritize data quality, provenance, and reproducibility — the foundation of meaningful clinical evidence.',
   },
   {
     icon: Users,
-    title: 'Collaborative Spirit',
+    title: 'Interdisciplinary Collaboration',
     description:
-      'Great health AI research requires clinicians, informaticians, and engineers working shoulder-to-shoulder.',
+      'Our research bridges nursing, medicine, computer science, and policy — across institutions in Korea and abroad.',
   },
   {
     icon: Target,
-    title: 'Clinical Impact',
+    title: 'Real-World Impact',
     description:
-      'Every project is grounded in a concrete clinical need — we measure success by real-world adoption and patient benefit.',
+      'Every project is grounded in a concrete clinical question — measured by adoption in healthcare settings, not benchmarks.',
   },
   {
     icon: Eye,
-    title: 'Ethical Responsibility',
+    title: 'Knowledge to Action',
     description:
-      'We proactively address fairness, privacy, and accountability in every system we build.',
+      'We design information structures that bridge raw data and actionable knowledge for clinicians and policymakers.',
   },
 ]
 
@@ -111,156 +107,166 @@ export default function About() {
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">
             Precision &amp; Provenance<br className="hidden sm:block" /> Health Informatics Lab
           </h1>
-          <p className="text-blue-200 text-base max-w-xl leading-relaxed">
-            We develop trustworthy, data-driven computational methods that advance clinical
-            decision-making, improve patient outcomes, and make AI in healthcare transparent and
-            accountable.
+          <p className="text-blue-200 text-base max-w-2xl leading-relaxed">
+            PHI (φ) Lab at The Catholic University of Korea — advancing precision medicine and
+            digital healthcare through data-driven interdisciplinary research.
           </p>
         </div>
       </section>
 
+      {/* ── Mission / Description ── */}
+      <section className="bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+          <SectionHeader label="Who We Are" title="Mission" />
+          <p className="text-gray-700 text-base leading-relaxed">{LAB_DESCRIPTION_EN}</p>
+        </div>
+      </section>
+
       {/* ── Professor profile ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <SectionHeader
-          label="Principal Investigator"
-          title="Meet the Lab Director"
-        />
+      <section className="bg-gray-50 border-y border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <SectionHeader label="Principal Investigator" title="Meet the Lab Director" />
 
-        <div className="bg-white rounded-2xl border border-blue-100 shadow-sm p-6 sm:p-10 flex flex-col lg:flex-row gap-10 items-start">
-          {/* Photo */}
-          <div className="flex-shrink-0 flex flex-col items-center gap-4">
-            <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-2xl overflow-hidden ring-4 ring-blue-100 shadow-md">
-              <img
-                src="https://api.dicebear.com/7.x/initials/svg?seed=Hyojung%20Kim&backgroundColor=1d4ed8&fontFamily=Arial&fontSize=40&fontWeight=700&textColor=ffffff"
-                alt="Prof. Hyojung Kim"
-                className="w-full h-full object-cover"
-              />
+          <div className="bg-white rounded-2xl border border-blue-100 shadow-sm p-6 sm:p-10 flex flex-col lg:flex-row gap-10 items-start">
+            {/* Photo */}
+            <div className="flex-shrink-0 flex flex-col items-center gap-4">
+              <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-2xl overflow-hidden ring-4 ring-blue-100 shadow-md">
+                <img
+                  src={PI.photo}
+                  alt={`Prof. ${PI.name}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Quick links */}
+              <div className="flex items-center gap-3">
+                <a
+                  href={`mailto:${PI.email}`}
+                  aria-label="Email"
+                  className="w-9 h-9 rounded-lg bg-gray-100 hover:bg-blue-50 hover:text-blue-600 flex items-center justify-center text-gray-500 transition-colors"
+                >
+                  <Mail size={16} />
+                </a>
+                {PI.personalSite && (
+                  <a
+                    href={PI.personalSite}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Personal site"
+                    className="w-9 h-9 rounded-lg bg-gray-100 hover:bg-blue-50 hover:text-blue-600 flex items-center justify-center text-gray-500 transition-colors"
+                  >
+                    <ExternalLink size={16} />
+                  </a>
+                )}
+              </div>
             </div>
 
-            {/* Quick links */}
-            <div className="flex items-center gap-3">
-              <a
-                href="mailto:hyojung.kim@ucalgary.ca"
-                aria-label="Email"
-                className="w-9 h-9 rounded-lg bg-gray-100 hover:bg-blue-50 hover:text-blue-600 flex items-center justify-center text-gray-500 transition-colors"
-              >
-                <Mail size={16} />
-              </a>
-              <a
-                href="https://scholar.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Google Scholar"
-                className="w-9 h-9 rounded-lg bg-gray-100 hover:bg-blue-50 hover:text-blue-600 flex items-center justify-center text-gray-500 transition-colors"
-              >
-                <BookOpen size={16} />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="w-9 h-9 rounded-lg bg-gray-100 hover:bg-blue-50 hover:text-blue-600 flex items-center justify-center text-gray-500 transition-colors"
-              >
-                <Link2 size={16} />
-              </a>
-            </div>
-          </div>
+            {/* Bio */}
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                <span className="inline-flex items-center gap-1 bg-blue-700 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                  <GraduationCap size={12} />
+                  Principal Investigator
+                </span>
+              </div>
+              <h2 className="text-3xl font-extrabold text-gray-900 mt-1">
+                {PI.name}
+                {PI.nameKo && <span className="text-gray-400 text-2xl font-medium ml-2">({PI.nameKo})</span>}
+              </h2>
+              <p className="text-blue-600 font-semibold text-sm mt-1">
+                {PI.title} — {PI.department}
+              </p>
+              <p className="text-gray-500 text-sm font-medium mt-0.5">{PI.institution}</p>
 
-          {/* Bio */}
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2 mb-2">
-              <span className="inline-flex items-center gap-1 bg-blue-700 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">
-                <GraduationCap size={12} />
-                Principal Investigator
-              </span>
-            </div>
-            <h2 className="text-3xl font-extrabold text-gray-900 mt-1">Prof. Hyojung Kim</h2>
-            <p className="text-blue-600 font-semibold text-sm mt-1">
-              Associate Professor — Department of Health Informatics
-            </p>
-            <p className="text-gray-500 text-sm font-medium mt-0.5">
-              University of Calgary, Calgary, Alberta, Canada
-            </p>
+              <div className="mt-5 space-y-3 text-gray-600 text-sm leading-relaxed whitespace-pre-line">
+                {PI.bioFull}
+              </div>
 
-            <div className="mt-5 space-y-3 text-gray-600 text-sm leading-relaxed">
-              <p>
-                Prof. Hyojung Kim leads the Precision &amp; Provenance Health Informatics (PHI) Lab
-                at the University of Calgary. Her research sits at the intersection of clinical
-                informatics, machine learning, and software engineering, with a particular focus on
-                building AI systems that are not only accurate but also traceable, reproducible, and
-                safe for deployment in real clinical environments.
-              </p>
-              <p>
-                She received her Ph.D. in Biomedical Informatics from Stanford University and held a
-                postdoctoral fellowship at MIT CSAIL before joining the University of Calgary faculty
-                in 2018. Her work has been funded by CIHR, NSERC, Alberta Innovates, and the
-                Canadian Cancer Society, and has appeared in JAMIA, npj Digital Medicine, and the
-                AMIA Annual Symposium, among other leading venues.
-              </p>
-              <p>
-                Prof. Kim serves on the editorial board of the Journal of Biomedical Informatics and
-                regularly reviews for Nature Medicine, Cell Systems, and major AI/ML conferences. She
-                is passionate about mentoring the next generation of health informatics researchers
-                and actively recruits motivated PhD students and postdoctoral fellows.
-              </p>
-            </div>
-
-            {/* Research areas */}
-            <div className="mt-6">
-              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
-                Research Areas
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {RESEARCH_AREAS.map((area) => (
-                  <ResearchTag key={area} label={area} />
-                ))}
+              {/* Research areas */}
+              <div className="mt-6">
+                <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
+                  Research Areas
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {PI.researchInterests.map((area) => (
+                    <ResearchTag key={area} label={area} />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Mission & Vision ── */}
-      <section className="bg-gray-50 border-y border-gray-200">
+      {/* ── Education & Experience ── */}
+      <section className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <SectionHeader
-            label="Who We Are"
-            title="Mission &amp; Vision"
-            subtitle="PHI Lab is driven by a shared belief that health AI can only fulfil its promise when it is trustworthy, transparent, and grounded in genuine clinical need."
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-            {/* Mission */}
-            <div className="bg-white rounded-2xl border border-blue-100 p-8">
-              <div className="w-12 h-12 rounded-xl bg-blue-700 flex items-center justify-center mb-5">
-                <Target size={22} className="text-white" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            {/* Education */}
+            <div>
+              <div className="flex items-center gap-2 mb-5">
+                <GraduationCap size={20} className="text-blue-700" />
+                <h3 className="text-xl font-bold text-gray-900">Education</h3>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Our Mission</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">
-                To advance the science and practice of health informatics by creating AI methods
-                that are clinically meaningful, computationally rigorous, and ethically
-                responsible. We partner with clinicians, health systems, and policymakers to
-                translate research into tools that improve patient care at scale.
-              </p>
+              <ul className="space-y-3">
+                {PI.education.map((ed, i) => (
+                  <li key={i} className="border-l-2 border-blue-100 pl-4 py-1">
+                    <p className="font-semibold text-gray-800 text-sm">
+                      {ed.degree} in {ed.field}
+                    </p>
+                    <p className="text-gray-500 text-sm">{ed.institution}</p>
+                    {ed.period && <p className="text-gray-400 text-xs mt-0.5">{ed.period}</p>}
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            {/* Vision */}
-            <div className="bg-white rounded-2xl border border-blue-100 p-8">
-              <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center mb-5">
-                <Eye size={22} className="text-white" />
+            {/* Experience */}
+            <div>
+              <div className="flex items-center gap-2 mb-5">
+                <Briefcase size={20} className="text-blue-700" />
+                <h3 className="text-xl font-bold text-gray-900">Professional Experience</h3>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Our Vision</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">
-                A future in which every clinical AI system leaves a transparent, auditable trail —
-                from raw data collection to patient-facing recommendation — ensuring that
-                physicians, patients, and regulators can always understand, verify, and trust
-                the decisions being made on their behalf.
-              </p>
+              <ul className="space-y-3">
+                {PI.experience.map((ex, i) => (
+                  <li key={i} className="border-l-2 border-blue-100 pl-4 py-1">
+                    <p className="text-gray-400 text-xs font-medium">{ex.period}</p>
+                    <p className="font-semibold text-gray-800 text-sm leading-snug">{ex.role}</p>
+                    <p className="text-gray-500 text-sm leading-snug">{ex.organization}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          {/* Values grid */}
+          {/* Service */}
+          {PI.service && PI.service.length > 0 && (
+            <div className="mt-10 pt-10 border-t border-gray-200">
+              <div className="flex items-center gap-2 mb-4">
+                <Award size={20} className="text-blue-700" />
+                <h3 className="text-xl font-bold text-gray-900">Service</h3>
+              </div>
+              <ul className="space-y-2 text-gray-600 text-sm leading-relaxed">
+                {PI.service.map((s, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="text-gray-300">•</span>
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ── Lab Values ── */}
+      <section className="bg-gray-50 border-y border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <SectionHeader
+            label="What We Stand For"
+            title="Lab Values"
+            subtitle="The principles that shape how we choose problems, build systems, and collaborate."
+          />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {LAB_VALUES.map((v) => (
               <ValueCard key={v.title} {...v} />
@@ -270,89 +276,91 @@ export default function About() {
       </section>
 
       {/* ── Contact & Location ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <SectionHeader
-          label="Get in Touch"
-          title="Contact &amp; Location"
-          subtitle="We welcome inquiries from prospective students, collaborators, and industry partners."
-        />
+      <section className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <SectionHeader
+            label="Get in Touch"
+            title="Contact &amp; Location"
+            subtitle="We welcome inquiries from prospective students, collaborators, and industry partners."
+          />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Contact details */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 text-base mb-4 flex items-center gap-2">
-                <Mail size={16} className="text-blue-600" />
-                Contact Information
-              </h3>
-              <address className="not-italic text-sm text-gray-600 space-y-2">
-                <p className="font-semibold text-gray-800">Prof. Hyojung Kim</p>
-                <p>Department of Health Informatics</p>
-                <p>Cumming School of Medicine</p>
-                <p>University of Calgary</p>
-                <p className="pt-2">
-                  <a
-                    href="mailto:hyojung.kim@ucalgary.ca"
-                    className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                  >
-                    hyojung.kim@ucalgary.ca
-                  </a>
-                </p>
-                <p>
-                  <a
-                    href="tel:+14031234567"
-                    className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                  >
-                    +1 (403) 123-4567
-                  </a>
-                </p>
-              </address>
-            </div>
-
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 text-base mb-4 flex items-center gap-2">
-                <Users size={16} className="text-blue-600" />
-                Prospective Students
-              </h3>
-              <p className="text-sm text-gray-500 leading-relaxed mb-4">
-                We are always looking for motivated PhD students and postdoctoral researchers with
-                strong backgrounds in machine learning, biomedical informatics, or software
-                engineering. Please email Prof. Kim with your CV, a brief research statement, and
-                your transcript.
-              </p>
-              <a
-                href="mailto:hyojung.kim@ucalgary.ca?subject=Prospective%20Student%20Inquiry"
-                className="inline-flex items-center gap-2 bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-800 transition-colors text-sm shadow-sm"
-              >
-                <Mail size={14} />
-                Send Application Inquiry
-              </a>
-            </div>
-          </div>
-
-          {/* Map placeholder */}
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col">
-            {/* Styled map placeholder */}
-            <div className="flex-1 bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col items-center justify-center gap-4 p-10 min-h-64">
-              <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-                <MapPin size={28} className="text-blue-600" />
-              </div>
-              <div className="text-center">
-                <p className="font-semibold text-gray-800 text-base">University of Calgary</p>
-                <p className="text-gray-500 text-sm mt-1">Health Sciences Centre</p>
-              </div>
-            </div>
-            {/* Address block */}
-            <div className="p-5 border-t border-gray-100">
-              <div className="flex items-start gap-3">
-                <MapPin size={16} className="text-blue-600 mt-0.5 flex-shrink-0" />
-                <address className="not-italic text-sm text-gray-600 leading-relaxed">
-                  PHI Lab — Room HSC 3330<br />
-                  Health Sciences Centre<br />
-                  3330 Hospital Drive NW<br />
-                  Calgary, Alberta T2N 4N1<br />
-                  Canada
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Contact details */}
+            <div className="space-y-6">
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <h3 className="font-semibold text-gray-900 text-base mb-4 flex items-center gap-2">
+                  <Mail size={16} className="text-blue-600" />
+                  Contact Information
+                </h3>
+                <address className="not-italic text-sm text-gray-600 space-y-2">
+                  <p className="font-semibold text-gray-800">Prof. {PI.name}</p>
+                  <p>{PI.department}</p>
+                  <p>{PI.institution}</p>
+                  <p className="pt-2">
+                    <a
+                      href={`mailto:${PI.email}`}
+                      className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                    >
+                      {PI.email}
+                    </a>
+                  </p>
+                  {PI.personalSite && (
+                    <p>
+                      <a
+                        href={PI.personalSite}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                      >
+                        Personal site ↗
+                      </a>
+                    </p>
+                  )}
                 </address>
+              </div>
+
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <h3 className="font-semibold text-gray-900 text-base mb-4 flex items-center gap-2">
+                  <Users size={16} className="text-blue-600" />
+                  Prospective Students
+                </h3>
+                <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                  We welcome motivated students and researchers passionate about health informatics,
+                  clinical AI, and real-world data engineering. Please email Prof. Kim with your CV
+                  and a brief research statement.
+                </p>
+                <a
+                  href={`mailto:${PI.email}?subject=Prospective%20Student%20Inquiry`}
+                  className="inline-flex items-center gap-2 bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-800 transition-colors text-sm shadow-sm"
+                >
+                  <Mail size={14} />
+                  Send Application Inquiry
+                </a>
+              </div>
+            </div>
+
+            {/* Address card */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col">
+              <div className="flex-1 bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col items-center justify-center gap-4 p-10 min-h-64">
+                <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
+                  <MapPin size={28} className="text-blue-600" />
+                </div>
+                <div className="text-center">
+                  <p className="font-semibold text-gray-800 text-base">The Catholic University of Korea</p>
+                  <p className="text-gray-500 text-sm mt-1">Bucheon Campus</p>
+                </div>
+              </div>
+              <div className="p-5 border-t border-gray-100">
+                <div className="flex items-start gap-3">
+                  <MapPin size={16} className="text-blue-600 mt-0.5 flex-shrink-0" />
+                  <address className="not-italic text-sm text-gray-600 leading-relaxed">
+                    Department of Biomedical Software Engineering<br />
+                    The Catholic University of Korea<br />
+                    43, Jibong-ro, Bucheon<br />
+                    14662, Gyeonggi-do<br />
+                    South Korea
+                  </address>
+                </div>
               </div>
             </div>
           </div>

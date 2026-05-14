@@ -1,143 +1,298 @@
 [
   {
-    "id": "kim2026-prov-llm",
-    "title": "Provenance-Aware Large Language Models for Clinical Note Summarization",
-    "authors": ["Hyojung Kim", "Jiyeon Lee", "Seojun Ryu"],
-    "venue": "Journal of the American Medical Informatics Association (JAMIA)",
+    "id": "choo2026-covid-screening",
+    "title": "Enhancing COVID-19 Screening Models With Epidemiological and Mobility Features: Machine-Learning Model Study",
+    "authors": [
+      { "name": "Choo H" },
+      { "name": "Lee D" },
+      { "name": "Shin SY" },
+      { "name": "Lee J" },
+      { "name": "Lee D" },
+      { "name": "Kim E" },
+      { "name": "Kim HJ", "isPi": true }
+    ],
+    "venue": "JMIR AI",
+    "venueDetails": "5(1), e54956",
     "year": 2026,
     "type": "journal",
-    "doi": "10.1093/jamia/ocaf042",
-    "abstract": "We introduce a provenance-aware prompting framework that traces the origin of every claim in LLM-generated clinical summaries back to source note spans. Experiments on MIMIC-IV discharge summaries show a 22% reduction in hallucinated clinical facts compared to standard instruction-tuned baselines.",
-    "tags": ["provenance", "LLM", "clinical NLP", "hallucination", "MIMIC-IV"]
+    "url": "https://ai.jmir.org/2026/1/e54956/",
+    "tags": ["COVID-19", "machine learning", "screening", "mobility", "epidemiology"]
   },
   {
-    "id": "ryu2026-fedehr",
-    "title": "FedEHR: Federated Fine-Tuning of Clinical Language Models Across Hospital Systems",
-    "authors": ["Seojun Ryu", "Hyojung Kim"],
-    "venue": "ACM Conference on Health, Inference, and Learning (CHIL)",
-    "year": 2026,
-    "type": "conference",
-    "doi": "10.1145/3689490.3690012",
-    "abstract": "FedEHR presents a communication-efficient federated learning protocol for fine-tuning transformer-based clinical language models across heterogeneous hospital EHR systems without centralizing patient data. We demonstrate competitive performance with centrally trained models on ICD coding and clinical event prediction tasks.",
-    "tags": ["federated learning", "EHR", "privacy", "clinical NLP", "ICD coding"]
-  },
-  {
-    "id": "lee2025-multilingual",
-    "title": "Cross-Lingual Named Entity Recognition for Clinical Text in Low-Resource Settings",
-    "authors": ["Jiyeon Lee", "Hyojung Kim"],
-    "venue": "Findings of the Association for Computational Linguistics (ACL Findings)",
-    "year": 2025,
-    "type": "conference",
-    "doi": "10.18653/v1/2025.findings-acl.318",
-    "abstract": "This paper investigates cross-lingual transfer for clinical NER in Korean and Japanese, where annotated clinical data is extremely scarce. We propose a structure-aware alignment objective that improves entity boundary detection by 8.4 F1 points over direct multilingual fine-tuning.",
-    "tags": ["NER", "multilingual NLP", "clinical text", "low-resource", "transfer learning"]
-  },
-  {
-    "id": "kim2025-phenotype",
-    "title": "Automated EHR Phenotyping Using Contrastive Learning on Structured and Unstructured Data",
-    "authors": ["Hyojung Kim", "Kyungmin Choi", "Dohyun Han"],
-    "venue": "Journal of Biomedical Informatics",
+    "id": "kim2025-capecitabine-tnbc",
+    "title": "Effectiveness of Adjuvant Capecitabine in Triple-Negative Breast Cancer Patients With Residual Disease After Neoadjuvant Treatment: A Real-World Evidence Study in Korea",
+    "authors": [
+      { "name": "Kim MJ" },
+      { "name": "Kim HJ", "isPi": true },
+      { "name": "Kim JY" },
+      { "name": "Shin J" },
+      { "name": "Park YH" }
+    ],
+    "venue": "Clinical Breast Cancer",
     "year": 2025,
     "type": "journal",
-    "doi": "10.1016/j.jbi.2025.104631",
-    "abstract": "We develop a contrastive learning approach that jointly encodes ICD codes, lab values, and free-text notes to produce patient representations for large-scale phenotype discovery. Our method outperforms existing PheWAS pipelines on five chronic disease cohorts from the All of Us Research Program.",
-    "tags": ["EHR phenotyping", "contrastive learning", "PheWAS", "structured data", "clinical NLP"]
+    "url": "https://pubmed.ncbi.nlm.nih.gov/39909791/",
+    "tags": ["breast cancer", "TNBC", "RWE", "capecitabine"]
   },
   {
-    "id": "park2025-kg",
-    "title": "Ontology-Guided Knowledge Graph Construction from Clinical Guidelines",
-    "authors": ["Minji Park", "Hyojung Kim"],
-    "venue": "Workshop on Knowledge Graph Generation From Text (Text2KG) at ESWC",
-    "year": 2025,
-    "type": "workshop",
-    "abstract": "We describe an information extraction pipeline that constructs patient-actionable knowledge graphs from clinical practice guidelines by grounding extracted relations to SNOMED CT and RxNorm. Evaluation on AHA heart failure guidelines shows 91% relation precision when combined with an LLM re-ranking step.",
-    "tags": ["knowledge graph", "ontology", "clinical guidelines", "information extraction", "SNOMED CT"]
-  },
-  {
-    "id": "han2024-icd",
-    "title": "Automated ICD-10 Coding with Hierarchical Label Attention and Negation Awareness",
-    "authors": ["Dohyun Han", "Hyojung Kim"],
-    "venue": "Journal of the American Medical Informatics Association (JAMIA)",
+    "id": "jeon2024-neuroendocrine",
+    "title": "Breast cancers with neuroendocrine differentiation: Retrospective case studies series from a single institution based on the 2019 WHO classification",
+    "authors": [
+      { "name": "Jeon Y" },
+      { "name": "Kim JY" },
+      { "name": "Ahn JS" },
+      { "name": "Im YH" },
+      { "name": "Choi K" },
+      { "name": "Jeong SY" },
+      { "name": "Kim HJ", "isPi": true },
+      { "name": "Park YH" }
+    ],
+    "venue": "Cancer Treatment and Research Communications",
+    "venueDetails": "Article 100857",
     "year": 2024,
     "type": "journal",
-    "doi": "10.1093/jamia/ocad198",
-    "abstract": "We propose a hierarchical label attention network that leverages the ICD code tree structure and a negation-detection sub-module to reduce false-positive code assignments in automated clinical coding. The system achieves state-of-the-art micro-F1 on the MIMIC-III full-code benchmark.",
-    "tags": ["ICD coding", "clinical coding", "label attention", "negation", "MIMIC-III"]
+    "url": "https://www.sciencedirect.com/science/article/pii/S2468294224000698",
+    "tags": ["breast cancer", "neuroendocrine", "WHO classification"]
   },
   {
-    "id": "ryu2024-dp",
-    "title": "Differentially Private Pretraining of Clinical BERT with Adaptive Clipping",
-    "authors": ["Seojun Ryu", "Hyojung Kim"],
-    "venue": "Proceedings of the AAAI Conference on Artificial Intelligence",
+    "id": "kim2024-fasttrack-faers",
+    "title": "Investigating the Safety Profile of Fast-Track COVID-19 Drugs Using the FDA Adverse Event Reporting System Database: A Comparative Observational Study",
+    "authors": [
+      { "name": "Kim HJ", "isPi": true, "coFirst": true },
+      { "name": "Yoon JH", "coFirst": true },
+      { "name": "Lee KH" }
+    ],
+    "venue": "Pharmacoepidemiology and Drug Safety",
+    "venueDetails": "33(11), e70043",
+    "year": 2024,
+    "type": "journal",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/39533148/",
+    "tags": ["FAERS", "pharmacovigilance", "COVID-19"]
+  },
+  {
+    "id": "kim2024-trastuzumab-hepatobiliary",
+    "title": "Long-term hepatobiliary disorder associated with trastuzumab emtansine: pharmacovigilance study using the FDA Adverse Event Reporting System database",
+    "authors": [
+      { "name": "Kim HJ", "isPi": true, "coFirst": true },
+      { "name": "Yoon JH", "coFirst": true },
+      { "name": "Park YH" }
+    ],
+    "venue": "Scientific Reports",
+    "venueDetails": "14(1), 19587",
+    "year": 2024,
+    "type": "journal",
+    "url": "https://www.nature.com/articles/s41598-024-69614-x",
+    "tags": ["FAERS", "pharmacovigilance", "trastuzumab", "breast cancer"]
+  },
+  {
+    "id": "kang2024-charm-cohort",
+    "title": "Comprehensive Young Age Breast Cancer registry from clinical, genomics, and patient-reported outcomes measured with 15 years follow-up: the CHARM cohort profile",
+    "authors": [
+      { "name": "Kang D" },
+      { "name": "Park S" },
+      { "name": "Kim HJ", "isPi": true },
+      { "name": "Lee J" },
+      { "name": "Han J" },
+      { "name": "Kim SW" },
+      { "name": "Park YH" }
+    ],
+    "venue": "Breast Cancer",
+    "venueDetails": "31(3), 467–475",
+    "year": 2024,
+    "type": "journal",
+    "doi": "10.1007/s12282-024-01559-5",
+    "url": "https://link.springer.com/article/10.1007/s12282-024-01559-5",
+    "tags": ["breast cancer", "registry", "cohort", "CHARM"]
+  },
+  {
+    "id": "kim2024-traffic-medinfo",
+    "title": "Traffic Exposure and Breast Cancer Mortality by Area of Residence: Incorporating Clinical and Socioeconomic Data",
+    "authors": [
+      { "name": "Kim HJ", "isPi": true },
+      { "name": "Cho S" },
+      { "name": "Shin SY" },
+      { "name": "Lee SK" },
+      { "name": "Kim H" },
+      { "name": "Srinivasan S" },
+      { "name": "Park YH" }
+    ],
+    "venue": "MEDINFO 2023 — The Future Is Accessible (IOS Press)",
+    "venueDetails": "pp. 1566–1567",
     "year": 2024,
     "type": "conference",
-    "doi": "10.1609/aaai.v38i14.29433",
-    "abstract": "We introduce an adaptive gradient clipping strategy for differentially private pretraining of BERT-style encoders on EHR corpora, reducing the privacy-utility trade-off gap by 18% compared to fixed-clipping DP-SGD. Privacy analysis confirms (ε=8, δ=10⁻⁵)-DP under the Rényi accounting framework.",
-    "tags": ["differential privacy", "BERT", "EHR", "privacy-preserving", "pretraining"]
+    "url": "https://pubmed.ncbi.nlm.nih.gov/38269748/",
+    "tags": ["breast cancer", "social determinants", "GIS", "mortality"]
   },
   {
-    "id": "cho2023-xai",
-    "title": "Explainable Sepsis Risk Prediction in the ICU Using Temporal Concept Bottleneck Models",
-    "authors": ["Yuna Cho", "Hyojung Kim"],
-    "venue": "AMIA Annual Symposium",
+    "id": "kang2024-social-support-charm",
+    "title": "Impact of Social Support during Diagnosis and Treatment on Disease Progression in Young Patients with Breast Cancer: A Prospective Cohort Study",
+    "authors": [
+      { "name": "Kang D" },
+      { "name": "Park S" },
+      { "name": "Kim HJ", "isPi": true },
+      { "name": "Kim SW" },
+      { "name": "Lee JE" },
+      { "name": "Yu J" },
+      { "name": "Park YH" }
+    ],
+    "venue": "Cancer Research and Treatment",
+    "venueDetails": "56(1), 125",
+    "year": 2024,
+    "type": "journal",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/37669709/",
+    "tags": ["breast cancer", "social support", "cohort"]
+  },
+  {
+    "id": "kang2023-endocrine-symptoms",
+    "title": "Pretreatment endocrine symptoms and recurrence-free survival among young premenopausal patients with breast cancer: a prospective cohort study",
+    "authors": [
+      { "name": "Kang D" },
+      { "name": "Cho J" },
+      { "name": "Park S" },
+      { "name": "Kim HJ", "isPi": true },
+      { "name": "Kim SW" },
+      { "name": "Lee JE" },
+      { "name": "Park YH" }
+    ],
+    "venue": "Therapeutic Advances in Medical Oncology",
+    "venueDetails": "15, 17588359231189421",
     "year": 2023,
-    "type": "conference",
-    "doi": "10.5555/3665232.3665289",
-    "abstract": "We adapt Concept Bottleneck Models to time-series ICU data to generate clinician-interpretable explanations for sepsis risk scores derived from continuous vital sign streams and lab trends. A user study with 12 ICU nurses shows significantly higher trust and actionability compared to SHAP-based explanations.",
-    "tags": ["explainability", "sepsis", "ICU", "concept bottleneck", "clinical decision support"]
+    "type": "journal",
+    "doi": "10.1177/17588359231189421",
+    "url": "https://journals.sagepub.com/doi/10.1177/17588359231189421",
+    "tags": ["breast cancer", "endocrine therapy", "cohort", "premenopausal"]
   },
   {
-    "id": "kim2023-prov-graph",
-    "title": "A Data Provenance Graph Model for Reproducible Clinical AI Pipelines",
-    "authors": ["Hyojung Kim"],
-    "venue": "VLDB Workshop on Tabular Data, ML & Knowledge Graphs (TMDL)",
+    "id": "choe2023-active-pv-framework",
+    "title": "Development and Application of an Active Pharmacovigilance Framework Based on Electronic Healthcare Records from Multiple Centers in Korea",
+    "authors": [
+      { "name": "Choe S" },
+      { "name": "Lee S" },
+      { "name": "Park CH" },
+      { "name": "Lee JH" },
+      { "name": "Kim HJ", "isPi": true },
+      { "name": "Byeon SJ" },
+      { "name": "Kim JH" }
+    ],
+    "venue": "Drug Safety",
+    "venueDetails": "46(7), 647–660",
     "year": 2023,
-    "type": "workshop",
-    "abstract": "This position paper formalizes a data provenance graph model tailored to multi-step clinical AI pipelines, capturing dataset splits, preprocessing transforms, and model checkpoints as typed provenance nodes. We demonstrate how the model supports audit, reproducibility, and regulatory compliance tracing under EU AI Act requirements.",
-    "tags": ["data provenance", "reproducibility", "clinical AI", "pipeline", "compliance"]
+    "type": "journal",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/37243963/",
+    "tags": ["pharmacovigilance", "EHR", "multi-institution", "Korea"]
   },
   {
-    "id": "han2022-text-mining",
-    "title": "Extracting Social Determinants of Health from Emergency Department Notes with Weak Supervision",
-    "authors": ["Dohyun Han", "Yuna Cho", "Hyojung Kim"],
-    "venue": "Journal of the American Medical Informatics Association (JAMIA)",
+    "id": "kim2023-rwd-brain-mets",
+    "title": "Preliminary attainability assessment of real-world data for answering major clinical research questions in breast cancer brain metastasis: framework development and validation",
+    "authors": [
+      { "name": "Kim MJ", "coFirst": true },
+      { "name": "Kim HJ", "isPi": true, "coFirst": true },
+      { "name": "Kang D" },
+      { "name": "Ahn HK" },
+      { "name": "Shin S" },
+      { "name": "Park S" },
+      { "name": "Cho J" },
+      { "name": "Park Y" }
+    ],
+    "venue": "Journal of Medical Internet Research",
+    "year": 2023,
+    "type": "journal",
+    "doi": "10.2196/43359",
+    "url": "https://doi.org/10.2196/43359",
+    "tags": ["RWD", "breast cancer", "brain metastasis", "framework"]
+  },
+  {
+    "id": "lee2022-hla-adr",
+    "title": "Reducing severe cutaneous adverse and type B adverse drug reactions using pre-stored human leukocyte antigen genotypes",
+    "authors": [
+      { "name": "Lee KH" },
+      { "name": "Kang DY" },
+      { "name": "Kim HH" },
+      { "name": "Kim YJ" },
+      { "name": "Kim HJ", "isPi": true },
+      { "name": "Kim JH" },
+      { "name": "Kang HR" }
+    ],
+    "venue": "Clinical and Translational Allergy",
+    "venueDetails": "12(1), e12098",
     "year": 2022,
     "type": "journal",
-    "doi": "10.1093/jamia/ocac037",
-    "abstract": "We construct a weakly supervised NER model for social determinants of health (SDoH) using a curated lexicon and distant supervision from structured fields, eliminating the need for expensive sentence-level annotation. Across three emergency department corpora, the model achieves macro-F1 > 0.79 for housing instability, food insecurity, and transportation barriers.",
-    "tags": ["SDoH", "weak supervision", "NER", "emergency medicine", "social determinants"]
+    "doi": "10.1002/clt2.12098",
+    "url": "https://onlinelibrary.wiley.com/doi/10.1002/clt2.12098",
+    "tags": ["HLA", "pharmacogenomics", "ADR", "drug safety"]
   },
   {
-    "id": "cho2022-readmit",
-    "title": "Multimodal 30-Day Readmission Prediction Combining Discharge Notes and Structured EHR Features",
-    "authors": ["Yuna Cho", "Hyojung Kim"],
-    "venue": "IEEE EMBC",
-    "year": 2022,
-    "type": "conference",
-    "doi": "10.1109/EMBC48229.2022.9871432",
-    "abstract": "A cross-modal attention fusion architecture combines ClinicalBERT embeddings of discharge notes with tabular EHR features for 30-day all-cause readmission prediction. The multimodal model improves AUROC by 3.1 points over text-only and structured-only baselines on a 40,000-patient cohort.",
-    "tags": ["readmission prediction", "multimodal", "EHR", "discharge notes", "cross-modal attention"]
-  },
-  {
-    "id": "kim2021-prov-survey",
-    "title": "Data Provenance in Clinical Machine Learning: A Systematic Review and Research Agenda",
-    "authors": ["Hyojung Kim", "Dohyun Han"],
-    "venue": "npj Digital Medicine",
+    "id": "kim2021-tnbc-cdw",
+    "title": "Real-world data from a refractory triple-negative breast cancer cohort selected using a clinical data warehouse approach",
+    "authors": [
+      { "name": "Kim H", "coFirst": true },
+      { "name": "Kim HJ", "isPi": true, "coFirst": true },
+      { "name": "Kim H" },
+      { "name": "Kim HR" },
+      { "name": "Jo H" },
+      { "name": "Hong J" },
+      { "name": "Park YH" }
+    ],
+    "venue": "Cancers",
+    "venueDetails": "13(22), 5835",
     "year": 2021,
     "type": "journal",
-    "doi": "10.1038/s41746-021-00524-8",
-    "abstract": "This systematic review synthesizes 87 studies on data provenance methods applied to clinical machine learning pipelines, identifying key gaps in standards adoption, tooling, and regulatory alignment. We propose a five-dimension research agenda covering tracking granularity, interoperability, real-time auditing, privacy-preserving provenance, and clinical workflow integration.",
-    "tags": ["data provenance", "systematic review", "clinical ML", "fairness", "reproducibility"]
+    "url": "https://www.mdpi.com/2072-6694/13/22/5835",
+    "tags": ["breast cancer", "TNBC", "CDW", "RWD"]
   },
   {
-    "id": "kim2020-ehr-nlp",
-    "title": "Benchmarking Pre-trained Language Models on Clinical Information Extraction Tasks",
-    "authors": ["Hyojung Kim", "Yuna Cho", "Byungho Shin"],
-    "venue": "Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)",
+    "id": "kim2020-cgdm",
+    "title": "Clinical genome data model (cGDM) provides interactive clinical decision support for precision medicine",
+    "authors": [
+      { "name": "Kim HJ", "isPi": true },
+      { "name": "Kim HJ" },
+      { "name": "Park Y" },
+      { "name": "Lee WS" },
+      { "name": "Lim Y" },
+      { "name": "Kim JH" }
+    ],
+    "venue": "Scientific Reports",
+    "venueDetails": "10(1), 1–13",
     "year": 2020,
-    "type": "conference",
-    "doi": "10.18653/v1/2020.emnlp-main.764",
-    "abstract": "We conduct a systematic benchmark of six pre-trained language models — including BERT, BioBERT, and ClinicalBERT — across eight clinical NLP tasks spanning NER, relation extraction, and clinical question answering. Results reveal that domain-adaptive pretraining on clinical notes outperforms general biomedical pretraining for tasks involving discharge summaries and ICU notes.",
-    "tags": ["BERT", "benchmark", "clinical NLP", "information extraction", "pretraining"]
+    "type": "journal",
+    "url": "https://www.nature.com/articles/s41598-020-58088-2",
+    "tags": ["cGDM", "knowledge representation", "CDSS", "precision medicine", "genomics"]
+  },
+  {
+    "id": "lee2020-hla-rule-based",
+    "title": "Extracting structured genotype information from free-text HLA reports using a rule-based approach",
+    "authors": [
+      { "name": "Lee KH" },
+      { "name": "Kim HJ", "isPi": true },
+      { "name": "Kim YJ" },
+      { "name": "Kim JH" },
+      { "name": "Song EY" }
+    ],
+    "venue": "Journal of Korean Medical Science",
+    "venueDetails": "35(12)",
+    "year": 2020,
+    "type": "journal",
+    "url": "https://ir.ymlib.yonsei.ac.kr/bitstream/22282913/134616/1/T012858.pdf",
+    "tags": ["HLA", "NLP", "rule-based", "structured extraction"]
+  },
+  {
+    "id": "cho2013-chemotherapy-cap",
+    "title": "Assessment of efficiency and safety of the comprehensive chemotherapy assistance program for ordering oncology medications",
+    "authors": [
+      { "name": "Cho E" },
+      { "name": "Kim HJ", "isPi": true },
+      { "name": "Kim GM" },
+      { "name": "Kum J" },
+      { "name": "Chung HK" },
+      { "name": "Lyu CJ" },
+      { "name": "Jung HK" },
+      { "name": "Shin SJ" }
+    ],
+    "venue": "International Journal of Medical Informatics",
+    "venueDetails": "82(6), 504–513",
+    "year": 2013,
+    "type": "journal",
+    "url": "https://www.sciencedirect.com/science/article/abs/pii/S1386505613000245",
+    "tags": ["CDSS", "chemotherapy", "oncology", "medication safety"]
   }
 ]

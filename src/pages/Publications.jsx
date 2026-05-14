@@ -37,14 +37,29 @@ const TYPE_CONFIG = {
 
 function buildBibtex(pub) {
   const citeKey = pub.id
-  const firstAuthorLast = pub.authors[0].split(' ').pop()
-  const authorStr = pub.authors.join(' and ')
+  const authorStr = pub.authors.map((a) => a.name).join(' and ')
   const doiLine = pub.doi ? `  doi       = {${pub.doi}},\n` : ''
+  const urlLine = !pub.doi && pub.url ? `  url       = {${pub.url}},\n` : ''
 
   if (pub.type === 'journal') {
-    return `@article{${citeKey},\n  author    = {${authorStr}},\n  title     = {{${pub.title}}},\n  journal   = {${pub.venue}},\n  year      = {${pub.year}},\n${doiLine}}`
+    return `@article{${citeKey},\n  author    = {${authorStr}},\n  title     = {{${pub.title}}},\n  journal   = {${pub.venue}},\n  year      = {${pub.year}},\n${doiLine}${urlLine}}`
   }
-  return `@inproceedings{${citeKey},\n  author    = {${authorStr}},\n  title     = {{${pub.title}}},\n  booktitle = {${pub.venue}},\n  year      = {${pub.year}},\n${doiLine}}`
+  return `@inproceedings{${citeKey},\n  author    = {${authorStr}},\n  title     = {{${pub.title}}},\n  booktitle = {${pub.venue}},\n  year      = {${pub.year}},\n${doiLine}${urlLine}}`
+}
+
+// Render author list with PI bold + † for co-first authors
+function AuthorList({ authors }) {
+  return (
+    <>
+      {authors.map((a, i) => (
+        <span key={`${a.name}-${i}`}>
+          {a.isPi ? <strong className="text-gray-800">{a.name}</strong> : a.name}
+          {a.coFirst && <sup>†</sup>}
+          {i < authors.length - 1 && ', '}
+        </span>
+      ))}
+    </>
+  )
 }
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
@@ -114,24 +129,33 @@ function PublicationCard({ pub }) {
       <h3 className="font-bold text-gray-900 text-base leading-snug mb-1.5">{pub.title}</h3>
 
       {/* Authors */}
-      <p className="text-gray-600 text-sm mb-1">{pub.authors.join(', ')}</p>
+      <p className="text-gray-600 text-sm mb-1">
+        <AuthorList authors={pub.authors} />
+      </p>
 
-      {/* Venue + year + type badge */}
+      {/* Venue + details + year + type badge */}
       <div className="flex flex-wrap items-center gap-2 mb-3">
         <span className="text-gray-500 text-sm italic">{pub.venue}</span>
+        {pub.venueDetails && (
+          <span className="text-gray-400 text-sm">{pub.venueDetails}</span>
+        )}
         <span className="text-gray-400 text-sm">&middot; {pub.year}</span>
         <TypeBadge type={pub.type} />
       </div>
 
-      {/* Abstract */}
-      <p className="text-gray-500 text-sm leading-relaxed mb-3">{pub.abstract}</p>
+      {/* Abstract (optional) */}
+      {pub.abstract && (
+        <p className="text-gray-500 text-sm leading-relaxed mb-3">{pub.abstract}</p>
+      )}
 
       {/* Tags */}
-      <div className="flex flex-wrap gap-1.5 mb-4">
-        {pub.tags.map((tag) => (
-          <KeywordTag key={tag} tag={tag} />
-        ))}
-      </div>
+      {pub.tags && pub.tags.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          {pub.tags.map((tag) => (
+            <KeywordTag key={tag} tag={tag} />
+          ))}
+        </div>
+      )}
 
       {/* Action row */}
       <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
@@ -145,6 +169,17 @@ function PublicationCard({ pub }) {
           >
             <ExternalLink size={12} />
             DOI
+          </a>
+        )}
+        {!pub.doi && pub.url && (
+          <a
+            href={pub.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md border bg-white text-gray-500 border-gray-200 hover:border-blue-300 hover:text-blue-600 transition-colors"
+          >
+            <ExternalLink size={12} />
+            Link
           </a>
         )}
       </div>
@@ -211,8 +246,8 @@ export default function Publications() {
       const matchQuery =
         query === '' ||
         p.title.toLowerCase().includes(query.toLowerCase()) ||
-        p.authors.some((a) => a.toLowerCase().includes(query.toLowerCase())) ||
-        p.tags.some((t) => t.toLowerCase().includes(query.toLowerCase())) ||
+        p.authors.some((a) => a.name.toLowerCase().includes(query.toLowerCase())) ||
+        (p.tags && p.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()))) ||
         p.venue.toLowerCase().includes(query.toLowerCase())
       return matchYear && matchQuery
     })
@@ -233,8 +268,8 @@ export default function Publications() {
       const matchQuery =
         q === '' ||
         p.title.toLowerCase().includes(q) ||
-        p.authors.some((a) => a.toLowerCase().includes(q)) ||
-        p.tags.some((t) => t.toLowerCase().includes(q)) ||
+        p.authors.some((a) => a.name.toLowerCase().includes(q)) ||
+        (p.tags && p.tags.some((t) => t.toLowerCase().includes(q))) ||
         p.venue.toLowerCase().includes(q)
       return matchYear && matchType && matchQuery
     })
