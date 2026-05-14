@@ -50,7 +50,7 @@ function ProfessorCard({ member }) {
         <div className="flex flex-wrap items-center gap-2 mb-1">
           <span className="inline-flex items-center gap-1 bg-blue-700 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">
             <GraduationCap size={12} />
-            Principal Investigator
+            {member.title}
           </span>
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mt-1">{member.name}</h2>

@@ -111,10 +111,6 @@ export default function Professor() {
         <div aria-hidden="true" className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-blue-600 opacity-20 blur-3xl" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 relative">
-          <span className="inline-flex items-center gap-1.5 bg-blue-600/40 border border-blue-400/40 text-blue-100 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-            <GraduationCap size={13} />
-            Principal Investigator
-          </span>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2">
             {PI.name}
             {PI.nameKo && (
