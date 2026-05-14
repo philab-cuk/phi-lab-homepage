@@ -2,6 +2,42 @@ import { useState, useMemo } from 'react'
 import { Search, Copy, Check, ExternalLink, BookOpen } from 'lucide-react'
 import publicationsData from '../data/publications.json'
 
+// Copy text to clipboard with 3-tier fallback so it works on
+// non-secure contexts too (e.g. http://192.168.x.x dev preview):
+// 1) navigator.clipboard (modern, requires HTTPS or localhost)
+// 2) document.execCommand('copy') via hidden textarea (legacy, deprecated
+//    but still supported in every major browser as of 2026)
+// 3) window.prompt() — last-ditch manual copy
+async function copyToClipboard(text) {
+  if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text)
+      return true
+    } catch {
+      /* fall through */
+    }
+  }
+  try {
+    const ta = document.createElement('textarea')
+    ta.value = text
+    ta.setAttribute('readonly', '')
+    ta.style.position = 'fixed'
+    ta.style.top = '0'
+    ta.style.left = '0'
+    ta.style.opacity = '0'
+    document.body.appendChild(ta)
+    ta.focus()
+    ta.select()
+    const ok = document.execCommand('copy')
+    document.body.removeChild(ta)
+    if (ok) return true
+  } catch {
+    /* fall through */
+  }
+  window.prompt('Copy this text manually:', text)
+  return false
+}
+
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const ALL_YEARS_OPTION = 'All'
@@ -84,19 +120,19 @@ function CategoryBadge({ category }) {
 function CopyBibtexButton({ pub }) {
   const [copied, setCopied] = useState(false)
 
-  function handleCopy() {
-    const bibtex = buildBibtex(pub)
-    navigator.clipboard.writeText(bibtex).then(() => {
+  async function handleCopy() {
+    const ok = await copyToClipboard(buildBibtex(pub))
+    if (ok) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
-    })
+    }
   }
 
   return (
     <button
       onClick={handleCopy}
       title="Copy BibTeX"
-      className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md border transition-colors ${
+      className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md border cursor-pointer transition-colors ${
         copied
           ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
           : 'bg-white text-gray-500 border-gray-200 hover:border-brand-300 hover:text-brand-600'
@@ -121,11 +157,8 @@ function PublicationCard({ pub }) {
   const isArticle = pub.category === 'article'
   return (
     <article className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-brand-200 transition-all">
-      {/* Category badge + year */}
-      <div className="flex flex-wrap items-center gap-2 mb-2">
-        <CategoryBadge category={pub.category} />
-        <span className="text-gray-400 text-xs font-medium">{pub.year}</span>
-      </div>
+      {/* Year (badge moved to bottom-right of action row) */}
+      <p className="text-gray-400 text-xs font-medium mb-2">{pub.year}</p>
 
       {/* Title */}
       <h3 className="font-bold text-gray-900 text-base leading-snug mb-1.5">{pub.title}</h3>
@@ -149,7 +182,7 @@ function PublicationCard({ pub }) {
         )}
       </div>
 
-      {/* Action row */}
+      {/* Action row — buttons left, category badge anchored bottom-right */}
       <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
         <CopyBibtexButton pub={pub} />
         {pub.doi && (
@@ -174,6 +207,9 @@ function PublicationCard({ pub }) {
             Link
           </a>
         )}
+        <span className="ml-auto">
+          <CategoryBadge category={pub.category} />
+        </span>
       </div>
     </article>
   )
@@ -265,7 +301,7 @@ export default function Publications() {
             backgroundSize: '40px 40px',
           }}
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 relative">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 relative">
           <span className="inline-flex items-center gap-1.5 bg-brand-600/40 border border-brand-400/40 text-brand-100 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
             <BookOpen size={13} />
             Research Output
@@ -285,7 +321,7 @@ export default function Publications() {
 
       {/* ── Filter Bar ── */}
       <div className="bg-white border-b border-gray-200 sticky top-16 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row md:items-center gap-4">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row md:items-center gap-4">
 
           {/* Search */}
           <div className="relative flex-1 min-w-0 max-w-sm">
