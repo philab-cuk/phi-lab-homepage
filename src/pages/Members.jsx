@@ -24,7 +24,7 @@ function SocialLink({ href, icon: Icon, label }) {
 
 function ResearchTag({ tag }) {
   return (
-    <span className="inline-block bg-brand-50 text-brand-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
+    <span className="inline-block bg-brand-50 text-brand-700 text-base font-medium px-4 py-1.5 rounded-full">
       {tag}
     </span>
   )
@@ -35,11 +35,13 @@ function ResearchTag({ tag }) {
 function ProfessorCard({ member }) {
   return (
     <div id={member.id} className="bg-white rounded-2xl border border-brand-100 shadow-sm p-6 sm:p-8 flex flex-col sm:flex-row gap-6 items-start hover:shadow-md transition-shadow scroll-mt-24">
-      {/* Photo */}
+      {/* Photo — portrait 3:4, LIVE 비율 보존.
+          photoLive 가 있으면 그걸 우선 (LIVE /members/ 카드와 일치),
+          없으면 photo (다운로드된 canonical) 로 fallback. */}
       <div className="flex-shrink-0">
-        <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden ring-4 ring-brand-100 shadow-sm">
+        <div className="w-48 sm:w-56 aspect-[3/4] rounded-2xl overflow-hidden ring-4 ring-brand-100 shadow-sm">
           <img
-            src={member.photo}
+            src={member.photoLive ?? member.photo}
             alt={member.name}
             className="w-full h-full object-cover"
           />
@@ -91,51 +93,56 @@ function ProfessorCard({ member }) {
 
 function StudentCard({ member }) {
   return (
-    <div id={member.id} className="bg-white rounded-xl border border-gray-200 p-5 flex flex-col hover:shadow-md hover:border-brand-200 transition-all group scroll-mt-24">
-      {/* Photo + name row */}
-      <div className="flex items-center gap-4 mb-4">
-        <div className="w-16 h-16 rounded-xl overflow-hidden ring-2 ring-gray-100 group-hover:ring-brand-100 transition-all flex-shrink-0">
-          <img
-            src={member.photo}
-            alt={member.name}
-            className="w-full h-full object-cover"
-          />
+    <div id={member.id} className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 flex flex-col sm:flex-row gap-6 sm:gap-10 hover:shadow-md hover:border-brand-200 transition-all group scroll-mt-24">
+      {/* Photo — portrait 3:4 (LIVE 비율 보존) */}
+      <div className="w-56 sm:w-64 aspect-[3/4] overflow-hidden rounded-lg bg-gray-50 ring-1 ring-gray-200 flex-shrink-0">
+        <img
+          src={member.photo}
+          alt={member.name}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      <div className="flex flex-col flex-1 min-w-0">
+        <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">
+          {member.name}
+        </h3>
+        <p className="text-brand-600 text-xs font-semibold uppercase tracking-wider mt-2">
+          {member.degree}
+        </p>
+
+        {/* Research interests */}
+        <div className="mt-6">
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
+            Research Interests
+          </p>
+          <div className="flex flex-wrap items-start content-start gap-2">
+            {member.researchInterests.map((tag) => (
+              <ResearchTag key={tag} tag={tag} />
+            ))}
+          </div>
         </div>
-        <div className="min-w-0">
-          <h3 className="font-semibold text-gray-900 text-base leading-tight truncate">
-            {member.name}
-          </h3>
-          <p className="text-brand-600 text-xs font-medium mt-0.5">{member.degree}</p>
-          {member.year && (
-            <p className="text-gray-400 text-xs mt-0.5">Year {member.year}</p>
+
+        {/* Footer: email + socials */}
+        <div className="flex items-center justify-between pt-4 mt-auto border-t border-gray-100">
+          {member.email ? (
+            <a
+              href={`mailto:${member.email}`}
+              className="flex items-center gap-1.5 text-gray-500 hover:text-brand-600 transition-colors text-sm truncate"
+              aria-label={`Email ${member.name}`}
+            >
+              <Mail size={14} className="flex-shrink-0" />
+              <span className="truncate">{member.email}</span>
+            </a>
+          ) : (
+            <span className="text-sm text-gray-300">—</span>
           )}
-        </div>
-      </div>
-
-      {/* Research interest tags */}
-      <div className="flex flex-wrap gap-1.5 mb-4 flex-1">
-        {member.researchInterests.map((tag) => (
-          <ResearchTag key={tag} tag={tag} />
-        ))}
-      </div>
-
-      {/* Footer: email + socials */}
-      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-        {member.email ? (
-          <a
-            href={`mailto:${member.email}`}
-            className="flex items-center gap-1.5 text-gray-500 hover:text-brand-600 transition-colors text-xs truncate"
-            aria-label={`Email ${member.name}`}
-          >
-            <Mail size={13} className="flex-shrink-0" />
-            <span className="truncate">{member.email}</span>
-          </a>
-        ) : (
-          <span className="text-xs text-gray-300">—</span>
-        )}
-        <div className="flex items-center gap-2 ml-2 flex-shrink-0">
-          <SocialLink href={member.googleScholar} icon={BookOpen} label="Google Scholar" />
-          <SocialLink href={member.linkedin} icon={Link2} label="LinkedIn" />
+          <div className="flex items-center gap-3 ml-2 flex-shrink-0">
+            <SocialLink href={member.googleScholar} icon={BookOpen} label="Google Scholar" />
+            <SocialLink href={member.linkedin} icon={Link2} label="LinkedIn" />
+          </div>
         </div>
       </div>
     </div>
@@ -257,7 +264,7 @@ export default function Members() {
           }}
         />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 relative">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Lab Members</h1>
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Members</h1>
         </div>
       </section>
 
@@ -288,7 +295,7 @@ export default function Members() {
               <div className="mb-10">
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-                    Faculty
+                    Principal Investigator
                   </span>
                   <div className="flex-1 h-px bg-gray-200" />
                 </div>
@@ -296,16 +303,16 @@ export default function Members() {
               </div>
             )}
 
-            {/* Students */}
+            {/* Undergraduate Researchers */}
             {students.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-6">
                   <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-                    Students
+                    Undergraduate Researchers
                   </span>
                   <div className="flex-1 h-px bg-gray-200" />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 gap-5">
                   {students.map((member) => (
                     <StudentCard key={member.id} member={member} />
                   ))}
@@ -332,24 +339,6 @@ export default function Members() {
           </div>
         )}
       </div>
-
-      {/* ── Join CTA ── */}
-      <section className="bg-brand-800 text-white mt-8">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 text-center">
-          <h2 className="text-2xl font-bold mb-3">Interested in Joining PHI Lab?</h2>
-          <p className="text-brand-200 text-sm leading-relaxed mb-6 max-w-xl mx-auto">
-            We welcome motivated students and researchers passionate about health informatics,
-            clinical AI, and data provenance. Reach out to learn about open positions.
-          </p>
-          <a
-            href="mailto:hyojung.kim@catholic.ac.kr"
-            className="inline-flex items-center gap-2 bg-white text-brand-800 font-semibold px-7 py-3 rounded-lg hover:bg-brand-50 transition-colors text-sm shadow-sm"
-          >
-            <Mail size={15} />
-            Get in Touch
-          </a>
-        </div>
-      </section>
     </>
   )
 }
