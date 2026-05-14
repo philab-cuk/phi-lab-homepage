@@ -81,7 +81,7 @@ function CourseImages({ images }) {
         ? 'grid grid-cols-2 gap-2'
         : 'grid grid-cols-3 gap-2'
   return (
-    <div className={`${gridCls} mb-4 rounded-lg overflow-hidden`}>
+    <div className={`${gridCls} rounded-lg overflow-hidden`}>
       {images.map((src, i) => (
         <button
           key={src}
@@ -200,9 +200,6 @@ function CourseCard({ course }) {
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md hover:border-brand-200 transition-all group flex flex-col">
-      {/* Images */}
-      <CourseImages images={images} />
-
       {/* Header row */}
       <div className="flex flex-wrap items-start gap-2 mb-3">
         {code && (
@@ -237,7 +234,7 @@ function CourseCard({ course }) {
       )}
 
       {/* Tags */}
-      <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
+      <div className="flex flex-wrap gap-1.5 pt-2 mb-4">
         {tags.map((tag) => (
           <span
             key={tag}
@@ -247,6 +244,11 @@ function CourseCard({ course }) {
             {tag}
           </span>
         ))}
+      </div>
+
+      {/* Images (last) */}
+      <div className="mt-auto">
+        <CourseImages images={images} />
       </div>
     </div>
   )
