@@ -43,26 +43,29 @@ function ViewAllLink({ to, label }) {
   )
 }
 
+// TODO(ui-redesign): Featured 위계 시각화, 듀얼 affiliation 뱃지, LIVE phi-card 스타일 재현
+function affiliationKicker(project) {
+  if (!project.affiliations || project.affiliations.length === 0) return null
+  return project.affiliations.map((a) => a.institution).join(' · ')
+}
+
 function HomeProjectCard({ project }) {
+  const kicker = affiliationKicker(project)
   return (
     <article className="bg-white border border-gray-200 p-5">
-      {project.affiliation && (
+      {kicker && (
         <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">
-          {project.affiliation}
+          {kicker}
         </p>
       )}
       <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-2">
         {project.title}
-        {project.titleKo && (
-          <>
-            <br />
-            <span className="font-normal text-gray-500">{project.titleKo}</span>
-          </>
-        )}
       </h3>
-      <p className="text-gray-600 text-xs leading-relaxed mb-3">{project.description}</p>
+      {project.descriptionKo && (
+        <p className="text-gray-600 text-xs leading-relaxed mb-3">{project.descriptionKo}</p>
+      )}
       <div>
-        {project.tags.map((tag) => (
+        {(project.tagsLive ?? []).map((tag) => (
           <span
             key={tag}
             className="inline-block text-xs font-medium border border-gray-300 text-gray-600 px-2 py-[2px] mr-1 mt-1"
@@ -247,13 +250,12 @@ const HERO = {
 }
 
 const STATS_LABELS = {
-  projects: 'Active Projects',
+  projects: 'Current Research',
   publications: 'Publications',
   collaborators: 'Collaborating Institutions',
 }
 
 const SECTION_TITLES = {
-  researchAreas: 'Research Areas',
   activeProjects: 'Current Research',
   recentPublications: 'Recent Publications',
   labMembers: 'Lab Members',
@@ -295,14 +297,18 @@ const ABOUT_BODY =
 export default function Home() {
   // Stats (computed from JSON)
   const activeProjectsCount = researchData.filter((p) => p.status === 'active').length
-  // Stats strip + Recent Publications section both restrict to peer-reviewed articles only
-  // (presentations live on the dedicated /publications page).
+  // Recent Publications section restricts to peer-reviewed articles (presentations
+  // live on the dedicated /publications page); the stats strip counts everything.
   const articles = publicationsData.filter((p) => p.category === 'article')
-  const publicationsCount = articles.length
-  const collaboratorsCount = `${COLLABORATING_INSTITUTIONS.length}+`
+  const publicationsCount = publicationsData.length
+  const collaboratorsCount = COLLABORATING_INSTITUTIONS.length
 
   // Body data slices
-  const featuredProjects = researchData.filter((p) => p.status === 'active').slice(0, 4)
+  // Featured 항목(MOMENTUM, AI-Trajectory) 을 우선 상단에 노출
+  const featuredProjects = [...researchData]
+    .filter((p) => p.status === 'active')
+    .sort((a, b) => Number(b.featured) - Number(a.featured))
+    .slice(0, 4)
   const recentPubs = [...articles].sort((a, b) => b.year - a.year).slice(0, 5)
   const latestYear = recentPubs.length > 0 ? Math.max(...recentPubs.map((p) => p.year)) : null
 
@@ -371,7 +377,6 @@ export default function Home() {
       {/* ── 1. Research Areas (3 pillars) — image-card grid, LIVE-style ─── */}
       <section id="research-areas" className="bg-gray-50 border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <HomeSectionHeader>{SECTION_TITLES.researchAreas}</HomeSectionHeader>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {['kr', 'rwd', 'rwe'].map((k) => (
               <HomePillarCard key={k} pillar={PILLARS[k]} />

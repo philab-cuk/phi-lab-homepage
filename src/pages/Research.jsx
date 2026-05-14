@@ -49,12 +49,8 @@ function StatusBadge({ status }) {
 
 // ─── Project Card ─────────────────────────────────────────────────────────────
 
+// TODO(ui-redesign): LIVE phi-card 구조(기관 그룹별 + Featured 위계 + phi-collab 라인) 재현
 function ProjectCard({ project }) {
-  const yearRange =
-    project.endYear
-      ? `${project.startYear} – ${project.endYear}`
-      : `${project.startYear} – Present`
-
   return (
     <article className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md hover:border-brand-200 transition-all group flex flex-col gap-4">
       {/* Header row */}
@@ -65,14 +61,15 @@ function ProjectCard({ project }) {
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1">
             <StatusBadge status={project.status} />
-            <span className="text-xs text-gray-400 font-medium">{yearRange}</span>
           </div>
           <h3 className="font-bold text-gray-900 text-lg leading-snug">{project.title}</h3>
         </div>
       </div>
 
-      {/* Description */}
-      <p className="text-gray-500 text-sm leading-relaxed">{project.description}</p>
+      {/* Description (Korean, LIVE phi-card-sub) */}
+      {project.descriptionKo && (
+        <p className="text-gray-500 text-sm leading-relaxed">{project.descriptionKo}</p>
+      )}
 
       {/* Funding */}
       {project.fundingAgency && (
@@ -83,7 +80,7 @@ function ProjectCard({ project }) {
 
       {/* Tags */}
       <div className="flex flex-wrap gap-1.5 mt-auto">
-        {project.tags.map((tag) => (
+        {(project.tagsLive ?? []).map((tag) => (
           <span
             key={tag}
             className="inline-block bg-gray-100 text-gray-600 text-xs font-medium px-2.5 py-0.5 rounded-full"
