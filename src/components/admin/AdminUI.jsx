@@ -1,0 +1,157 @@
+import { useEffect, useState } from 'react'
+
+// 공통 admin 페이지 헤더
+export function PageHeader({ title, subtitle, actions }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem', borderBottom: '1px solid #ddd', paddingBottom: '0.5rem' }}>
+      <div>
+        <h1 style={{ fontSize: '1.5rem', margin: 0 }}>{title}</h1>
+        {subtitle && <div style={{ color: '#666', fontSize: '0.875rem', marginTop: '0.25rem' }}>{subtitle}</div>}
+      </div>
+      {actions && <div style={{ display: 'flex', gap: '0.5rem' }}>{actions}</div>}
+    </div>
+  )
+}
+
+export function Button({ children, primary, danger, ...rest }) {
+  const bg = danger ? '#c33' : primary ? '#222' : '#fff'
+  const color = danger || primary ? '#fff' : '#222'
+  const border = danger ? '#a22' : primary ? '#000' : '#ccc'
+  return (
+    <button
+      {...rest}
+      style={{
+        padding: '0.4rem 0.8rem',
+        background: bg, color, border: `1px solid ${border}`,
+        cursor: rest.disabled ? 'not-allowed' : 'pointer',
+        fontSize: '0.85rem',
+        ...rest.style,
+      }}
+    >
+      {children}
+    </button>
+  )
+}
+
+export function Table({ columns, rows, empty = '데이터 없음' }) {
+  if (!rows?.length) return <div style={{ color: '#777', padding: '1rem 0' }}>{empty}</div>
+  return (
+    <div style={{ overflow: 'auto' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
+        <thead>
+          <tr style={{ background: '#f0f0f0' }}>
+            {columns.map(c => (
+              <th key={c.key} style={{ textAlign: 'left', padding: '0.5rem', borderBottom: '1px solid #ccc', fontWeight: 600 }}>
+                {c.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={r.id ?? r.email ?? r.token ?? i} style={{ borderBottom: '1px solid #eee', background: i % 2 ? '#fafafa' : '#fff' }}>
+              {columns.map(c => (
+                <td key={c.key} style={{ padding: '0.5rem', verticalAlign: 'top' }}>
+                  {c.render ? c.render(r) : r[c.key] ?? ''}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+export function Modal({ open, onClose, title, children, footer }) {
+  if (!open) return null
+  return (
+    <div
+      onClick={onClose}
+      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 100, paddingTop: '4rem' }}
+    >
+      <div onClick={(e) => e.stopPropagation()} style={{ background: '#fff', minWidth: 480, maxWidth: '90vw', maxHeight: '80vh', overflow: 'auto', padding: '1.25rem', borderRadius: 4 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', borderBottom: '1px solid #eee', paddingBottom: '0.5rem', marginBottom: '0.75rem' }}>
+          <h2 style={{ margin: 0, fontSize: '1.1rem' }}>{title}</h2>
+          <button onClick={onClose} style={{ background: 'transparent', border: 'none', fontSize: '1.2rem', cursor: 'pointer', color: '#666' }}>×</button>
+        </div>
+        <div>{children}</div>
+        {footer && <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid #eee' }}>{footer}</div>}
+      </div>
+    </div>
+  )
+}
+
+export function Field({ label, hint, children }) {
+  return (
+    <label style={{ display: 'block', marginBottom: '0.6rem' }}>
+      <span style={{ display: 'block', fontSize: '0.8rem', color: '#444', marginBottom: '0.2rem' }}>{label}</span>
+      {children}
+      {hint && <div style={{ fontSize: '0.75rem', color: '#888', marginTop: '0.2rem' }}>{hint}</div>}
+    </label>
+  )
+}
+
+export function TextInput(props) {
+  return (
+    <input
+      {...props}
+      style={{ width: '100%', padding: '0.4rem 0.5rem', border: '1px solid #ccc', fontSize: '0.875rem', ...(props.style || {}) }}
+    />
+  )
+}
+
+export function TextArea(props) {
+  return (
+    <textarea
+      {...props}
+      style={{ width: '100%', padding: '0.4rem 0.5rem', border: '1px solid #ccc', fontSize: '0.875rem', fontFamily: 'inherit', minHeight: 80, ...(props.style || {}) }}
+    />
+  )
+}
+
+export function Select({ options, ...rest }) {
+  return (
+    <select
+      {...rest}
+      style={{ width: '100%', padding: '0.4rem 0.5rem', border: '1px solid #ccc', fontSize: '0.875rem', background: '#fff', ...(rest.style || {}) }}
+    >
+      {options.map(o =>
+        typeof o === 'string'
+          ? <option key={o} value={o}>{o}</option>
+          : <option key={o.value} value={o.value}>{o.label}</option>
+      )}
+    </select>
+  )
+}
+
+export function ErrorBanner({ error }) {
+  if (!error) return null
+  return (
+    <div style={{ background: '#fee', border: '1px solid #fcc', color: '#900', padding: '0.5rem 0.75rem', fontSize: '0.85rem', marginBottom: '0.75rem' }}>
+      {typeof error === 'string' ? error : error.message || JSON.stringify(error)}
+    </div>
+  )
+}
+
+// "yes/no" 컨펌 모달용 hook
+export function useConfirm() {
+  const [state, setState] = useState(null)
+  const ask = (message) => new Promise((resolve) => setState({ message, resolve }))
+  const ui = state ? (
+    <Modal
+      open
+      onClose={() => { state.resolve(false); setState(null) }}
+      title="확인"
+      footer={
+        <>
+          <Button onClick={() => { state.resolve(false); setState(null) }}>취소</Button>
+          <Button danger onClick={() => { state.resolve(true); setState(null) }}>확인</Button>
+        </>
+      }
+    >
+      <div>{state.message}</div>
+    </Modal>
+  ) : null
+  return [ask, ui]
+}
