@@ -14,6 +14,9 @@ dist-ssr
 
 # Playwright MCP scratch (browser snapshots, console logs)
 .playwright-mcp/
+# Local visual-verification screenshots (kept on disk for the user, not committed)
+*-desktop.png
+*-mobile.png
 
 # Editor directories and files
 .vscode/*

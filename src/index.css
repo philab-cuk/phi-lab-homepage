@@ -1,21 +1,73 @@
 @import "tailwindcss";
 
 /*
- * Brand palette — derived from the LIVE site (philabcuk.org).
- * brand-700 = #1279BE  ← exact link/accent colour observed via DevTools
- * on the live nav (verified 2026-05-14). The 50–900 scale below is
- * built around this hue (HSL ~204°, 84% sat) so the lighter shades
- * become tints and the darker shades deepen for backgrounds.
+ * PHI Lab — minimal redesign tokens.
+ * Goal: MIT/Stanford research-lab feel. Almost no decoration; readability first.
+ * Body 17px / line-height 1.7. Single brand blue (#1279BE) for links only.
  */
 @theme {
   --color-brand-50:  #ebf3fa;
   --color-brand-100: #d4e7f5;
   --color-brand-200: #a4cbe9;
-  --color-brand-300: #75afdc;
-  --color-brand-400: #4593d0;
-  --color-brand-500: #228ace;
-  --color-brand-600: #1782c5;
   --color-brand-700: #1279be;
   --color-brand-800: #0d5e94;
   --color-brand-900: #08446b;
+
+  --color-ink:   #1a1a1a;
+  --color-muted: #555555;
+  --color-meta:  #888888;
+  --color-rule:  #e5e5e5;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
+
+@layer base {
+  html { font-size: 17px; }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    line-height: 1.7;
+    background: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-ink);
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  h1 { font-size: 1.75rem; margin: 1.6em 0 0.5em; }
+  h2 { font-size: 1.3rem;  margin: 1.8em 0 0.5em; }
+  h3 { font-size: 1.05rem; margin: 1.4em 0 0.4em; }
+
+  p { margin: 0.7em 0; }
+
+  a {
+    color: var(--color-brand-700);
+    text-decoration: none;
+  }
+  a:hover { text-decoration: underline; }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--color-rule);
+    margin: 2em 0;
+  }
+
+  ul, ol { padding-left: 1.4em; }
+  li     { margin: 0.2em 0; }
+
+  blockquote {
+    margin: 1.2em 0;
+    padding-left: 1em;
+    border-left: 2px solid var(--color-rule);
+    color: var(--color-muted);
+    font-style: italic;
+  }
+
+  img { max-width: 100%; height: auto; display: block; }
 }
