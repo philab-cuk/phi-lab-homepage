@@ -1,230 +1,149 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Mail, Link2, BookOpen, GraduationCap, Building2 } from 'lucide-react'
 import membersData from '../data/members.json'
-
-// ─── Helpers ────────────────────────────────────────────────────────────────
 
 const TABS = ['Current Members', 'Alumni']
 
-function SocialLink({ href, icon: Icon, label }) {
-  if (!href) return null
+function SocialLine({ member }) {
+  const items = []
+  if (member.email) {
+    items.push(
+      <a key="email" href={`mailto:${member.email}`}>
+        {member.email}
+      </a>,
+    )
+  }
+  if (member.googleScholar) {
+    items.push(
+      <a key="gs" href={member.googleScholar} target="_blank" rel="noopener noreferrer">
+        Google Scholar
+      </a>,
+    )
+  }
+  if (member.linkedin) {
+    items.push(
+      <a key="li" href={member.linkedin} target="_blank" rel="noopener noreferrer">
+        LinkedIn
+      </a>,
+    )
+  }
+  if (items.length === 0) return null
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={label}
-      className="text-gray-400 hover:text-brand-600 transition-colors"
+    <p className="my-2 text-[15px]">
+      {items.map((el, i) => (
+        <span key={i}>
+          {i > 0 && ' · '}
+          {el}
+        </span>
+      ))}
+    </p>
+  )
+}
+
+function ResearchInterests({ tags }) {
+  if (!tags || tags.length === 0) return null
+  return (
+    <p className="my-1 text-[15px] text-muted">
+      <span className="text-meta">Research interests:</span> {tags.join(', ')}
+    </p>
+  )
+}
+
+function ProfessorRow({ member }) {
+  return (
+    <div
+      id={member.id}
+      className="flex flex-col sm:flex-row gap-6 items-start scroll-mt-24 mt-6"
     >
-      <Icon size={15} />
-    </a>
-  )
-}
-
-function ResearchTag({ tag }) {
-  return (
-    <span className="inline-block bg-brand-50 text-brand-700 text-base font-medium px-4 py-1.5 rounded-full">
-      {tag}
-    </span>
-  )
-}
-
-// ─── Professor Card ──────────────────────────────────────────────────────────
-
-function ProfessorCard({ member }) {
-  return (
-    <div id={member.id} className="bg-white rounded-2xl border border-brand-100 shadow-sm p-6 sm:p-8 flex flex-col sm:flex-row gap-6 items-start hover:shadow-md transition-shadow scroll-mt-24">
-      {/* Photo — portrait 3:4, LIVE 비율 보존.
-          photoLive 가 있으면 그걸 우선 (LIVE /members/ 카드와 일치),
-          없으면 photo (다운로드된 canonical) 로 fallback. */}
-      <div className="flex-shrink-0">
-        <div className="w-48 sm:w-56 aspect-[3/4] rounded-2xl overflow-hidden ring-4 ring-brand-100 shadow-sm">
-          <img
-            src={member.photoLive ?? member.photo}
-            alt={member.name}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      </div>
-
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap items-center gap-2 mb-1">
-          <span className="inline-flex items-center gap-1 bg-brand-700 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">
-            <GraduationCap size={12} />
-            {member.title}
-          </span>
-        </div>
-        <h2 className="text-2xl font-bold text-gray-900 mt-1">{member.name}</h2>
-        <p className="text-brand-600 font-medium text-sm mt-0.5">{member.degree}</p>
-
-        {member.bioShort && (
-          <p className="text-gray-500 text-sm leading-relaxed mt-3 max-w-2xl">{member.bioShort}</p>
-        )}
-
-        {/* Research interests */}
-        <div className="flex flex-wrap gap-1.5 mt-4">
-          {member.researchInterests.map((tag) => (
-            <ResearchTag key={tag} tag={tag} />
-          ))}
-        </div>
-
-        {/* Links */}
-        <div className="flex items-center gap-4 mt-4">
-          <a
-            href={`mailto:${member.email}`}
-            className="inline-flex items-center gap-1.5 text-gray-600 hover:text-brand-600 text-xs font-medium transition-colors"
-          >
-            <Mail size={14} />
-            {member.email}
-          </a>
-          <div className="flex items-center gap-3">
-            <SocialLink href={member.googleScholar} icon={BookOpen} label="Google Scholar" />
-            <SocialLink href={member.linkedin} icon={Link2} label="LinkedIn" />
-          </div>
-        </div>
+      <img
+        src={member.photoLive ?? member.photo}
+        alt={member.name}
+        className="w-40 sm:w-44 aspect-[3/4] object-cover flex-shrink-0"
+      />
+      <div className="min-w-0">
+        <p className="my-0 text-xl font-semibold text-ink">{member.name}</p>
+        <p className="my-0 text-muted">{member.title}</p>
+        <p className="my-0 text-muted">{member.degree}</p>
+        {member.bioShort && <p className="text-muted">{member.bioShort}</p>}
+        <ResearchInterests tags={member.researchInterests} />
+        <SocialLine member={member} />
       </div>
     </div>
   )
 }
 
-// ─── Student Card ─────────────────────────────────────────────────────────────
-
-function StudentCard({ member }) {
+function StudentRow({ member }) {
   return (
-    <div id={member.id} className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 flex flex-col sm:flex-row gap-6 sm:gap-10 hover:shadow-md hover:border-brand-200 transition-all group scroll-mt-24">
-      {/* Photo — portrait 3:4 (LIVE 비율 보존) */}
-      <div className="w-56 sm:w-64 aspect-[3/4] overflow-hidden rounded-lg bg-gray-50 ring-1 ring-gray-200 flex-shrink-0">
-        <img
-          src={member.photo}
-          alt={member.name}
-          loading="lazy"
-          decoding="async"
-          className="w-full h-full object-cover"
-        />
+    <div
+      id={member.id}
+      className="flex flex-col sm:flex-row gap-6 items-start scroll-mt-24 py-6 border-b border-rule last:border-b-0"
+    >
+      <img
+        src={member.photo}
+        alt={member.name}
+        loading="lazy"
+        decoding="async"
+        className="w-32 sm:w-36 aspect-[3/4] object-cover flex-shrink-0"
+      />
+      <div className="min-w-0">
+        <p className="my-0 text-lg font-semibold text-ink">{member.name}</p>
+        <p className="my-0 text-muted">{member.degree}</p>
+        <ResearchInterests tags={member.researchInterests} />
+        <SocialLine member={member} />
       </div>
+    </div>
+  )
+}
 
-      <div className="flex flex-col flex-1 min-w-0">
-        <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">
-          {member.name}
-        </h3>
-        <p className="text-brand-600 text-xs font-semibold uppercase tracking-wider mt-2">
-          {member.degree}
-        </p>
-
-        {/* Research interests */}
-        <div className="mt-6">
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
-            Research Interests
-          </p>
-          <div className="flex flex-wrap items-start content-start gap-2">
-            {member.researchInterests.map((tag) => (
-              <ResearchTag key={tag} tag={tag} />
-            ))}
-          </div>
-        </div>
-
-        {/* Footer: email + socials */}
-        <div className="flex items-center justify-between pt-4 mt-auto border-t border-gray-100">
-          {member.email ? (
-            <a
-              href={`mailto:${member.email}`}
-              className="flex items-center gap-1.5 text-gray-500 hover:text-brand-600 transition-colors text-sm truncate"
-              aria-label={`Email ${member.name}`}
-            >
-              <Mail size={14} className="flex-shrink-0" />
-              <span className="truncate">{member.email}</span>
+function AlumnusItem({ member }) {
+  return (
+    <div
+      id={member.id}
+      className="scroll-mt-24 py-4 border-b border-rule last:border-b-0"
+    >
+      <p className="my-0">
+        <span className="font-semibold text-ink">{member.name}</span>
+        <span className="text-muted">
+          {' '}· {member.degree} · {member.graduatedYear}
+        </span>
+      </p>
+      {member.role && <p className="my-0 text-muted text-[15px]">{member.role}</p>}
+      {member.currentAffiliation && (
+        <p className="my-0 text-muted text-[15px]">Now: {member.currentAffiliation}</p>
+      )}
+      {(member.googleScholar || member.linkedin) && (
+        <p className="my-1 text-[15px]">
+          {member.googleScholar && (
+            <a href={member.googleScholar} target="_blank" rel="noopener noreferrer">
+              Google Scholar
             </a>
-          ) : (
-            <span className="text-sm text-gray-300">—</span>
           )}
-          <div className="flex items-center gap-3 ml-2 flex-shrink-0">
-            <SocialLink href={member.googleScholar} icon={BookOpen} label="Google Scholar" />
-            <SocialLink href={member.linkedin} icon={Link2} label="LinkedIn" />
-          </div>
-        </div>
-      </div>
+          {member.googleScholar && member.linkedin && ' · '}
+          {member.linkedin && (
+            <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </a>
+          )}
+        </p>
+      )}
     </div>
   )
 }
 
-// ─── Alumni Row ───────────────────────────────────────────────────────────────
-
-function AlumnusRow({ member }) {
-  return (
-    <div id={member.id} className="bg-white rounded-xl border border-gray-200 p-5 flex items-start gap-4 hover:shadow-sm hover:border-brand-200 transition-all group scroll-mt-24">
-      {/* Avatar */}
-      <div className="w-12 h-12 rounded-xl overflow-hidden ring-2 ring-gray-100 group-hover:ring-brand-100 transition-all flex-shrink-0">
-        <img
-          src={member.photo}
-          alt={member.name}
-          className="w-full h-full object-cover"
-        />
-      </div>
-
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-          <h3 className="font-semibold text-gray-900 text-base">{member.name}</h3>
-          <span className="text-gray-400 text-xs">{member.degree} &middot; {member.graduatedYear}</span>
-        </div>
-
-        <p className="text-xs text-brand-600 font-medium mt-0.5">{member.role}</p>
-
-        {member.currentAffiliation && (
-          <div className="flex items-center gap-1 mt-1.5 text-gray-500 text-xs">
-            <Building2 size={12} className="flex-shrink-0 text-gray-400" />
-            {member.currentAffiliation}
-          </div>
-        )}
-
-        <div className="flex flex-wrap gap-1.5 mt-2">
-          {member.researchInterests.map((tag) => (
-            <span
-              key={tag}
-              className="inline-block bg-gray-100 text-gray-600 text-xs font-medium px-2 py-0.5 rounded-full"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Social links */}
-      <div className="flex items-center gap-2 flex-shrink-0 mt-0.5">
-        <SocialLink href={member.googleScholar} icon={BookOpen} label="Google Scholar" />
-        <SocialLink href={member.linkedin} icon={Link2} label="LinkedIn" />
-      </div>
-    </div>
-  )
-}
-
-// ─── Tab Button ───────────────────────────────────────────────────────────────
-
-function TabButton({ label, active, count, onClick }) {
+function TabLink({ label, active, count, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`relative flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+      className={`mr-6 text-[15px] ${
         active
-          ? 'bg-brand-700 text-white shadow-sm'
-          : 'bg-white text-gray-600 border border-gray-200 hover:border-brand-200 hover:text-brand-700'
+          ? 'text-ink underline underline-offset-[6px] decoration-1'
+          : 'text-muted hover:underline'
       }`}
     >
-      {label}
-      <span
-        className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full text-xs font-bold ${
-          active ? 'bg-brand-600 text-brand-100' : 'bg-gray-100 text-gray-500'
-        }`}
-      >
-        {count}
-      </span>
+      {label} <span className="text-meta">({count})</span>
     </button>
   )
 }
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Members() {
   const [activeTab, setActiveTab] = useState(TABS[0])
@@ -240,10 +159,8 @@ export default function Members() {
     if (!location.hash) return
     const id = location.hash.slice(1)
     const inAlumni = alumni.some((m) => m.id === id)
-    // Sync tab to URL hash (intentional URL→state sync, not a cascading render).
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveTab(inAlumni ? 'Alumni' : 'Current Members')
-    // Defer to next frame so the freshly-rendered tab content is in the DOM.
     requestAnimationFrame(() => {
       const el = document.getElementById(id)
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -251,94 +168,57 @@ export default function Members() {
   }, [location.hash, alumni])
 
   return (
-    <>
-      {/* ── Page Header ── */}
-      <section className="bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 text-white">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 opacity-10 pointer-events-none"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }}
+    <div className="mx-auto max-w-[800px] px-6 py-12">
+      <h1>Members</h1>
+
+      <div className="mt-6 border-b border-rule pb-3">
+        <TabLink
+          label="Current Members"
+          active={activeTab === 'Current Members'}
+          count={membersData.current.length}
+          onClick={() => setActiveTab('Current Members')}
         />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 relative">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Members</h1>
-        </div>
-      </section>
-
-      {/* ── Main Content ── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-
-        {/* ── Tab Switcher ── */}
-        <div className="flex items-center gap-3 mb-10">
-          <TabButton
-            label="Current Members"
-            active={activeTab === 'Current Members'}
-            count={membersData.current.length}
-            onClick={() => setActiveTab('Current Members')}
-          />
-          <TabButton
-            label="Alumni"
-            active={activeTab === 'Alumni'}
-            count={alumni.length}
-            onClick={() => setActiveTab('Alumni')}
-          />
-        </div>
-
-        {/* ── Current Members Tab ── */}
-        {activeTab === 'Current Members' && (
-          <div>
-            {/* Professor */}
-            {professor && (
-              <div className="mb-10">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-                    Principal Investigator
-                  </span>
-                  <div className="flex-1 h-px bg-gray-200" />
-                </div>
-                <ProfessorCard member={professor} />
-              </div>
-            )}
-
-            {/* Undergraduate Researchers */}
-            {students.length > 0 && (
-              <div>
-                <div className="flex items-center gap-2 mb-6">
-                  <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-                    Undergraduate Researchers
-                  </span>
-                  <div className="flex-1 h-px bg-gray-200" />
-                </div>
-                <div className="grid grid-cols-1 gap-5">
-                  {students.map((member) => (
-                    <StudentCard key={member.id} member={member} />
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* ── Alumni Tab ── */}
-        {activeTab === 'Alumni' && (
-          <div>
-            <div className="flex items-center gap-2 mb-6">
-              <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-                {alumni.length} {alumni.length === 1 ? 'Graduate' : 'Graduates'}
-              </span>
-              <div className="flex-1 h-px bg-gray-200" />
-            </div>
-            <div className="flex flex-col gap-4 max-w-4xl">
-              {alumni.map((member) => (
-                <AlumnusRow key={member.id} member={member} />
-              ))}
-            </div>
-          </div>
-        )}
+        <TabLink
+          label="Alumni"
+          active={activeTab === 'Alumni'}
+          count={alumni.length}
+          onClick={() => setActiveTab('Alumni')}
+        />
       </div>
-    </>
+
+      {activeTab === 'Current Members' && (
+        <>
+          {professor && (
+            <>
+              <h2>Principal Investigator</h2>
+              <ProfessorRow member={professor} />
+            </>
+          )}
+          {students.length > 0 && (
+            <>
+              <h2>Undergraduate Researchers</h2>
+              <div>
+                {students.map((member) => (
+                  <StudentRow key={member.id} member={member} />
+                ))}
+              </div>
+            </>
+          )}
+        </>
+      )}
+
+      {activeTab === 'Alumni' && (
+        <>
+          <h2>
+            {alumni.length} {alumni.length === 1 ? 'Graduate' : 'Graduates'}
+          </h2>
+          <div>
+            {alumni.map((member) => (
+              <AlumnusItem key={member.id} member={member} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
   )
 }
