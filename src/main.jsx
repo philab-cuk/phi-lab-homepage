@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 
+import { AuthProvider } from './contexts/AuthContext.jsx'
+
 import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
 import About from './pages/About.jsx'
@@ -12,6 +14,19 @@ import Research from './pages/Research.jsx'
 import Publications from './pages/Publications.jsx'
 import Lectures from './pages/Lectures.jsx'
 import NotFound from './pages/NotFound.jsx'
+
+import AdminLayout from './components/AdminLayout.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
+import AdminLogin from './pages/admin/AdminLogin.jsx'
+import AdminDashboard from './pages/admin/AdminDashboard.jsx'
+import AdminUsers from './pages/admin/AdminUsers.jsx'
+import AdminMembers from './pages/admin/AdminMembers.jsx'
+import AdminPublications from './pages/admin/AdminPublications.jsx'
+import AdminResearch from './pages/admin/AdminResearch.jsx'
+import AdminLectures from './pages/admin/AdminLectures.jsx'
+import AdminPages from './pages/admin/AdminPages.jsx'
+import AdminNews from './pages/admin/AdminNews.jsx'
+import AdminPosts from './pages/admin/AdminPosts.jsx'
 
 const router = createBrowserRouter([
   {
@@ -28,10 +43,38 @@ const router = createBrowserRouter([
       { path: '*', element: <NotFound /> },
     ],
   },
+  { path: '/admin/login', element: <AdminLogin /> },
+  {
+    path: '/admin',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: <AdminDashboard /> },
+          { path: 'news', element: <AdminNews /> },
+          { path: 'posts', element: <AdminPosts /> },
+          {
+            element: <ProtectedRoute requireEditor />,
+            children: [
+              { path: 'users', element: <AdminUsers /> },
+              { path: 'members', element: <AdminMembers /> },
+              { path: 'publications', element: <AdminPublications /> },
+              { path: 'research', element: <AdminResearch /> },
+              { path: 'lectures', element: <AdminLectures /> },
+              { path: 'pages', element: <AdminPages /> },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ])
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 )
