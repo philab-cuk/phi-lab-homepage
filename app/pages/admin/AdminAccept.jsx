@@ -22,16 +22,26 @@ function Shell({ children }) {
 
 export default function AdminAccept() {
   const [params] = useSearchParams()
-  const token = params.get('token')
+  // 토큰: URL 쿼리 우선, 없으면 구글 로그인 전에 보관해둔 값(세션 저장소).
+  // 구글 OAuth 복귀 시 Supabase 가 #access_token 을 붙이는데, ?token= 쿼리와
+  // 충돌하므로 로그인 시점엔 쿼리를 빼고 토큰을 sessionStorage 로 넘긴다.
+  const token = params.get('token') || sessionStorage.getItem('pending_invite_token')
   const { isAuthenticated, user, signInWithGoogle, loading } = useAuth()
   const [status, setStatus] = useState('idle') // idle | redeeming | success | error
   const [message, setMessage] = useState(null)
   const [result, setResult] = useState(null)
 
+  function startGoogle() {
+    if (token) sessionStorage.setItem('pending_invite_token', token)
+    const acceptUrl = window.location.origin + import.meta.env.BASE_URL.replace(/\/$/, '') + '/admin/accept'
+    signInWithGoogle(acceptUrl)
+  }
+
   useEffect(() => {
     if (loading || !isAuthenticated || !token || status !== 'idle') return
     setStatus('redeeming')
     supabase.rpc('redeem_invite', { invite_token: token }).then(({ data, error }) => {
+      sessionStorage.removeItem('pending_invite_token')
       if (error) {
         setStatus('error')
         setMessage(ERROR_KO[error.message] || error.message)
@@ -60,7 +70,7 @@ export default function AdminAccept() {
         </p>
         <button
           type="button"
-          onClick={() => signInWithGoogle(window.location.href)}
+          onClick={startGoogle}
           style={{ width: '100%', padding: '0.6rem 1rem', background: '#fff', color: '#222', border: '1px solid #ccc', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
         >
           <span style={{ fontWeight: 'bold', color: '#4285F4' }}>G</span> Google 로 로그인하고 수락
