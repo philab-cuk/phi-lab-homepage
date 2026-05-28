@@ -70,4 +70,7 @@
   }
 
   img { max-width: 100%; height: auto; display: block; }
+
+  button:not(:disabled) { cursor: pointer; }
+  button:disabled       { cursor: not-allowed; }
 }

@@ -148,7 +148,6 @@ function YearGroup({ year, pubs }) {
 
 export default function Publications() {
   const [yearFilter, setYearFilter] = useState(ALL_YEARS_OPTION)
-  const [query, setQuery] = useState('')
 
   const counts = useMemo(() => {
     const c = { article: 0, intl: 0, national: 0 }
@@ -167,17 +166,9 @@ export default function Publications() {
 
   const filtered = useMemo(() => {
     return publicationsData.filter((p) => {
-      const matchYear = yearFilter === ALL_YEARS_OPTION || p.year === yearFilter
-      const q = query.toLowerCase().trim()
-      const matchQuery =
-        q === '' ||
-        p.title.toLowerCase().includes(q) ||
-        p.authors.some((a) => a.name.toLowerCase().includes(q)) ||
-        p.venue.toLowerCase().includes(q) ||
-        (p.location && p.location.toLowerCase().includes(q))
-      return matchYear && matchQuery
+      return yearFilter === ALL_YEARS_OPTION || p.year === yearFilter
     })
-  }, [yearFilter, query])
+  }, [yearFilter])
 
   const grouped = useMemo(() => {
     const map = {}
@@ -211,13 +202,6 @@ export default function Publications() {
       </p>
 
       <div className="mt-6 mb-2 flex flex-wrap gap-x-6 gap-y-2 items-baseline border-b border-rule pb-3">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search title, author, venue, location…"
-          className="border-b border-rule bg-transparent py-1 outline-none focus:border-ink flex-1 min-w-[220px] max-w-[360px]"
-        />
         <label className="text-[15px] text-meta">
           Year:{' '}
           <select

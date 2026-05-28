@@ -20,19 +20,6 @@ const FOOTER = {
   email: 'hyojung.kim@catholic.ac.kr',
 }
 
-const COLLABORATING_INSTITUTIONS = [
-  'Samsung Medical Center',
-  'Kakao Healthcare',
-  "Eunpyeong St. Mary's Hospital",
-  "Bucheon St. Mary's Hospital",
-  "Sookmyung Women's University",
-  'Chonnam National University',
-  'University of Cincinnati',
-  'Harvard University',
-  'Tufts University',
-  'Sungkyunkwan University (SKKU)',
-]
-
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const close = () => setMobileOpen(false)
@@ -93,7 +80,7 @@ function Header() {
 function Footer() {
   return (
     <footer className="border-t border-rule mt-20">
-      <div className="mx-auto max-w-[960px] px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-[15px]">
+      <div className="mx-auto max-w-[960px] px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-8 text-[15px]">
         <div>
           <p className="font-semibold text-ink mb-1">PHI Lab</p>
           <p className="text-muted">{FOOTER.tagline}</p>
@@ -110,11 +97,6 @@ function Footer() {
               <a href={`mailto:${FOOTER.email}`}>{FOOTER.email}</a>
             </p>
           </address>
-        </div>
-
-        <div>
-          <p className="font-semibold text-ink mb-1">Collaborating Institutions</p>
-          <p className="text-muted">{COLLABORATING_INSTITUTIONS.join(' · ')}</p>
         </div>
       </div>
 
