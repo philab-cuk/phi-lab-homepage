@@ -58,7 +58,7 @@ export default function AdminMembers() {
 
   async function load() {
     setLoading(true); setError(null)
-    const { data, error } = await supabase.from('members').select('*').order('status').order('display_order')
+    const { data, error } = await supabase.from('members').select('*').order('status').order('created_at').order('display_order')
     if (error) setError(error)
     setRows(data || [])
     setLoading(false)

@@ -56,7 +56,8 @@ export async function fetchMembers() {
     .from('members')
     .select('*')
     .order('status')
-    .order('display_order')
+    .order('created_at')      // 먼저 등록된 사람이 상단
+    .order('display_order')   // 동시 등록(시딩)은 LIVE 순서 유지
   if (error) throw error
   const all = (data ?? []).map(mapMember)
   return {
