@@ -31,7 +31,8 @@ export default function AdminLogin() {
   }
 
   return (
-    <div style={{ padding: '2rem', maxWidth: 420 }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+      <div style={{ width: '100%', maxWidth: 380 }}>
       <h1 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Admin Login</h1>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '0.75rem' }}>
@@ -82,6 +83,7 @@ export default function AdminLogin() {
       <p style={{ fontSize: '0.75rem', color: '#888', marginTop: '0.5rem' }}>
         초대받은 이메일의 구글 계정으로 로그인하세요.
       </p>
+      </div>
     </div>
   )
 }

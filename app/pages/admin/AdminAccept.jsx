@@ -11,6 +11,15 @@ const ERROR_KO = {
   invite_email_mismatch: '초대받은 이메일과 로그인한 계정이 다릅니다. 초대받은 이메일로 로그인하세요.',
 }
 
+// 화면 중앙 정렬 셸
+function Shell({ children }) {
+  return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+      <div style={{ width: '100%', maxWidth: 440 }}>{children}</div>
+    </div>
+  )
+}
+
 export default function AdminAccept() {
   const [params] = useSearchParams()
   const token = params.get('token')
@@ -33,20 +42,18 @@ export default function AdminAccept() {
     })
   }, [loading, isAuthenticated, token, status])
 
-  const box = { padding: '2rem', maxWidth: 460 }
-
   if (!token) {
-    return <div style={box}><h1 style={{ fontSize: '1.5rem' }}>초대 수락</h1><p style={{ color: '#b00' }}>초대 토큰이 없습니다. 받은 링크를 다시 확인하세요.</p></div>
+    return <Shell><h1 style={{ fontSize: '1.5rem' }}>초대 수락</h1><p style={{ color: '#b00' }}>초대 토큰이 없습니다. 받은 링크를 다시 확인하세요.</p></Shell>
   }
 
   if (loading) {
-    return <div style={box}><h1 style={{ fontSize: '1.5rem' }}>초대 수락</h1><p>확인 중…</p></div>
+    return <Shell><h1 style={{ fontSize: '1.5rem' }}>초대 수락</h1><p>확인 중…</p></Shell>
   }
 
   // 로그인 전: 구글 로그인 (수락 페이지로 돌아오게)
   if (!isAuthenticated) {
     return (
-      <div style={box}>
+      <Shell>
         <h1 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>초대 수락</h1>
         <p style={{ color: '#555', marginBottom: '1rem' }}>
           초대받은 이메일의 <strong>구글 계정</strong>으로 로그인하면 자동으로 등록됩니다.
@@ -58,13 +65,13 @@ export default function AdminAccept() {
         >
           <span style={{ fontWeight: 'bold', color: '#4285F4' }}>G</span> Google 로 로그인하고 수락
         </button>
-      </div>
+      </Shell>
     )
   }
 
   // 로그인 후
   return (
-    <div style={box}>
+    <Shell>
       <h1 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>초대 수락</h1>
       <p style={{ color: '#888', fontSize: '0.85rem', marginBottom: '1rem' }}>로그인: {user?.email}</p>
 
@@ -90,6 +97,6 @@ export default function AdminAccept() {
           </Link>
         </>
       )}
-    </div>
+    </Shell>
   )
 }
