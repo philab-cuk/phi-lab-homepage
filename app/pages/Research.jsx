@@ -1,5 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useLoaderData } from 'react-router'
 import { fetchResearch } from '../lib/publicData'
+
+export async function loader() {
+  return fetchResearch()
+}
 
 const FILTERS = [
   { key: 'all', label: 'All' },
@@ -112,30 +117,7 @@ function FilterBar({ activeFilter, onChange }) {
 
 export default function Research() {
   const [activeFilter, setActiveFilter] = useState('all')
-  const [researchData, setResearchData] = useState(null)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    fetchResearch().then(setResearchData).catch(setError)
-  }, [])
-
-  if (error) {
-    return (
-      <div className="mx-auto max-w-[820px] px-6 py-12">
-        <h1>Current Research</h1>
-        <p className="text-muted py-10">데이터를 불러오지 못했습니다.</p>
-      </div>
-    )
-  }
-
-  if (!researchData) {
-    return (
-      <div className="mx-auto max-w-[820px] px-6 py-12">
-        <h1>Current Research</h1>
-        <p className="text-muted py-10">로딩 중…</p>
-      </div>
-    )
-  }
+  const researchData = useLoaderData()
 
   // Featured: LIVE Major Research Initiatives (MOMENTUM, AI-Trajectory)
   const featured = researchData.filter((p) => p.featured)

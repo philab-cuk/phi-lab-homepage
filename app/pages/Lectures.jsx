@@ -1,5 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useLoaderData } from 'react-router'
 import { fetchLectures } from '../lib/publicData'
+
+export async function loader() {
+  return fetchLectures()
+}
 
 // Context lets nested CourseImages open the page-level lightbox without
 // prop-drilling through SemesterSection → CourseItem.
@@ -211,32 +216,9 @@ function SemesterSection({ semester, courses }) {
 }
 
 export default function Lectures() {
-  const [lecturesData, setLecturesData] = useState(null)
-  const [error, setError] = useState(null)
+  const lecturesData = useLoaderData()
   const [lightbox, setLightbox] = useState(null)
   const openLightbox = (images, index) => setLightbox({ images, index })
-
-  useEffect(() => {
-    fetchLectures().then(setLecturesData).catch(setError)
-  }, [])
-
-  if (error) {
-    return (
-      <div className="mx-auto max-w-[820px] px-6 py-12">
-        <h1>Lectures &amp; Courses</h1>
-        <p className="text-muted py-10">데이터를 불러오지 못했습니다.</p>
-      </div>
-    )
-  }
-
-  if (!lecturesData) {
-    return (
-      <div className="mx-auto max-w-[820px] px-6 py-12">
-        <h1>Lectures &amp; Courses</h1>
-        <p className="text-muted py-10">로딩 중…</p>
-      </div>
-    )
-  }
 
   const grouped = groupBySemester(lecturesData)
   const gradCount = lecturesData.filter((c) => c.level === 'graduate').length

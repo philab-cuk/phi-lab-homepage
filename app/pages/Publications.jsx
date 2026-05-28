@@ -1,5 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
+import { useLoaderData } from 'react-router'
 import { fetchPublications } from '../lib/publicData'
+
+export async function loader() {
+  return fetchPublications()
+}
 
 // 3-tier copy fallback so it works on non-secure contexts (http LAN preview).
 async function copyToClipboard(text) {
@@ -145,12 +150,7 @@ function YearGroup({ year, pubs }) {
 }
 
 export default function Publications() {
-  const [publicationsData, setPublicationsData] = useState(null)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    fetchPublications().then(setPublicationsData).catch(setError)
-  }, [])
+  const publicationsData = useLoaderData()
 
   const counts = useMemo(() => {
     const c = { article: 0, intl: 0, national: 0 }
@@ -180,24 +180,6 @@ export default function Publications() {
         pubs: pubs.sort((a, b) => (order[a.category] ?? 9) - (order[b.category] ?? 9)),
       }))
   }, [publicationsData])
-
-  if (error) {
-    return (
-      <div className="mx-auto max-w-[820px] px-6 py-12">
-        <h1>Publications</h1>
-        <p className="text-muted py-10">데이터를 불러오지 못했습니다.</p>
-      </div>
-    )
-  }
-
-  if (!publicationsData) {
-    return (
-      <div className="mx-auto max-w-[820px] px-6 py-12">
-        <h1>Publications</h1>
-        <p className="text-muted py-10">로딩 중…</p>
-      </div>
-    )
-  }
 
   return (
     <div className="mx-auto max-w-[820px] px-6 py-12">

@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Outlet, useNavigate } from 'react-router'
 import { useAuth } from '../contexts/AuthContext'
 
 const ROLE_LABEL = {

@@ -1,5 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useLoaderData } from 'react-router'
 import { fetchHomeStats } from '../lib/publicData'
+
+export async function loader() {
+  return fetchHomeStats()
+}
 
 // ─── Constants ────────────────────────────────────────────────────────────
 
@@ -42,13 +46,8 @@ const PILLARS = [
 ]
 
 export default function Home() {
-  const [stats, setStats] = useState({ activeResearchCount: 0, publicationsCount: 0 })
+  const stats = useLoaderData()
   const collaboratorsCount = COLLABORATING_INSTITUTIONS.length
-
-  useEffect(() => {
-    fetchHomeStats().then(setStats).catch(() => {})
-  }, [])
-
   const activeProjectsCount = stats.activeResearchCount
   const publicationsCount = stats.publicationsCount
 

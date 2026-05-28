@@ -31,20 +31,21 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # prerender 용 헤드리스 브라우저
-      - run: pnpm exec playwright install --with-deps chromium
-
-      # 빌드 + prerender (공개 페이지 HTML 굳히기)
+      # 빌드 (react-router framework 모드 — Node 가 직접 정적 HTML 생성, 브라우저 불필요)
       # VITE_BASE: 프로젝트 페이지 하위 경로. custom domain cutover 시 '/' 로 바꾸거나 제거.
-      - run: pnpm build:ssg
+      - run: pnpm build
         env:
           VITE_BASE: /phi-lab-homepage/
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
+      # 비-prerender 경로(/admin, /posts) 직접 접근·새로고침 시 GitHub Pages 가
+      # 404.html 로 SPA fallback 하도록 복사.
+      - run: cp build/client/__spa-fallback.html build/client/404.html
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: build/client
 
   deploy:
     needs: build

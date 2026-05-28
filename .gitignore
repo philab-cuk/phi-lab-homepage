@@ -31,3 +31,7 @@ dist-ssr
 
 # Claude Code local settings (per-machine)
 .claude/settings.local.json
+
+# react-router framework build
+build/
+.react-router/

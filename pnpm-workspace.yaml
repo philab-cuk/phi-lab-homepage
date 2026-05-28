@@ -1,0 +1,3 @@
+# esbuild 빌드 스크립트 허용 (vite/react-router 빌드에 필요)
+allowBuilds:
+  esbuild: true

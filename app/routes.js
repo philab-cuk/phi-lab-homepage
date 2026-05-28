@@ -1,0 +1,38 @@
+import { index, route, layout } from '@react-router/dev/routes'
+
+export default [
+  // 공개 페이지 (헤더/푸터 공통 Layout) — prerender 대상(SSG)
+  layout('components/Layout.jsx', [
+    index('pages/Home.jsx'),
+    route('about', 'pages/About.jsx'),
+    route('members', 'pages/Members.jsx'),
+    route('professor', 'pages/Professor.jsx'),
+    route('research', 'pages/Research.jsx'),
+    route('publications', 'pages/Publications.jsx'),
+    route('lectures', 'pages/Lectures.jsx'),
+  ]),
+
+  // admin 로그인 (가드 밖)
+  route('admin/login', 'pages/admin/AdminLogin.jsx'),
+
+  // admin — 클라이언트 렌더(CSR). 인증+whitelist 가드 → 레이아웃 → 페이지
+  layout('components/ProtectedRoute.jsx', [
+    route('admin', 'components/AdminLayout.jsx', [
+      index('pages/admin/AdminDashboard.jsx'),
+      // whitelist 전원 (researcher/alumni 포함)
+      route('news', 'pages/admin/AdminNews.jsx'),
+      route('posts', 'pages/admin/AdminPosts.jsx'),
+      // editor(admin/professor) 전용
+      layout('components/EditorProtectedRoute.jsx', [
+        route('users', 'pages/admin/AdminUsers.jsx'),
+        route('members', 'pages/admin/AdminMembers.jsx'),
+        route('publications', 'pages/admin/AdminPublications.jsx'),
+        route('research', 'pages/admin/AdminResearch.jsx'),
+        route('lectures', 'pages/admin/AdminLectures.jsx'),
+      ]),
+    ]),
+  ]),
+
+  // 404
+  route('*', 'pages/NotFound.jsx'),
+]

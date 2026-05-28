@@ -1,4 +1,4 @@
-import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
+import { NavLink, Outlet, Link, useLocation } from 'react-router'
 import { useEffect, useState } from 'react'
 
 const NAV_ROUTES = [
