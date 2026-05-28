@@ -59,10 +59,15 @@ export function AuthProvider({ children }) {
     supabase.auth.signInWithPassword({ email, password })
 
   // 구글 로그인. redirectTo 로 로그인 후 돌아올 URL 지정 (기본: 현재 URL).
+  // prompt=select_account: 로그아웃 후 재로그인 시 항상 계정 선택 화면 표시
+  // (구글 세션 캐시로 바로 통과되는 것 방지).
   const signInWithGoogle = (redirectTo) =>
     supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: redirectTo || window.location.href },
+      options: {
+        redirectTo: redirectTo || window.location.href,
+        queryParams: { prompt: 'select_account' },
+      },
     })
 
   const signOut = () => supabase.auth.signOut()
