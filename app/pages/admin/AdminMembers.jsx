@@ -33,6 +33,28 @@ export default function AdminMembers() {
   const [isNew, setIsNew] = useState(false)
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
+  const [uploading, setUploading] = useState(false)
+
+  async function handlePhotoUpload(file) {
+    if (!file) return
+    setError(null)
+    setUploading(true)
+    try {
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase()
+      if (!['jpg', 'jpeg', 'png', 'webp'].includes(ext)) throw new Error('jpg/png/webp 만 허용')
+      if (file.size > 10 * 1024 * 1024) throw new Error('10MB 초과')
+      const entityKey = edit.id?.trim() || '_temp'
+      const path = `${entityKey}/profile.${ext}`
+      const { error: upErr } = await supabase.storage.from('profile-photos').upload(path, file, {
+        contentType: file.type, upsert: true,
+      })
+      if (upErr) throw upErr
+      const { data } = supabase.storage.from('profile-photos').getPublicUrl(path)
+      // 같은 경로 덮어쓰기 시 캐시 갱신용 쿼리
+      setEdit((e) => ({ ...e, photo_url: `${data.publicUrl}?v=${Date.now()}` }))
+    } catch (e) { setError(e) }
+    finally { setUploading(false) }
+  }
 
   async function load() {
     setLoading(true); setError(null)
@@ -150,7 +172,28 @@ export default function AdminMembers() {
             <Field label="Student number / 학번"><TextInput value={edit.student_number||''} onChange={e => setEdit({...edit, student_number: e.target.value || null})} /></Field>
             <Field label="Department"><TextInput value={edit.department||''} onChange={e => setEdit({...edit, department: e.target.value || null})} /></Field>
             <Field label="Institution"><TextInput value={edit.institution||''} onChange={e => setEdit({...edit, institution: e.target.value || null})} /></Field>
-            <Field label="Photo URL"><TextInput value={edit.photo_url||''} onChange={e => setEdit({...edit, photo_url: e.target.value || null})} /></Field>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <Field label="사진" hint="파일 업로드(jpg/png/webp, 10MB 이내) 또는 URL 직접 입력. 새 멤버는 ID 입력 후 업로드하세요.">
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                  {edit.photo_url && (
+                    <img src={edit.photo_url} alt="" style={{ width: 54, height: 72, objectFit: 'cover', border: '1px solid #ccc', flexShrink: 0 }} />
+                  )}
+                  <div style={{ flex: 1 }}>
+                    <TextInput value={edit.photo_url || ''} onChange={e => setEdit({ ...edit, photo_url: e.target.value || null })} placeholder="https://… 또는 아래 버튼으로 업로드" />
+                    <label style={{ display: 'inline-block', marginTop: '0.4rem', fontSize: '0.8rem', cursor: uploading ? 'default' : 'pointer', color: '#06c' }}>
+                      {uploading ? '업로드 중…' : '＋ 파일 업로드'}
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        style={{ display: 'none' }}
+                        disabled={uploading}
+                        onChange={(e) => { handlePhotoUpload(e.target.files?.[0]); e.target.value = '' }}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </Field>
+            </div>
             <Field label="Email"><TextInput value={edit.email||''} onChange={e => setEdit({...edit, email: e.target.value || null})} /></Field>
             <Field label="Personal site"><TextInput value={edit.personal_site||''} onChange={e => setEdit({...edit, personal_site: e.target.value || null})} /></Field>
             <Field label="LinkedIn"><TextInput value={edit.linkedin||''} onChange={e => setEdit({...edit, linkedin: e.target.value || null})} /></Field>
