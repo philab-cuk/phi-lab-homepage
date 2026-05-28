@@ -26,7 +26,14 @@ export default function AdminUsers() {
       supabase.from('invites').select('token, role, intended_email, created_by, created_at, expires_at, used_at, used_by_email').order('created_at', { ascending: false }),
     ])
     if (uErr || iErr) setError(uErr || iErr)
-    setUsers(u || [])
+    // 등록순(added_at asc). 같은 시각이면 role 우선순위: professor → admin → 나머지
+    const rolePriority = { professor: 0, admin: 1, researcher: 2, alumni: 3 }
+    const sortedUsers = (u || []).slice().sort((a, b) => {
+      const t = new Date(a.added_at) - new Date(b.added_at)
+      if (t !== 0) return t
+      return (rolePriority[a.role] ?? 9) - (rolePriority[b.role] ?? 9)
+    })
+    setUsers(sortedUsers)
     setInvites(i || [])
     setLoading(false)
   }
