@@ -12,6 +12,14 @@ function withBase(path) {
   return base + (path.startsWith('/') ? path : '/' + path)
 }
 
+// Supabase Storage 이미지 변환: 원본(object URL)을 리사이즈 URL(render/image)로.
+// 원본은 Storage 에 그대로 두고, 페이지에선 width 지정 리사이즈본을 받는다.
+// storage URL 이 아니면(외부/로컬) 원본 그대로.
+function resized(url, width) {
+  if (!url || !url.includes('/storage/v1/object/public/')) return url
+  return url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/') + `?width=${width}&quality=80`
+}
+
 // ── Members ────────────────────────────────────────────────────────────────
 function mapMember(m) {
   return {
@@ -24,8 +32,8 @@ function mapMember(m) {
     year: m.student_number,
     department: m.department,
     institution: m.institution,
-    photo: withBase(m.photo_url),
-    photoLive: withBase(m.photo_url),
+    photo: resized(withBase(m.photo_url), 450),
+    photoLive: resized(withBase(m.photo_url), 450),
     email: m.email,
     personalSite: m.personal_site,
     linkedin: m.linkedin,
