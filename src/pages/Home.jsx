@@ -1,5 +1,5 @@
-import researchData from '../data/research.json'
-import publicationsData from '../data/publications.json'
+import { useEffect, useState } from 'react'
+import { fetchHomeStats } from '../lib/publicData'
 
 // ─── Constants ────────────────────────────────────────────────────────────
 
@@ -42,9 +42,15 @@ const PILLARS = [
 ]
 
 export default function Home() {
-  const activeProjectsCount = researchData.filter((p) => p.status === 'active').length
-  const publicationsCount = publicationsData.length
+  const [stats, setStats] = useState({ activeResearchCount: 0, publicationsCount: 0 })
   const collaboratorsCount = COLLABORATING_INSTITUTIONS.length
+
+  useEffect(() => {
+    fetchHomeStats().then(setStats).catch(() => {})
+  }, [])
+
+  const activeProjectsCount = stats.activeResearchCount
+  const publicationsCount = stats.publicationsCount
 
   return (
     <div className="mx-auto max-w-[820px] px-6 py-12">

@@ -1,6 +1,5 @@
-import membersData from '../data/members.json'
-
-const PI = membersData.current.find((m) => m.role === 'Principal Investigator')
+import { useEffect, useState } from 'react'
+import { fetchProfessor } from '../lib/publicData'
 
 const CATEGORY_LABELS = {
   academic: 'Academic Experience',
@@ -50,6 +49,7 @@ function ExperienceGroup({ category, items }) {
   return (
     <section className="mt-8">
       <h3>{CATEGORY_LABELS[category] ?? 'Experience'}</h3>
+      <hr className="my-2" />
       <ul className="list-none pl-0 m-0">
         {items.map((item, i) => (
           <ExperienceItem key={i} item={item} />
@@ -60,13 +60,39 @@ function ExperienceGroup({ category, items }) {
 }
 
 export default function Professor() {
+  const [PI, setPI] = useState(null)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    fetchProfessor().then(setPI).catch(setError)
+  }, [])
+
+  if (error) {
+    return (
+      <div className="mx-auto max-w-[760px] px-6 py-12">
+        <h1>Professor</h1>
+        <p className="text-muted py-10">데이터를 불러오지 못했습니다.</p>
+      </div>
+    )
+  }
+
+  if (!PI) {
+    return (
+      <div className="mx-auto max-w-[760px] px-6 py-12">
+        <h1>Professor</h1>
+        <p className="text-muted py-10">로딩 중…</p>
+      </div>
+    )
+  }
+
+  const experience = PI.experience ?? []
   const grouped = CATEGORY_ORDER.map((cat) => ({
     category: cat,
-    items: PI.experience.filter((e) => e.category === cat),
+    items: experience.filter((e) => e.category === cat),
   })).filter((g) => g.items.length > 0)
 
-  const ungrouped = PI.experience.filter((e) => !CATEGORY_ORDER.includes(e.category))
-  const bioParagraphs = PI.bioFull.split('\n\n')
+  const ungrouped = experience.filter((e) => !CATEGORY_ORDER.includes(e.category))
+  const bioParagraphs = (PI.bioFull ?? '').split('\n\n')
 
   return (
     <div className="mx-auto max-w-[760px] px-6 py-12">

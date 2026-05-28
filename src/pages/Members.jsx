@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import membersData from '../data/members.json'
+import { fetchMembers } from '../lib/publicData'
 
 const TABS = ['Current Members', 'Alumni']
 
@@ -147,16 +147,22 @@ function TabLink({ label, active, count, onClick }) {
 
 export default function Members() {
   const [activeTab, setActiveTab] = useState(TABS[0])
+  const [data, setData] = useState(null)
+  const [error, setError] = useState(null)
   const location = useLocation()
 
-  const professor = membersData.current.find((m) => m.role === 'Principal Investigator')
-  const students = membersData.current.filter((m) => m.role !== 'Principal Investigator')
-  const alumni = membersData.alumni
+  useEffect(() => {
+    fetchMembers().then(setData).catch(setError)
+  }, [])
+
+  const professor = data?.current.find((m) => m.role === 'Principal Investigator')
+  const students = data?.current.filter((m) => m.role !== 'Principal Investigator') ?? []
+  const alumni = data?.alumni ?? []
 
   // Hash navigation: if URL has #<id>, force the tab that contains that
   // member into view, then smooth-scroll to the card.
   useEffect(() => {
-    if (!location.hash) return
+    if (!location.hash || !data) return
     const id = location.hash.slice(1)
     const inAlumni = alumni.some((m) => m.id === id)
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -165,7 +171,25 @@ export default function Members() {
       const el = document.getElementById(id)
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     })
-  }, [location.hash, alumni])
+  }, [location.hash, alumni, data])
+
+  if (error) {
+    return (
+      <div className="mx-auto max-w-[800px] px-6 py-12">
+        <h1>Members</h1>
+        <p className="text-muted py-10">데이터를 불러오지 못했습니다.</p>
+      </div>
+    )
+  }
+
+  if (!data) {
+    return (
+      <div className="mx-auto max-w-[800px] px-6 py-12">
+        <h1>Members</h1>
+        <p className="text-muted py-10">로딩 중…</p>
+      </div>
+    )
+  }
 
   return (
     <div className="mx-auto max-w-[800px] px-6 py-12">
@@ -175,7 +199,7 @@ export default function Members() {
         <TabLink
           label="Current Members"
           active={activeTab === 'Current Members'}
-          count={membersData.current.length}
+          count={data.current.length}
           onClick={() => setActiveTab('Current Members')}
         />
         <TabLink

@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import publicationsData from '../data/publications.json'
+import { useEffect, useMemo, useState } from 'react'
+import { fetchPublications } from '../lib/publicData'
 
 // 3-tier copy fallback so it works on non-secure contexts (http LAN preview).
 async function copyToClipboard(text) {
@@ -31,8 +31,6 @@ async function copyToClipboard(text) {
   window.prompt('Copy this text manually:', text)
   return false
 }
-
-const ALL_YEARS_OPTION = 'All'
 
 const CATEGORY_LABEL = {
   article: 'Article, peer-reviewed',
@@ -147,32 +145,26 @@ function YearGroup({ year, pubs }) {
 }
 
 export default function Publications() {
-  const [yearFilter, setYearFilter] = useState(ALL_YEARS_OPTION)
+  const [publicationsData, setPublicationsData] = useState(null)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    fetchPublications().then(setPublicationsData).catch(setError)
+  }, [])
 
   const counts = useMemo(() => {
     const c = { article: 0, intl: 0, national: 0 }
-    publicationsData.forEach((p) => {
+    ;(publicationsData ?? []).forEach((p) => {
       if (p.category === 'article') c.article++
       else if (p.category === 'international-presentation') c.intl++
       else if (p.category === 'national-presentation') c.national++
     })
     return c
-  }, [])
-
-  const years = useMemo(() => {
-    const set = new Set(publicationsData.map((p) => p.year))
-    return [...set].sort((a, b) => b - a)
-  }, [])
-
-  const filtered = useMemo(() => {
-    return publicationsData.filter((p) => {
-      return yearFilter === ALL_YEARS_OPTION || p.year === yearFilter
-    })
-  }, [yearFilter])
+  }, [publicationsData])
 
   const grouped = useMemo(() => {
     const map = {}
-    filtered.forEach((p) => {
+    ;(publicationsData ?? []).forEach((p) => {
       if (!map[p.year]) map[p.year] = []
       map[p.year].push(p)
     })
@@ -187,7 +179,25 @@ export default function Publications() {
         year: Number(year),
         pubs: pubs.sort((a, b) => (order[a.category] ?? 9) - (order[b.category] ?? 9)),
       }))
-  }, [filtered])
+  }, [publicationsData])
+
+  if (error) {
+    return (
+      <div className="mx-auto max-w-[820px] px-6 py-12">
+        <h1>Publications</h1>
+        <p className="text-muted py-10">데이터를 불러오지 못했습니다.</p>
+      </div>
+    )
+  }
+
+  if (!publicationsData) {
+    return (
+      <div className="mx-auto max-w-[820px] px-6 py-12">
+        <h1>Publications</h1>
+        <p className="text-muted py-10">로딩 중…</p>
+      </div>
+    )
+  }
 
   return (
     <div className="mx-auto max-w-[820px] px-6 py-12">
@@ -199,42 +209,6 @@ export default function Publications() {
       <p className="text-[15px] text-meta">
         {counts.article} articles, peer-reviewed · {counts.intl} international
         presentations · {counts.national} national presentations
-      </p>
-
-      <div className="mt-6 mb-2 flex flex-wrap gap-x-6 gap-y-2 items-baseline border-b border-rule pb-3">
-        <label className="text-[15px] text-meta">
-          Year:{' '}
-          <select
-            value={yearFilter}
-            onChange={(e) => {
-              const v = e.target.value
-              setYearFilter(v === ALL_YEARS_OPTION ? ALL_YEARS_OPTION : Number(v))
-            }}
-            className="bg-transparent border-b border-rule text-ink py-1 outline-none"
-          >
-            <option value={ALL_YEARS_OPTION}>All</option>
-            {years.map((y) => (
-              <option key={y} value={y}>
-                {y}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      <p className="text-[15px] text-meta mt-2">
-        Showing {filtered.length} of {publicationsData.length}
-        {yearFilter !== ALL_YEARS_OPTION && (
-          <>
-            {' · '}
-            <button
-              onClick={() => setYearFilter(ALL_YEARS_OPTION)}
-              className="hover:underline"
-            >
-              Clear filter
-            </button>
-          </>
-        )}
       </p>
 
       {grouped.length > 0 ? (
