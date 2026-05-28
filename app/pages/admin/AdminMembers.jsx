@@ -18,6 +18,11 @@ function emptyMember() {
 function arrJoin(a) { return Array.isArray(a) ? a.join(', ') : '' }
 function arrSplit(s) { return s ? s.split(',').map(x => x.trim()).filter(Boolean) : null }
 
+// 영문 소문자 slug (이메일 앞부분 또는 이름 기반)
+function slugify(s) {
+  return (s || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]/g, '').slice(0, 40)
+}
+
 function jsonText(v) { return v ? JSON.stringify(v, null, 2) : '' }
 function parseJson(s) {
   if (!s?.trim()) return null
@@ -91,9 +96,22 @@ export default function AdminMembers() {
       }
       delete payload._education_text
       delete payload._experience_text
-      if (!payload.id || !payload.name || !payload.role || !payload.status) {
-        throw new Error('id / name / role / status 필수')
+      if (!payload.name || !payload.role || !payload.status) {
+        throw new Error('name / role / status 필수')
       }
+
+      // 새 멤버는 id(slug) 자동 생성: 연결 계정 이메일 앞부분 → 없으면 이름, 중복 시 숫자
+      if (isNew) {
+        const base = slugify(edit.email ? edit.email.split('@')[0] : edit.name) || 'member'
+        let id = base
+        for (let i = 2; i < 100; i++) {
+          const { data } = await supabase.from('members').select('id').eq('id', id).maybeSingle()
+          if (!data) break
+          id = `${base}${i}`
+        }
+        payload.id = id
+      }
+
       const op = isNew
         ? supabase.from('members').insert(payload)
         : supabase.from('members').update(payload).eq('id', payload.id)
@@ -163,8 +181,8 @@ export default function AdminMembers() {
       >
         {edit && (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
-            <Field label="ID (slug)" hint="hkim 같은 단순 slug. 변경 불가." >
-              <TextInput value={edit.id} disabled={!isNew} onChange={e => setEdit({ ...edit, id: e.target.value })} />
+            <Field label="ID (slug)" hint={isNew ? '저장 시 자동 생성 (연결 계정/이름 기반).' : '변경 불가.'}>
+              <TextInput value={isNew ? '(저장 시 자동 생성)' : edit.id} disabled />
             </Field>
             <Field label="Status">
               <Select value={edit.status} options={STATUSES} onChange={e => setEdit({ ...edit, status: e.target.value })} />
