@@ -12,6 +12,7 @@ export default function AdminDashboard() {
     cards.push({ to: '/admin/lectures',     label: 'Lectures 관리' })
     cards.push({ to: '/admin/users',        label: 'Users / Invites' })
   }
+  cards.push({ to: '/admin/my-profile', label: '내 프로필' })
   cards.push({ to: '/admin/news',  label: 'News 작성' })
   cards.push({ to: '/admin/posts', label: 'Posts 작성' })
 

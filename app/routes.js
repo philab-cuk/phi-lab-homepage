@@ -21,6 +21,7 @@ export default [
     route('admin', 'components/AdminLayout.jsx', [
       index('pages/admin/AdminDashboard.jsx'),
       // whitelist 전원 (researcher/alumni 포함)
+      route('my-profile', 'pages/admin/AdminMyProfile.jsx'),
       route('news', 'pages/admin/AdminNews.jsx'),
       route('posts', 'pages/admin/AdminPosts.jsx'),
       // editor(admin/professor) 전용

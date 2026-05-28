@@ -22,6 +22,7 @@ function buildMenu(role) {
     items.push({ to: '/admin/lectures',     label: 'Lectures' })
   }
   if (whitelisted) {
+    items.push({ to: '/admin/my-profile', label: '내 프로필' })
     items.push({ to: '/admin/news',  label: 'News' })
     items.push({ to: '/admin/posts', label: 'Posts' })
   }
