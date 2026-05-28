@@ -181,8 +181,13 @@ export default function AdminMembers() {
       >
         {edit && (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
-            <Field label="ID (slug)" hint={isNew ? '저장 시 자동 생성 (연결 계정/이름 기반).' : '변경 불가.'}>
-              <TextInput value={isNew ? '(저장 시 자동 생성)' : edit.id} disabled />
+            <Field label="ID (slug)" hint={isNew ? '이름/연결계정 기반 자동 생성. 중복 시 숫자가 붙습니다.' : '변경 불가.'}>
+              <TextInput
+                value={isNew
+                  ? (slugify(edit.email ? edit.email.split('@')[0] : edit.name) || '(이름 입력 시 생성)')
+                  : edit.id}
+                disabled
+              />
             </Field>
             <Field label="Status">
               <Select value={edit.status} options={STATUSES} onChange={e => setEdit({ ...edit, status: e.target.value })} />
