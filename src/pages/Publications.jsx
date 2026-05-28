@@ -224,17 +224,14 @@ export default function Publications() {
 
       <p className="text-[15px] text-meta mt-2">
         Showing {filtered.length} of {publicationsData.length}
-        {(yearFilter !== ALL_YEARS_OPTION || query) && (
+        {yearFilter !== ALL_YEARS_OPTION && (
           <>
             {' · '}
             <button
-              onClick={() => {
-                setYearFilter(ALL_YEARS_OPTION)
-                setQuery('')
-              }}
+              onClick={() => setYearFilter(ALL_YEARS_OPTION)}
               className="hover:underline"
             >
-              Clear filters
+              Clear filter
             </button>
           </>
         )}
