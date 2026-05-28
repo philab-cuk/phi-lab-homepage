@@ -64,7 +64,7 @@ export default function AdminResearch() {
         notes: edit.notes, funding_agency: edit.funding_agency,
         featured: !!edit.featured, status: edit.status, display_order: edit.display_order||0,
       }
-      if (!payload.id || !payload.title) throw new Error('id / title 필수')
+      if (!payload.title) throw new Error('title 필수')
       const op = isNew
         ? supabase.from('research').insert(payload)
         : supabase.from('research').update(payload).eq('id', payload.id)
@@ -113,13 +113,12 @@ export default function AdminResearch() {
       <PageHeader
         title="Research"
         subtitle={`${rows.length}개 (institutions ${institutions.length})`}
-        actions={<>{deleteModeToggle}<Button primary onClick={() => { setIsNew(true); setEdit(emptyResearch()) }}>+ 새 연구</Button></>}
+        actions={<>{deleteModeToggle}<Button primary onClick={() => { setIsNew(true); setEdit({ ...emptyResearch(), id: crypto.randomUUID() }) }}>+ 새 연구</Button></>}
       />
       <ErrorBanner error={error} />
       {loading ? <div>로딩 중…</div> : (
         <Table
           columns={[
-            { key: 'display_order', label: '#' },
             { key: 'id', label: 'ID', render: r => <code style={{ fontSize: '0.7rem' }}>{r.id}</code> },
             { key: 'title', label: 'Title', render: r => <>{r.title}{r.featured ? <span style={{ color: '#a60', marginLeft: 4 }}>★</span> : null}</> },
             { key: 'status', label: 'Status' },
@@ -146,7 +145,7 @@ export default function AdminResearch() {
       >
         {edit && (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
-            <Field label="ID"><TextInput value={edit.id} disabled={!isNew} onChange={e => setEdit({...edit, id: e.target.value})} /></Field>
+            <Field label="ID" hint={isNew ? '자동 생성된 UID (변경 불가)' : '변경 불가.'}><TextInput value={edit.id} disabled /></Field>
             <Field label="Status"><Select value={edit.status} options={STATUSES} onChange={e => setEdit({...edit, status: e.target.value})} /></Field>
             <div style={{ gridColumn: '1 / -1' }}>
               <Field label="Title"><TextInput value={edit.title||''} onChange={e => setEdit({...edit, title: e.target.value})} /></Field>
@@ -164,7 +163,6 @@ export default function AdminResearch() {
             <Field label="Featured">
               <Select value={edit.featured ? 'true' : 'false'} options={['true','false']} onChange={e => setEdit({...edit, featured: e.target.value === 'true'})} />
             </Field>
-            <Field label="Display order"><TextInput type="number" value={edit.display_order||0} onChange={e => setEdit({...edit, display_order: Number(e.target.value)||0})} /></Field>
 
             <div style={{ gridColumn: '1 / -1' }}>
               <Field

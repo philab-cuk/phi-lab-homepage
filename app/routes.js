@@ -28,8 +28,10 @@ export default [
       layout('components/EditorProtectedRoute.jsx', [
         route('users', 'pages/admin/AdminUsers.jsx'),
         route('members', 'pages/admin/AdminMembers.jsx'),
+        route('professor', 'pages/admin/AdminProfessor.jsx'),
         route('publications', 'pages/admin/AdminPublications.jsx'),
         route('research', 'pages/admin/AdminResearch.jsx'),
+        route('institutions', 'pages/admin/AdminInstitutions.jsx'),
         route('lectures', 'pages/admin/AdminLectures.jsx'),
       ]),
     ]),

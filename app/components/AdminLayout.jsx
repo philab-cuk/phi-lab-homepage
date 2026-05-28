@@ -29,7 +29,9 @@ function buildMenu(role) {
       title: 'Admin',
       items: [
         { to: '/admin/users', label: 'Users / Invites' },
+        { to: '/admin/professor', label: 'Professor' },
         { to: '/admin/members', label: 'Members' },
+        { to: '/admin/institutions', label: 'Institutions' },
         { to: '/admin/publications', label: 'Publications' },
         { to: '/admin/research', label: 'Research' },
         { to: '/admin/lectures', label: 'Lectures' },

@@ -99,10 +99,12 @@ export function Modal({ open, onClose, title, children, footer }) {
   )
 }
 
-export function Field({ label, hint, children }) {
+export function Field({ label, hint, children, required }) {
   return (
     <label style={{ display: 'block', marginBottom: '0.6rem' }}>
-      <span style={{ display: 'block', fontSize: '0.8rem', color: '#444', marginBottom: '0.2rem' }}>{label}</span>
+      <span style={{ display: 'block', fontSize: '0.8rem', color: '#444', marginBottom: '0.2rem' }}>
+        {label}{required && <span style={{ color: '#c33', marginLeft: 2 }} title="필수 입력">*</span>}
+      </span>
       {children}
       {hint && <div style={{ fontSize: '0.75rem', color: '#888', marginTop: '0.2rem' }}>{hint}</div>}
     </label>

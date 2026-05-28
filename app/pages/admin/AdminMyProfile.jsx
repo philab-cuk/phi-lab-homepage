@@ -1,16 +1,10 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
-import { PageHeader, Button, Field, TextInput, TextArea, ErrorBanner } from '../../components/admin/AdminUI'
+import { PageHeader, Button, Field, TextInput, TextArea, Select, ErrorBanner } from '../../components/admin/AdminUI'
 
 function arrJoin(a) { return Array.isArray(a) ? a.join(', ') : '' }
 function arrSplit(s) { return s ? s.split(',').map(x => x.trim()).filter(Boolean) : null }
-function jsonText(v) { return v ? JSON.stringify(v, null, 2) : '' }
-function parseJson(s) { if (!s?.trim()) return null; try { return JSON.parse(s) } catch { throw new Error('JSON 형식 오류') } }
-
-function slugFromEmail(email) {
-  return (email.split('@')[0] || 'member').toLowerCase().replace(/[^a-z0-9]/g, '') || 'member'
-}
 
 export default function AdminMyProfile() {
   const { user } = useAuth()
@@ -19,49 +13,47 @@ export default function AdminMyProfile() {
   const [edit, setEdit] = useState(null)
   const [error, setError] = useState(null)
   const [saving, setSaving] = useState(false)
-  const [uploading, setUploading] = useState(false)
   const [savedMsg, setSavedMsg] = useState(false)
+  const [pendingFile, setPendingFile] = useState(null) // 선택했지만 아직 업로드 안 한 사진
+  const [previewUrl, setPreviewUrl] = useState(null)    // 로컬 미리보기(objectURL)
+  const [roleOptions, setRoleOptions] = useState([])    // member_roles 라벨 목록 (Role 드롭다운)
 
   async function load() {
     setError(null)
-    const { data, error } = await supabase.from('members').select('*').eq('email', email).maybeSingle()
+    const [{ data, error }, { data: roles }] = await Promise.all([
+      supabase.from('members').select('*').eq('email', email).maybeSingle(),
+      supabase.from('member_roles').select('label').order('sort_order'),
+    ])
     if (error) { setError(error); return }
+    setRoleOptions((roles || []).map(r => r.label))
     setExisting(data || null)
     setEdit(data
-      ? { ...data, _education_text: jsonText(data.education), _experience_text: jsonText(data.experience) }
+      ? { ...data }
       : { name: '', name_ko: null, role: '', title: null, degree: null, department: null, institution: null,
-          photo_url: null, personal_site: null, linkedin: null, google_scholar: null,
-          research_interests: null, bio_short: null, bio_full: null, _education_text: '', _experience_text: '' })
+          photo_url: null, personal_site: null, linkedin: null, google_scholar: null, joined_at: null,
+          research_interests: null, bio_short: null, bio_full: null })
   }
   useEffect(() => { if (email) load() }, [email])
 
-  async function handlePhotoUpload(file) {
+  // 파일 선택 시: 검증 후 메모리에만 보관 (업로드는 저장 때)
+  function onSelectFile(file) {
     if (!file) return
-    setError(null); setUploading(true)
-    try {
-      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase()
-      if (!['jpg','jpeg','png','webp'].includes(ext)) throw new Error('jpg/png/webp 만 허용')
-      if (file.size > 10 * 1024 * 1024) throw new Error('10MB 초과')
-      const key = existing?.id || slugFromEmail(email)
-      const path = `${key}/profile.${ext}`
-      const { error: upErr } = await supabase.storage.from('profile-photos').upload(path, file, { contentType: file.type, upsert: true })
-      if (upErr) throw upErr
-      const { data } = supabase.storage.from('profile-photos').getPublicUrl(path)
-      setEdit((e) => ({ ...e, photo_url: `${data.publicUrl}?v=${Date.now()}` }))
-    } catch (e) { setError(e) } finally { setUploading(false) }
+    const ext = (file.name.split('.').pop() || '').toLowerCase()
+    if (!['jpg','jpeg','png','webp'].includes(ext)) { setError(new Error('jpg/png/webp 만 허용')); return }
+    if (file.size > 10 * 1024 * 1024) { setError(new Error('10MB 초과')); return }
+    setError(null)
+    setPendingFile(file)
+    setPreviewUrl(URL.createObjectURL(file))
   }
 
-  // 등록 시 고유 id 생성 (email prefix, 충돌 시 suffix)
-  async function genUniqueId() {
-    const base = slugFromEmail(email)
-    let id = base, n = 1
-    // 최대 몇 번만 시도
-    for (let i = 0; i < 20; i++) {
-      const { data } = await supabase.from('members').select('id').eq('id', id).maybeSingle()
-      if (!data) return id
-      n++; id = `${base}${n}`
-    }
-    return `${base}-${Date.now()}`
+  // 저장 시 실제 업로드
+  async function uploadPending(memberId) {
+    const ext = (pendingFile.name.split('.').pop() || 'jpg').toLowerCase()
+    const path = `${memberId}/profile.${ext}`
+    const { error: upErr } = await supabase.storage.from('profile-photos').upload(path, pendingFile, { contentType: pendingFile.type, upsert: true })
+    if (upErr) throw upErr
+    const { data } = supabase.storage.from('profile-photos').getPublicUrl(path)
+    return `${data.publicUrl}?v=${Date.now()}`
   }
 
   async function save() {
@@ -74,18 +66,20 @@ export default function AdminMyProfile() {
         linkedin: edit.linkedin || null, google_scholar: edit.google_scholar || null,
         research_interests: typeof edit.research_interests === 'string' ? arrSplit(edit.research_interests) : edit.research_interests,
         bio_short: edit.bio_short || null, bio_full: edit.bio_full || null,
-        education: edit._education_text ? parseJson(edit._education_text) : null,
-        experience: edit._experience_text ? parseJson(edit._experience_text) : null,
+        joined_at: edit.joined_at || null,
       }
-      if (!common.name || !common.role) throw new Error('이름 / 역할(role) 은 필수입니다')
+      if (!common.name || !common.name_ko || !common.role) throw new Error('Name (English) / Name (Korean) / Role 은 필수 입력입니다')
+      if (!common.joined_at) throw new Error('연구실 합류일은 필수 입력입니다')
 
       if (existing) {
         // 본인 행 수정 (email/id/status/display_order 는 건드리지 않음)
+        if (pendingFile) common.photo_url = await uploadPending(existing.id)
         const { error } = await supabase.from('members').update(common).eq('id', existing.id)
         if (error) throw error
       } else {
-        // 신규 등록: id 자동, email 자동(본인), status=current, display_order=맨뒤
-        const id = await genUniqueId()
+        // 신규 등록: id 는 UID 자동, email 자동(본인), status=current, display_order=맨뒤
+        const id = crypto.randomUUID()
+        if (pendingFile) common.photo_url = await uploadPending(id)
         const { data: maxRow } = await supabase.from('members')
           .select('display_order').eq('status', 'current')
           .order('display_order', { ascending: false }).limit(1).maybeSingle()
@@ -95,6 +89,7 @@ export default function AdminMyProfile() {
         })
         if (error) throw error
       }
+      setPendingFile(null); setPreviewUrl(null)
       setSavedMsg(true)
       await load()
     } catch (e) { setError(e) } finally { setSaving(false) }
@@ -121,9 +116,22 @@ export default function AdminMyProfile() {
         <Field label="Status">
           <TextInput value={isNew ? 'current (등록 시 자동)' : existing.status} disabled style={disabledStyle} />
         </Field>
-        <Field label="Name (English)"><TextInput value={edit.name||''} onChange={e => setEdit({...edit, name: e.target.value})} /></Field>
-        <Field label="Name (Korean)"><TextInput value={edit.name_ko||''} onChange={e => setEdit({...edit, name_ko: e.target.value || null})} /></Field>
-        <Field label="Role" hint="예: Undergraduate Researcher"><TextInput value={edit.role||''} onChange={e => setEdit({...edit, role: e.target.value})} /></Field>
+        <Field label="연구실 합류일" required hint="이 날짜 순서로 멤버가 정렬됩니다.">
+          <TextInput type="date" value={edit.joined_at || ''} onChange={e => setEdit({ ...edit, joined_at: e.target.value || null })} />
+        </Field>
+        <Field label="Name (English)" required><TextInput value={edit.name||''} onChange={e => setEdit({...edit, name: e.target.value})} /></Field>
+        <Field label="Name (Korean)" required><TextInput value={edit.name_ko||''} onChange={e => setEdit({...edit, name_ko: e.target.value || null})} /></Field>
+        <Field label="Role" required hint="목록에서 선택하세요.">
+          <Select
+            value={edit.role || ''}
+            options={[
+              { value: '', label: '(선택)' },
+              ...roleOptions.map(r => ({ value: r, label: r })),
+              ...(edit.role && !roleOptions.includes(edit.role) ? [{ value: edit.role, label: `${edit.role} (목록 외)` }] : []),
+            ]}
+            onChange={e => setEdit({ ...edit, role: e.target.value })}
+          />
+        </Field>
         <Field label="Degree"><TextInput value={edit.degree||''} onChange={e => setEdit({...edit, degree: e.target.value || null})} /></Field>
         <Field label="Title"><TextInput value={edit.title||''} onChange={e => setEdit({...edit, title: e.target.value || null})} /></Field>
         <Field label="Department"><TextInput value={edit.department||''} onChange={e => setEdit({...edit, department: e.target.value || null})} /></Field>
@@ -133,14 +141,15 @@ export default function AdminMyProfile() {
         <Field label="Google Scholar"><TextInput value={edit.google_scholar||''} onChange={e => setEdit({...edit, google_scholar: e.target.value || null})} /></Field>
 
         <div style={{ gridColumn: '1 / -1' }}>
-          <Field label="사진" hint="jpg/png/webp, 10MB 이내">
+          <Field label="사진" hint="jpg/png/webp, 10MB 이내. 저장을 눌러야 실제로 업로드됩니다.">
             <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-              {edit.photo_url && <img src={edit.photo_url} alt="" style={{ width: 54, height: 72, objectFit: 'cover', border: '1px solid #ccc', flexShrink: 0 }} />}
-              <label style={{ display: 'inline-block', fontSize: '0.85rem', cursor: uploading ? 'default' : 'pointer', color: '#fff', background: '#222', border: '1px solid #000', padding: '0.4rem 0.8rem' }}>
-                {uploading ? '업로드 중…' : (edit.photo_url ? '사진 변경' : '＋ 사진 업로드')}
-                <input type="file" accept="image/jpeg,image/png,image/webp" style={{ display: 'none' }} disabled={uploading}
-                  onChange={(e) => { handlePhotoUpload(e.target.files?.[0]); e.target.value = '' }} />
+              {(previewUrl || edit.photo_url) && <img src={previewUrl || edit.photo_url} alt="" style={{ width: 54, height: 72, objectFit: 'cover', border: '1px solid #ccc', flexShrink: 0 }} />}
+              <label style={{ display: 'inline-block', fontSize: '0.85rem', cursor: 'pointer', color: '#fff', background: '#222', border: '1px solid #000', padding: '0.4rem 0.8rem' }}>
+                {(previewUrl || edit.photo_url) ? '사진 변경' : '＋ 사진 선택'}
+                <input type="file" accept="image/jpeg,image/png,image/webp" style={{ display: 'none' }}
+                  onChange={(e) => { onSelectFile(e.target.files?.[0]); e.target.value = '' }} />
               </label>
+              {pendingFile && <span style={{ fontSize: '0.75rem', color: '#888' }}>저장 시 업로드 예정</span>}
             </div>
           </Field>
         </div>
@@ -155,16 +164,6 @@ export default function AdminMyProfile() {
         </div>
         <div style={{ gridColumn: '1 / -1' }}>
           <Field label="Bio full"><TextArea rows={6} value={edit.bio_full||''} onChange={e => setEdit({...edit, bio_full: e.target.value || null})} /></Field>
-        </div>
-        <div style={{ gridColumn: '1 / -1' }}>
-          <Field label="Education (JSON)" hint='예: [{"degree":"BSc","field":"...","institution":"..."}]'>
-            <TextArea rows={4} style={{ fontFamily: 'monospace', fontSize: '0.75rem' }} value={edit._education_text || ''} onChange={e => setEdit({...edit, _education_text: e.target.value})} />
-          </Field>
-        </div>
-        <div style={{ gridColumn: '1 / -1' }}>
-          <Field label="Experience (JSON)">
-            <TextArea rows={5} style={{ fontFamily: 'monospace', fontSize: '0.75rem' }} value={edit._experience_text || ''} onChange={e => setEdit({...edit, _experience_text: e.target.value})} />
-          </Field>
         </div>
       </div>
 

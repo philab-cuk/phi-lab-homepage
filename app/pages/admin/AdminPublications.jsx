@@ -18,12 +18,6 @@ function emptyPub() {
   }
 }
 
-function slugFromTitle(t, year) {
-  if (!t) return ''
-  const slug = t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60)
-  return year ? `${slug}-${year}` : slug
-}
-
 export default function AdminPublications() {
   const [rows, setRows] = useState([])
   const [authors, setAuthors] = useState([])
@@ -69,7 +63,7 @@ export default function AdminPublications() {
         date: edit.date, year: Number(edit.year), doi: edit.doi, url: edit.url,
         featured: !!edit.featured, display_order: edit.display_order || 0,
       }
-      if (!payload.id || !payload.title || !payload.category || !payload.year) throw new Error('id / title / category / year 필수')
+      if (!payload.title || !payload.category || !payload.year) throw new Error('title / category / year 필수')
 
       const op = isNew
         ? supabase.from('publications').insert(payload)
@@ -138,7 +132,7 @@ export default function AdminPublications() {
 
   function openNew() {
     setIsNew(true)
-    setEdit(emptyPub())
+    setEdit({ ...emptyPub(), id: crypto.randomUUID() })
   }
 
   async function doImport() {
@@ -147,12 +141,12 @@ export default function AdminPublications() {
       const result = importMode === 'doi'
         ? await fetchByDoi(importInput)
         : parseBibtex(importInput)
-      // 새 publication 으로 폼에 채움 — 사용자가 id 정해서 저장
+      // 새 publication 으로 폼에 채움 — id 는 UID 자동
       setImportMode(null); setImportInput('')
       setIsNew(true)
       setEdit({
         ...emptyPub(),
-        id: slugFromTitle(result.title, result.year),
+        id: crypto.randomUUID(),
         category: 'article',
         title: result.title || '',
         venue: result.venue || null,
@@ -260,7 +254,7 @@ export default function AdminPublications() {
       >
         {edit && (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
-            <Field label="ID (slug)"><TextInput value={edit.id} disabled={!isNew} onChange={e => setEdit({...edit, id: e.target.value})} /></Field>
+            <Field label="ID" hint={isNew ? '자동 생성된 UID (변경 불가)' : '변경 불가.'}><TextInput value={edit.id} disabled /></Field>
             <Field label="Category"><Select value={edit.category} options={CATEGORIES} onChange={e => setEdit({...edit, category: e.target.value})} /></Field>
             <div style={{ gridColumn: '1 / -1' }}>
               <Field label="Title"><TextInput value={edit.title||''} onChange={e => setEdit({...edit, title: e.target.value})} /></Field>
@@ -275,7 +269,6 @@ export default function AdminPublications() {
               <Field label="URL"><TextInput value={edit.url||''} onChange={e => setEdit({...edit, url: e.target.value || null})} /></Field>
             </div>
             <Field label="Featured"><Select value={edit.featured?'true':'false'} options={['true','false']} onChange={e => setEdit({...edit, featured: e.target.value==='true'})} /></Field>
-            <Field label="Display order"><TextInput type="number" value={edit.display_order||0} onChange={e => setEdit({...edit, display_order: Number(e.target.value)||0})} /></Field>
 
             <div style={{ gridColumn: '1 / -1', borderTop: '1px solid #eee', paddingTop: '0.75rem', marginTop: '0.5rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>

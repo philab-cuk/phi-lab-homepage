@@ -6,9 +6,11 @@ export default function AdminDashboard() {
 
   const cards = []
   if (isEditor) {
+    cards.push({ to: '/admin/professor',     label: 'Professor 관리' })
     cards.push({ to: '/admin/members',      label: 'Members 관리' })
     cards.push({ to: '/admin/publications', label: 'Publications 관리' })
     cards.push({ to: '/admin/research',     label: 'Research 관리' })
+    cards.push({ to: '/admin/institutions', label: 'Institutions 관리' })
     cards.push({ to: '/admin/lectures',     label: 'Lectures 관리' })
     cards.push({ to: '/admin/users',        label: 'Users / Invites' })
   }

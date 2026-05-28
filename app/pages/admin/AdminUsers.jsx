@@ -103,9 +103,7 @@ export default function AdminUsers() {
             <Button onClick={() => setTab('users')} primary={tab === 'users'}>Users ({users.length})</Button>
             <Button onClick={() => setTab('invites')} primary={tab === 'invites'}>Invites ({invites.filter(i => !i.used_at && new Date(i.expires_at) > new Date()).length} 활성)</Button>
             {deleteModeToggle}
-            {tab === 'invites' && (
-              <Button primary onClick={() => setNewInvite({ intended_email: '', role: 'researcher' })}>+ 초대 발급</Button>
-            )}
+            <Button primary onClick={() => setNewInvite({ intended_email: '', role: 'researcher' })}>멤버 초대</Button>
           </>
         }
       />
@@ -192,7 +190,7 @@ export default function AdminUsers() {
       <Modal
         open={!!newInvite}
         onClose={() => setNewInvite(null)}
-        title="초대 발급"
+        title="멤버 초대"
         footer={
           <>
             <Button onClick={() => setNewInvite(null)}>취소</Button>

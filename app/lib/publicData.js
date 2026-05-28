@@ -36,6 +36,7 @@ function mapMember(m) {
     institution: m.institution,
     photo: resized(withBase(m.photo_url), 450, 600),
     photoLive: resized(withBase(m.photo_url), 450, 600),
+    joinedAt: m.joined_at,
     email: m.email,
     personalSite: m.personal_site,
     linkedin: m.linkedin,
@@ -56,8 +57,8 @@ export async function fetchMembers() {
     .from('members')
     .select('*')
     .order('status')
-    .order('created_at')      // 먼저 등록된 사람이 상단
-    .order('display_order')   // 동시 등록(시딩)은 LIVE 순서 유지
+    .order('joined_at', { ascending: true, nullsFirst: true }) // 먼저 합류한 사람이 상단, 합류일 미입력(창립 멤버)은 맨 앞
+    .order('display_order')   // 같은 합류일/미입력은 LIVE 순서 유지
   if (error) throw error
   const all = (data ?? []).map(mapMember)
   return {
@@ -92,7 +93,6 @@ function mapLecture(l) {
     year: l.year,
     term: l.term,
     level: l.level,
-    language: l.language,
     description: l.description,
     objectives: l.objectives ?? [],
     images: (l.images ?? []).map(withBase),
@@ -188,6 +188,17 @@ export async function fetchPublications() {
     .order('display_order')
   if (error) throw error
   return (data ?? []).map(mapPublication)
+}
+
+// 홈 "Collaborating Institutions" — 외부 협력 기관만(내부 PHI Lab 제외), 이름순.
+export async function fetchCollaboratingInstitutions() {
+  const { data, error } = await supabase
+    .from('institutions')
+    .select('name_en, name_ko, is_internal')
+    .eq('is_internal', false)
+    .order('name_en')
+  if (error) throw error
+  return (data ?? []).map((i) => i.name_en)
 }
 
 // ── Home 집계 ───────────────────────────────────────────────────────────────

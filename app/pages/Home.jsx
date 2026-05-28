@@ -1,24 +1,15 @@
 import { useLoaderData } from 'react-router'
-import { fetchHomeStats } from '../lib/publicData'
+import { fetchHomeStats, fetchCollaboratingInstitutions } from '../lib/publicData'
 
 export async function loader() {
-  return fetchHomeStats()
+  const [stats, collaborators] = await Promise.all([
+    fetchHomeStats(),
+    fetchCollaboratingInstitutions(),
+  ])
+  return { ...stats, collaborators }
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────
-
-const COLLABORATING_INSTITUTIONS = [
-  'Samsung Medical Center',
-  'Kakao Healthcare',
-  "Eunpyeong St. Mary's Hospital",
-  "Bucheon St. Mary's Hospital",
-  "Sookmyung Women's University",
-  'Chonnam National University',
-  'University of Cincinnati',
-  'Harvard University',
-  'Tufts University',
-  'Sungkyunkwan University (SKKU)',
-]
 
 // LIVE verbatim — philabcuk.org Home, do not paraphrase or expand.
 const HERO = {
@@ -46,10 +37,11 @@ const PILLARS = [
 ]
 
 export default function Home() {
-  const stats = useLoaderData()
-  const collaboratorsCount = COLLABORATING_INSTITUTIONS.length
-  const activeProjectsCount = stats.activeResearchCount
-  const publicationsCount = stats.publicationsCount
+  const data = useLoaderData()
+  const collaborators = data.collaborators
+  const collaboratorsCount = collaborators.length
+  const activeProjectsCount = data.activeResearchCount
+  const publicationsCount = data.publicationsCount
 
   return (
     <div className="mx-auto max-w-[820px] px-6 py-12">
@@ -94,7 +86,7 @@ export default function Home() {
       {/* ── Collaborating Institutions ────────────────────────────── */}
       <h2>Collaborating Institutions</h2>
       <ul className="list-none pl-0 m-0">
-        {COLLABORATING_INSTITUTIONS.map((inst) => (
+        {collaborators.map((inst) => (
           <li key={inst} className="my-1">
             {inst}
           </li>
