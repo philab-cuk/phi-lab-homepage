@@ -27,6 +27,9 @@ import AdminLectures from './pages/admin/AdminLectures.jsx'
 import AdminNews from './pages/admin/AdminNews.jsx'
 import AdminPosts from './pages/admin/AdminPosts.jsx'
 
+// vite base 와 라우터 basename 을 일치시킴 ('/phi-lab-homepage/' → '/phi-lab-homepage', '/' → '/')
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -67,7 +70,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-])
+], { basename })
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

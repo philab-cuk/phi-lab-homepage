@@ -18,8 +18,11 @@ const ROUTES = [
 const DIST = 'dist'
 const PORT = 4173
 
+// vite.config 의 base 와 동일 (CI 의 VITE_BASE). preview 서버도 이 경로로 서빙됨.
+const BASE = (process.env.VITE_BASE || '/').replace(/\/$/, '') // '' 또는 '/phi-lab-homepage'
+
 const server = await preview({ preview: { port: PORT, strictPort: true } })
-const base = `http://localhost:${PORT}`
+const origin = `http://localhost:${PORT}`
 
 // SPA 원본 셸을 fallback 용으로 백업 (prerender 가 index.html 을 덮기 전에).
 const indexPath = join(DIST, 'index.html')
@@ -35,7 +38,8 @@ const page = await browser.newPage()
 let failed = 0
 for (const route of ROUTES) {
   try {
-    await page.goto(base + route, { waitUntil: 'networkidle', timeout: 20000 })
+    const url = origin + BASE + route
+    await page.goto(url, { waitUntil: 'networkidle', timeout: 20000 })
     // 데이터 로딩 완료 대기: '로딩 중' 문구 사라지고 h1 존재.
     await page
       .waitForFunction(
