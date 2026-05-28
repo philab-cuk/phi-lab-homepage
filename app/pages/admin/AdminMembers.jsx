@@ -201,24 +201,21 @@ export default function AdminMembers() {
             <Field label="Department"><TextInput value={edit.department||''} onChange={e => setEdit({...edit, department: e.target.value || null})} /></Field>
             <Field label="Institution"><TextInput value={edit.institution||''} onChange={e => setEdit({...edit, institution: e.target.value || null})} /></Field>
             <div style={{ gridColumn: '1 / -1' }}>
-              <Field label="사진" hint="파일 업로드(jpg/png/webp, 10MB 이내) 또는 URL 직접 입력. 새 멤버는 ID 입력 후 업로드하세요.">
-                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+              <Field label="사진" hint="jpg/png/webp, 10MB 이내. 새 멤버는 이름 입력 후 업로드하세요.">
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                   {edit.photo_url && (
                     <img src={edit.photo_url} alt="" style={{ width: 54, height: 72, objectFit: 'cover', border: '1px solid #ccc', flexShrink: 0 }} />
                   )}
-                  <div style={{ flex: 1 }}>
-                    <TextInput value={edit.photo_url || ''} onChange={e => setEdit({ ...edit, photo_url: e.target.value || null })} placeholder="https://… 또는 아래 버튼으로 업로드" />
-                    <label style={{ display: 'inline-block', marginTop: '0.4rem', fontSize: '0.8rem', cursor: uploading ? 'default' : 'pointer', color: '#06c' }}>
-                      {uploading ? '업로드 중…' : '＋ 파일 업로드'}
-                      <input
-                        type="file"
-                        accept="image/jpeg,image/png,image/webp"
-                        style={{ display: 'none' }}
-                        disabled={uploading}
-                        onChange={(e) => { handlePhotoUpload(e.target.files?.[0]); e.target.value = '' }}
-                      />
-                    </label>
-                  </div>
+                  <label style={{ display: 'inline-block', fontSize: '0.85rem', cursor: uploading ? 'default' : 'pointer', color: '#fff', background: '#222', border: '1px solid #000', padding: '0.4rem 0.8rem' }}>
+                    {uploading ? '업로드 중…' : (edit.photo_url ? '사진 변경' : '＋ 사진 업로드')}
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      style={{ display: 'none' }}
+                      disabled={uploading}
+                      onChange={(e) => { handlePhotoUpload(e.target.files?.[0]); e.target.value = '' }}
+                    />
+                  </label>
                 </div>
               </Field>
             </div>
