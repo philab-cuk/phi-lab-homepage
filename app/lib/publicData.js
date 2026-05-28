@@ -13,11 +13,13 @@ function withBase(path) {
 }
 
 // Supabase Storage 이미지 변환: 원본(object URL)을 리사이즈 URL(render/image)로.
-// 원본은 Storage 에 그대로 두고, 페이지에선 width 지정 리사이즈본을 받는다.
-// storage URL 이 아니면(외부/로컬) 원본 그대로.
-function resized(url, width) {
+// 원본은 Storage 에 그대로 두고, 페이지에선 리사이즈본을 받는다.
+// width 만 주면 height 가 원본 유지돼 비율이 깨지므로, width+height 박스 +
+// resize=contain 으로 비율을 유지하며 축소한다. storage URL 이 아니면 원본 그대로.
+function resized(url, width, height) {
   if (!url || !url.includes('/storage/v1/object/public/')) return url
-  return url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/') + `?width=${width}&quality=80`
+  return url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/') +
+    `?width=${width}&height=${height}&resize=contain&quality=80`
 }
 
 // ── Members ────────────────────────────────────────────────────────────────
@@ -32,8 +34,8 @@ function mapMember(m) {
     year: m.student_number,
     department: m.department,
     institution: m.institution,
-    photo: resized(withBase(m.photo_url), 450),
-    photoLive: resized(withBase(m.photo_url), 450),
+    photo: resized(withBase(m.photo_url), 450, 600),
+    photoLive: resized(withBase(m.photo_url), 450, 600),
     email: m.email,
     personalSite: m.personal_site,
     linkedin: m.linkedin,
