@@ -44,7 +44,7 @@ export function useDeleteMode() {
       onClick={() => setDeleteMode(v => !v)}
       title={deleteMode ? '삭제 버튼이 활성화된 상태입니다. 다시 누르면 잠금.' : '삭제 버튼을 활성화하려면 클릭'}
     >
-      {deleteMode ? '삭제 모드 ON' : '삭제 모드 OFF'}
+      {deleteMode ? '삭제 모드 OFF' : '삭제 모드 ON'}
     </Button>
   )
   return [deleteMode, toggle]
