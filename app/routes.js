@@ -12,8 +12,9 @@ export default [
     route('lectures', 'pages/Lectures.jsx'),
   ]),
 
-  // admin 로그인 (가드 밖)
+  // admin 로그인 / 초대 수락 (가드 밖 — 로그인 전 접근)
   route('admin/login', 'pages/admin/AdminLogin.jsx'),
+  route('admin/accept', 'pages/admin/AdminAccept.jsx'),
 
   // admin — 클라이언트 렌더(CSR). 인증+whitelist 가드 → 레이아웃 → 페이지
   layout('components/ProtectedRoute.jsx', [

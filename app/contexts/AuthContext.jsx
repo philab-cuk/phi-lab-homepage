@@ -58,6 +58,13 @@ export function AuthProvider({ children }) {
   const signIn = (email, password) =>
     supabase.auth.signInWithPassword({ email, password })
 
+  // 구글 로그인. redirectTo 로 로그인 후 돌아올 URL 지정 (기본: 현재 URL).
+  const signInWithGoogle = (redirectTo) =>
+    supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: redirectTo || window.location.href },
+    })
+
   const signOut = () => supabase.auth.signOut()
 
   const value = {
@@ -71,6 +78,7 @@ export function AuthProvider({ children }) {
     isWhitelisted: !!profile,
     isEditor: profile?.role === 'admin' || profile?.role === 'professor',
     signIn,
+    signInWithGoogle,
     signOut,
   }
 

@@ -3,7 +3,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router'
 import { useAuth } from '../../contexts/AuthContext'
 
 export default function AdminLogin() {
-  const { isAuthenticated, signIn, loading } = useAuth()
+  const { isAuthenticated, signIn, signInWithGoogle, loading } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/admin'
@@ -67,11 +67,21 @@ export default function AdminLogin() {
           {submitting ? '로그인 중…' : '로그인'}
         </button>
       </form>
-      {/* TODO(cutover): Google OAuth provider 활성화 후 아래 버튼 노출
-        <button onClick={() => supabase.auth.signInWithOAuth({ provider: 'google' })}>
-          Google 로 로그인
-        </button>
-      */}
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '1.25rem 0', color: '#999', fontSize: '0.8rem' }}>
+        <span style={{ flex: 1, height: 1, background: '#ddd' }} /> 또는 <span style={{ flex: 1, height: 1, background: '#ddd' }} />
+      </div>
+
+      <button
+        type="button"
+        onClick={() => signInWithGoogle(window.location.origin + (location.state?.from?.pathname ? location.state.from.pathname : '/admin'))}
+        style={{ width: '100%', padding: '0.5rem 1rem', background: '#fff', color: '#222', border: '1px solid #ccc', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+      >
+        <span style={{ fontWeight: 'bold', color: '#4285F4' }}>G</span> Google 로 로그인
+      </button>
+      <p style={{ fontSize: '0.75rem', color: '#888', marginTop: '0.5rem' }}>
+        초대받은 이메일의 구글 계정으로 로그인하세요.
+      </p>
     </div>
   )
 }

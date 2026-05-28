@@ -74,6 +74,18 @@ export default function AdminUsers() {
     load()
   }
 
+  const [copiedToken, setCopiedToken] = useState(null)
+  async function copyInviteLink(row) {
+    const link = `${window.location.origin}/admin/accept?token=${row.token}`
+    try {
+      await navigator.clipboard.writeText(link)
+    } catch {
+      window.prompt('이 링크를 복사해 전달하세요:', link)
+    }
+    setCopiedToken(row.token)
+    setTimeout(() => setCopiedToken((t) => (t === row.token ? null : t)), 2000)
+  }
+
   return (
     <div>
       <PageHeader
@@ -127,9 +139,17 @@ export default function AdminUsers() {
               }
             },
             {
-              key: 'actions', label: '', render: r => (
-                <Button danger onClick={() => handleRevokeInvite(r)} disabled={!deleteMode || !!r.used_at || new Date(r.expires_at) <= new Date()}>회수</Button>
-              )
+              key: 'actions', label: '', render: r => {
+                const active = !r.used_at && new Date(r.expires_at) > new Date()
+                return (
+                  <div style={{ display: 'flex', gap: '0.25rem' }}>
+                    <Button onClick={() => copyInviteLink(r)} disabled={!active}>
+                      {copiedToken === r.token ? '복사됨' : '링크 복사'}
+                    </Button>
+                    <Button danger onClick={() => handleRevokeInvite(r)} disabled={!deleteMode || !active}>회수</Button>
+                  </div>
+                )
+              }
             },
           ]}
           rows={invites}
