@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { fetchByDoi, parseBibtex } from '../../lib/publications-import'
-import { PageHeader, Button, Table, Modal, Field, TextInput, TextArea, Select, ErrorBanner, useConfirm } from '../../components/admin/AdminUI'
+import { PageHeader, Button, Table, Modal, Field, TextInput, TextArea, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
 
 const CATEGORIES = [
   { value: 'article', label: 'Article' },
@@ -36,6 +36,7 @@ export default function AdminPublications() {
   const [importInput, setImportInput] = useState('')
   const [importing, setImporting] = useState(false)
   const [confirm, confirmUI] = useConfirm()
+  const [deleteMode, deleteModeToggle] = useDeleteMode()
 
   async function load() {
     setLoading(true); setError(null)
@@ -198,6 +199,7 @@ export default function AdminPublications() {
             ))}
             <Button onClick={() => { setImportMode('doi'); setImportInput('') }}>DOI import</Button>
             <Button onClick={() => { setImportMode('bibtex'); setImportInput('') }}>BibTeX import</Button>
+            {deleteModeToggle}
             <Button primary onClick={openNew}>+ 새 출판물</Button>
           </>
         }
@@ -219,7 +221,7 @@ export default function AdminPublications() {
               key: 'actions', label: '', render: r => (
                 <div style={{ display: 'flex', gap: '0.25rem' }}>
                   <Button onClick={() => openEdit(r)}>편집</Button>
-                  <Button danger onClick={() => del(r)}>삭제</Button>
+                  <Button danger disabled={!deleteMode} onClick={() => del(r)}>삭제</Button>
                 </div>
               )
             },

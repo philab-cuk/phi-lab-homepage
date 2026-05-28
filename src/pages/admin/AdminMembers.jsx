@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { PageHeader, Button, Table, Modal, Field, TextInput, TextArea, Select, ErrorBanner, useConfirm } from '../../components/admin/AdminUI'
+import { PageHeader, Button, Table, Modal, Field, TextInput, TextArea, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
 
 const STATUSES = ['current', 'alumni']
 
@@ -32,6 +32,7 @@ export default function AdminMembers() {
   const [edit, setEdit] = useState(null)
   const [isNew, setIsNew] = useState(false)
   const [confirm, confirmUI] = useConfirm()
+  const [deleteMode, deleteModeToggle] = useDeleteMode()
 
   async function load() {
     setLoading(true); setError(null)
@@ -94,6 +95,7 @@ export default function AdminMembers() {
           <>
             <Button onClick={() => setTab('current')} primary={tab==='current'}>Current</Button>
             <Button onClick={() => setTab('alumni')} primary={tab==='alumni'}>Alumni</Button>
+            {deleteModeToggle}
             <Button primary onClick={openNew}>+ 새 멤버</Button>
           </>
         }
@@ -112,7 +114,7 @@ export default function AdminMembers() {
               key: 'actions', label: '', render: r => (
                 <div style={{ display: 'flex', gap: '0.25rem' }}>
                   <Button onClick={() => openEdit(r)}>편집</Button>
-                  <Button danger onClick={() => del(r)}>삭제</Button>
+                  <Button danger disabled={!deleteMode} onClick={() => del(r)}>삭제</Button>
                 </div>
               )
             },

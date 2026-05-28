@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
-import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm } from '../../components/admin/AdminUI'
+import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
 import RichTextEditor from '../../components/admin/RichTextEditor'
 
 const STATUSES = ['draft', 'published']
@@ -23,6 +23,7 @@ export default function AdminPosts() {
   const [edit, setEdit] = useState(null)
   const [isNew, setIsNew] = useState(false)
   const [confirm, confirmUI] = useConfirm()
+  const [deleteMode, deleteModeToggle] = useDeleteMode()
 
   async function load() {
     setLoading(true); setError(null)
@@ -77,6 +78,7 @@ export default function AdminPosts() {
             <Button onClick={() => setStatusFilter('all')} primary={statusFilter==='all'}>All</Button>
             <Button onClick={() => setStatusFilter('published')} primary={statusFilter==='published'}>Published</Button>
             <Button onClick={() => setStatusFilter('draft')} primary={statusFilter==='draft'}>Draft</Button>
+            {deleteModeToggle}
             <Button primary onClick={() => { setIsNew(true); setEdit(emptyPost(user.email)) }}>+ 새 글</Button>
           </>
         }
@@ -96,7 +98,7 @@ export default function AdminPosts() {
               key: 'actions', label: '', render: r => (
                 <div style={{ display: 'flex', gap: '0.25rem' }}>
                   <Button onClick={() => { setIsNew(false); setEdit({ ...r }) }}>편집</Button>
-                  <Button danger onClick={() => del(r)}>삭제</Button>
+                  <Button danger disabled={!deleteMode} onClick={() => del(r)}>삭제</Button>
                 </div>
               )
             },

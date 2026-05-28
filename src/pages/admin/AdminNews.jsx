@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
-import { PageHeader, Button, Table, Modal, Field, TextInput, TextArea, Select, ErrorBanner, useConfirm } from '../../components/admin/AdminUI'
+import { PageHeader, Button, Table, Modal, Field, TextInput, TextArea, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
 
 const STATUSES = ['draft', 'published']
 
@@ -23,6 +23,7 @@ export default function AdminNews() {
   const [isNew, setIsNew] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [confirm, confirmUI] = useConfirm()
+  const [deleteMode, deleteModeToggle] = useDeleteMode()
   const fileInputRef = useRef(null)
 
   async function load() {
@@ -111,6 +112,7 @@ export default function AdminNews() {
             <Button onClick={() => setStatusFilter('all')} primary={statusFilter==='all'}>All</Button>
             <Button onClick={() => setStatusFilter('published')} primary={statusFilter==='published'}>Published</Button>
             <Button onClick={() => setStatusFilter('draft')} primary={statusFilter==='draft'}>Draft</Button>
+            {deleteModeToggle}
             <Button primary onClick={() => { setIsNew(true); setEdit(emptyNews(user.email)) }}>+ 새 뉴스</Button>
           </>
         }
@@ -131,7 +133,7 @@ export default function AdminNews() {
               key: 'actions', label: '', render: r => (
                 <div style={{ display: 'flex', gap: '0.25rem' }}>
                   <Button onClick={() => { setIsNew(false); setEdit({ ...r, images: r.images || [] }) }}>편집</Button>
-                  <Button danger onClick={() => del(r)}>삭제</Button>
+                  <Button danger disabled={!deleteMode} onClick={() => del(r)}>삭제</Button>
                 </div>
               )
             },

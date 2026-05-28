@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { PageHeader, Button, Table, Modal, Field, TextInput, TextArea, Select, ErrorBanner, useConfirm } from '../../components/admin/AdminUI'
+import { PageHeader, Button, Table, Modal, Field, TextInput, TextArea, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
 
 const TERMS  = ['Spring', 'Summer', 'Fall', 'Winter']
 const LEVELS = ['undergraduate', 'graduate']
@@ -24,6 +24,7 @@ export default function AdminLectures() {
   const [edit, setEdit] = useState(null)
   const [isNew, setIsNew] = useState(false)
   const [confirm, confirmUI] = useConfirm()
+  const [deleteMode, deleteModeToggle] = useDeleteMode()
 
   async function load() {
     setLoading(true); setError(null)
@@ -67,7 +68,7 @@ export default function AdminLectures() {
       <PageHeader
         title="Lectures"
         subtitle={`${rows.length}개`}
-        actions={<Button primary onClick={() => { setIsNew(true); setEdit(emptyLecture()) }}>+ 새 강의</Button>}
+        actions={<>{deleteModeToggle}<Button primary onClick={() => { setIsNew(true); setEdit(emptyLecture()) }}>+ 새 강의</Button></>}
       />
       <ErrorBanner error={error} />
       {loading ? <div>로딩 중…</div> : (
@@ -82,7 +83,7 @@ export default function AdminLectures() {
               key: 'actions', label: '', render: r => (
                 <div style={{ display: 'flex', gap: '0.25rem' }}>
                   <Button onClick={() => { setIsNew(false); setEdit({ ...r }) }}>편집</Button>
-                  <Button danger onClick={() => del(r)}>삭제</Button>
+                  <Button danger disabled={!deleteMode} onClick={() => del(r)}>삭제</Button>
                 </div>
               )
             },

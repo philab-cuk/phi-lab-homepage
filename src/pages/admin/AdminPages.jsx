@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
-import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm } from '../../components/admin/AdminUI'
+import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
 import RichTextEditor from '../../components/admin/RichTextEditor'
 
 const STATUSES = ['draft', 'published']
@@ -23,6 +23,7 @@ export default function AdminPages() {
   const [edit, setEdit] = useState(null)
   const [isNew, setIsNew] = useState(false)
   const [confirm, confirmUI] = useConfirm()
+  const [deleteMode, deleteModeToggle] = useDeleteMode()
 
   async function load() {
     setLoading(true); setError(null)
@@ -74,7 +75,7 @@ export default function AdminPages() {
       <PageHeader
         title="Pages"
         subtitle={`${rows.length}개 · 공개 페이지 본문 (about/home/professor 등)`}
-        actions={<Button primary onClick={() => { setIsNew(true); setEdit(emptyPage(user.email)) }}>+ 새 페이지</Button>}
+        actions={<>{deleteModeToggle}<Button primary onClick={() => { setIsNew(true); setEdit(emptyPage(user.email)) }}>+ 새 페이지</Button></>}
       />
       <ErrorBanner error={error} />
 
@@ -103,7 +104,7 @@ export default function AdminPages() {
               key: 'actions', label: '', render: r => (
                 <div style={{ display: 'flex', gap: '0.25rem' }}>
                   <Button onClick={() => { setIsNew(false); setEdit({ ...r }) }}>편집</Button>
-                  <Button danger onClick={() => del(r)}>삭제</Button>
+                  <Button danger disabled={!deleteMode} onClick={() => del(r)}>삭제</Button>
                 </div>
               )
             },

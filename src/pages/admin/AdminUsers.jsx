@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
-import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm } from '../../components/admin/AdminUI'
+import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
 
 const ROLES = ['admin', 'professor', 'researcher', 'alumni']
 
@@ -13,6 +13,7 @@ export default function AdminUsers() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [confirm, confirmUI] = useConfirm()
+  const [deleteMode, deleteModeToggle] = useDeleteMode()
 
   // 모달 상태
   const [editUser, setEditUser] = useState(null)
@@ -82,6 +83,7 @@ export default function AdminUsers() {
           <>
             <Button onClick={() => setTab('users')} primary={tab === 'users'}>Users ({users.length})</Button>
             <Button onClick={() => setTab('invites')} primary={tab === 'invites'}>Invites ({invites.filter(i => !i.used_at && new Date(i.expires_at) > new Date()).length} 활성)</Button>
+            {deleteModeToggle}
             {tab === 'invites' && (
               <Button primary onClick={() => setNewInvite({ intended_email: '', role: 'researcher' })}>+ 초대 발급</Button>
             )}
@@ -102,7 +104,7 @@ export default function AdminUsers() {
               key: 'actions', label: '', render: r => (
                 <div style={{ display: 'flex', gap: '0.25rem' }}>
                   <Button onClick={() => setEditUser({ ...r })}>편집</Button>
-                  <Button danger onClick={() => handleDeleteUser(r)} disabled={r.email === user.email}>삭제</Button>
+                  <Button danger onClick={() => handleDeleteUser(r)} disabled={!deleteMode || r.email === user.email}>삭제</Button>
                 </div>
               )
             },
@@ -126,7 +128,7 @@ export default function AdminUsers() {
             },
             {
               key: 'actions', label: '', render: r => (
-                <Button danger onClick={() => handleRevokeInvite(r)} disabled={!!r.used_at || new Date(r.expires_at) <= new Date()}>회수</Button>
+                <Button danger onClick={() => handleRevokeInvite(r)} disabled={!deleteMode || !!r.used_at || new Date(r.expires_at) <= new Date()}>회수</Button>
               )
             },
           ]}

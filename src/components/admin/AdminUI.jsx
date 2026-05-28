@@ -24,6 +24,7 @@ export function Button({ children, primary, danger, ...rest }) {
         padding: '0.4rem 0.8rem',
         background: bg, color, border: `1px solid ${border}`,
         cursor: rest.disabled ? 'not-allowed' : 'pointer',
+        opacity: rest.disabled ? 0.45 : 1,
         fontSize: '0.85rem',
         ...rest.style,
       }}
@@ -31,6 +32,22 @@ export function Button({ children, primary, danger, ...rest }) {
       {children}
     </button>
   )
+}
+
+// 행 단위 삭제/회수 같은 파괴적 액션을 '삭제 모드' 토글 뒤에 가두기 위한 훅.
+// 반환: [deleteMode 불리언, 헤더에 끼워넣을 토글 UI]
+export function useDeleteMode() {
+  const [deleteMode, setDeleteMode] = useState(false)
+  const toggle = (
+    <Button
+      danger={deleteMode}
+      onClick={() => setDeleteMode(v => !v)}
+      title={deleteMode ? '삭제 버튼이 활성화된 상태입니다. 다시 누르면 잠금.' : '삭제 버튼을 활성화하려면 클릭'}
+    >
+      {deleteMode ? '삭제 모드 ON' : '삭제 모드 OFF'}
+    </Button>
+  )
+  return [deleteMode, toggle]
 }
 
 export function Table({ columns, rows, empty = '데이터 없음' }) {
