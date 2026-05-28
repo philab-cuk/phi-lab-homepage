@@ -194,11 +194,11 @@ export async function fetchPublications() {
 export async function fetchCollaboratingInstitutions() {
   const { data, error } = await supabase
     .from('institutions')
-    .select('name_en, name_ko, is_internal')
+    .select('name_en, name_ko, is_internal, logo_url')
     .eq('is_internal', false)
     .order('name_en')
   if (error) throw error
-  return (data ?? []).map((i) => i.name_en)
+  return (data ?? []).map((i) => ({ name: i.name_en, logo: withBase(i.logo_url) }))
 }
 
 // ── Home 집계 ───────────────────────────────────────────────────────────────

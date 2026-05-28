@@ -26,12 +26,12 @@ function Header() {
 
   return (
     <header className="border-b border-rule">
-      <div className="mx-auto max-w-[960px] px-6 py-5 flex items-center justify-between">
-        <Link to="/" onClick={close} className="text-base font-semibold text-ink no-underline">
-          PHI Lab
+      <div className="mx-auto max-w-[960px] px-6 py-7 flex items-center justify-between">
+        <Link to="/" onClick={close} className="inline-flex items-center no-underline">
+          <img src={import.meta.env.BASE_URL + 'logo.jpg'} alt="PHI Lab" className="h-14 w-auto" />
         </Link>
 
-        <nav className="hidden md:flex gap-6 text-[15px]">
+        <nav className="hidden md:flex gap-6 text-[17px]">
           {NAV_ROUTES.map(({ to, label }) => (
             <NavLink
               key={to}
@@ -58,7 +58,7 @@ function Header() {
       </div>
 
       {mobileOpen && (
-        <nav className="md:hidden border-t border-rule px-6 py-4 flex flex-col gap-3 text-[15px]">
+        <nav className="md:hidden border-t border-rule px-6 py-4 flex flex-col gap-3 text-[17px]">
           {NAV_ROUTES.map(({ to, label }) => (
             <NavLink
               key={to}

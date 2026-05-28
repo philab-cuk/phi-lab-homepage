@@ -16,6 +16,26 @@ export default function AdminInstitutions() {
   const [saving, setSaving] = useState(false)
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
+  const [pendingFile, setPendingFile] = useState(null) // 선택만 하고 저장 시 업로드
+  const [previewUrl, setPreviewUrl] = useState(null)
+
+  function resetLogo() { setPendingFile(null); setPreviewUrl(null) }
+  function onSelectFile(file) {
+    if (!file) return
+    const ext = (file.name.split('.').pop() || '').toLowerCase()
+    if (!['jpg', 'jpeg', 'png', 'webp', 'svg'].includes(ext)) { setError(new Error('jpg/png/webp/svg 만 허용')); return }
+    if (file.size > 5 * 1024 * 1024) { setError(new Error('5MB 초과')); return }
+    setError(null); setPendingFile(file); setPreviewUrl(URL.createObjectURL(file))
+  }
+  async function uploadLogo(id) {
+    const ext = (pendingFile.name.split('.').pop() || 'png').toLowerCase()
+    const path = `institutions/${id}.${ext}`
+    const ctype = ext === 'svg' ? 'image/svg+xml' : pendingFile.type
+    const { error: upErr } = await supabase.storage.from('page-images').upload(path, pendingFile, { contentType: ctype, upsert: true })
+    if (upErr) throw upErr
+    const { data } = supabase.storage.from('page-images').getPublicUrl(path)
+    return `${data.publicUrl}?v=${Date.now()}`
+  }
 
   async function load() {
     setLoading(true); setError(null)
@@ -31,21 +51,25 @@ export default function AdminInstitutions() {
   }
   useEffect(() => { load() }, [])
 
-  function openNew() { setIsNew(true); setEdit({ name_en: '', name_ko: null, is_internal: false }) }
-  function openEdit(row) { setIsNew(false); setEdit({ id: row.id, name_en: row.name_en, name_ko: row.name_ko, is_internal: row.is_internal }) }
+  function openNew() { resetLogo(); setIsNew(true); setEdit({ id: crypto.randomUUID(), name_en: '', name_ko: null, is_internal: false, logo_url: null }) }
+  function openEdit(row) { resetLogo(); setIsNew(false); setEdit({ id: row.id, name_en: row.name_en, name_ko: row.name_ko, is_internal: row.is_internal, logo_url: row.logo_url || null }) }
+  function closeEdit() { resetLogo(); setEdit(null) }
 
   async function save() {
     setError(null); setSaving(true)
     try {
       const name_en = (edit.name_en || '').trim()
       if (!name_en) throw new Error('기관명(영문)은 필수입니다')
-      const payload = { name_en, name_ko: edit.name_ko?.trim() || null, is_internal: !!edit.is_internal }
+      const payload = {
+        name_en, name_ko: edit.name_ko?.trim() || null, is_internal: !!edit.is_internal,
+        logo_url: pendingFile ? await uploadLogo(edit.id) : (edit.logo_url || null),
+      }
       const op = isNew
-        ? supabase.from('institutions').insert(payload)
+        ? supabase.from('institutions').insert({ ...payload, id: edit.id })
         : supabase.from('institutions').update(payload).eq('id', edit.id)
       const { error } = await op
       if (error) throw error
-      setEdit(null); load()
+      closeEdit(); load()
     } catch (e) {
       setError(e?.code === '23505' ? new Error('같은 이름의 기관이 이미 있습니다') : e)
     } finally { setSaving(false) }
@@ -74,6 +98,7 @@ export default function AdminInstitutions() {
         <Table
           empty="기관이 없습니다"
           columns={[
+            { key: 'logo', label: '로고', render: r => r.logo_url ? <img src={r.logo_url} alt="" style={{ height: 28, width: 'auto', maxWidth: 80, objectFit: 'contain' }} /> : '' },
             { key: 'name_en', label: '기관명 (영문)' },
             { key: 'name_ko', label: '기관명 (한글)', render: r => r.name_ko || '' },
             { key: 'is_internal', label: '구분', render: r => r.is_internal ? '내부' : '외부' },
@@ -93,11 +118,11 @@ export default function AdminInstitutions() {
 
       <Modal
         open={!!edit}
-        onClose={() => setEdit(null)}
+        onClose={closeEdit}
         title={edit ? (isNew ? '새 기관' : `Edit: ${edit.name_en}`) : ''}
         footer={
           <>
-            <Button onClick={() => setEdit(null)} disabled={saving}>취소</Button>
+            <Button onClick={closeEdit} disabled={saving}>취소</Button>
             <Button primary onClick={save} disabled={saving}>{saving ? '저장 중…' : '저장'}</Button>
           </>
         }
@@ -116,6 +141,17 @@ export default function AdminInstitutions() {
                 options={INTERNAL_OPTS}
                 onChange={e => setEdit({ ...edit, is_internal: e.target.value === 'true' })}
               />
+            </Field>
+            <Field label="로고" hint="jpg/png/webp/svg, 5MB 이내. 저장을 눌러야 업로드됩니다.">
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                {(previewUrl || edit.logo_url) && <img src={previewUrl || edit.logo_url} alt="" style={{ height: 40, width: 'auto', maxWidth: 120, objectFit: 'contain', border: '1px solid #eee' }} />}
+                <label style={{ display: 'inline-block', fontSize: '0.85rem', cursor: 'pointer', color: '#fff', background: '#222', border: '1px solid #000', padding: '0.4rem 0.8rem' }}>
+                  {(previewUrl || edit.logo_url) ? '로고 변경' : '＋ 로고 선택'}
+                  <input type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml" style={{ display: 'none' }} onChange={e => { onSelectFile(e.target.files?.[0]); e.target.value = '' }} />
+                </label>
+                {edit.logo_url && !pendingFile && <Button onClick={() => setEdit({ ...edit, logo_url: null })}>로고 제거</Button>}
+                {pendingFile && <span style={{ fontSize: '0.75rem', color: '#888' }}>저장 시 업로드 예정</span>}
+              </div>
             </Field>
           </div>
         )}
