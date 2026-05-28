@@ -18,9 +18,17 @@ function emptyMember() {
 function arrJoin(a) { return Array.isArray(a) ? a.join(', ') : '' }
 function arrSplit(s) { return s ? s.split(',').map(x => x.trim()).filter(Boolean) : null }
 
-// 영문 소문자 slug (이메일 앞부분 또는 이름 기반)
+// 영문 소문자 slug (영문/숫자만)
 function slugify(s) {
   return (s || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]/g, '').slice(0, 40)
+}
+
+// 새 멤버 id 자동 생성 base: 년월일 + 영문이름 (이름이 비영문이면 날짜만)
+function autoIdBase(name) {
+  const d = new Date()
+  const ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`
+  const slug = slugify(name)
+  return slug ? `${ymd}-${slug}` : ymd
 }
 
 function jsonText(v) { return v ? JSON.stringify(v, null, 2) : '' }
@@ -100,14 +108,14 @@ export default function AdminMembers() {
         throw new Error('name / role / status 필수')
       }
 
-      // 새 멤버는 id(slug) 자동 생성: 연결 계정 이메일 앞부분 → 없으면 이름, 중복 시 숫자
+      // 새 멤버는 id(slug) 자동 생성: 년월일-영문이름, 중복 시 숫자
       if (isNew) {
-        const base = slugify(edit.email ? edit.email.split('@')[0] : edit.name) || 'member'
+        const base = autoIdBase(edit.name)
         let id = base
         for (let i = 2; i < 100; i++) {
           const { data } = await supabase.from('members').select('id').eq('id', id).maybeSingle()
           if (!data) break
-          id = `${base}${i}`
+          id = `${base}-${i}`
         }
         payload.id = id
       }
@@ -181,13 +189,8 @@ export default function AdminMembers() {
       >
         {edit && (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
-            <Field label="ID (slug)" hint={isNew ? '이름/연결계정 기반 자동 생성. 중복 시 숫자가 붙습니다.' : '변경 불가.'}>
-              <TextInput
-                value={isNew
-                  ? (slugify(edit.email ? edit.email.split('@')[0] : edit.name) || '(이름 입력 시 생성)')
-                  : edit.id}
-                disabled
-              />
+            <Field label="ID (slug)" hint={isNew ? '년월일-영문이름 자동 생성. 중복 시 숫자가 붙습니다.' : '변경 불가.'}>
+              <TextInput value={isNew ? autoIdBase(edit.name) : edit.id} disabled />
             </Field>
             <Field label="Status">
               <Select value={edit.status} options={STATUSES} onChange={e => setEdit({ ...edit, status: e.target.value })} />
