@@ -10,7 +10,6 @@ export default function AdminDashboard() {
     cards.push({ to: '/admin/publications', label: 'Publications 관리' })
     cards.push({ to: '/admin/research',     label: 'Research 관리' })
     cards.push({ to: '/admin/lectures',     label: 'Lectures 관리' })
-    cards.push({ to: '/admin/pages',        label: 'Pages 본문 편집' })
     cards.push({ to: '/admin/users',        label: 'Users / Invites' })
   }
   cards.push({ to: '/admin/news',  label: 'News 작성' })

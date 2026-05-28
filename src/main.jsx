@@ -24,7 +24,6 @@ import AdminMembers from './pages/admin/AdminMembers.jsx'
 import AdminPublications from './pages/admin/AdminPublications.jsx'
 import AdminResearch from './pages/admin/AdminResearch.jsx'
 import AdminLectures from './pages/admin/AdminLectures.jsx'
-import AdminPages from './pages/admin/AdminPages.jsx'
 import AdminNews from './pages/admin/AdminNews.jsx'
 import AdminPosts from './pages/admin/AdminPosts.jsx'
 
@@ -62,7 +61,6 @@ const router = createBrowserRouter([
               { path: 'publications', element: <AdminPublications /> },
               { path: 'research', element: <AdminResearch /> },
               { path: 'lectures', element: <AdminLectures /> },
-              { path: 'pages', element: <AdminPages /> },
             ],
           },
         ],

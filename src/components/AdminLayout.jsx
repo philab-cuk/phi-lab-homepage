@@ -20,7 +20,6 @@ function buildMenu(role) {
     items.push({ to: '/admin/publications', label: 'Publications' })
     items.push({ to: '/admin/research',     label: 'Research' })
     items.push({ to: '/admin/lectures',     label: 'Lectures' })
-    items.push({ to: '/admin/pages',        label: 'Pages' })
   }
   if (whitelisted) {
     items.push({ to: '/admin/news',  label: 'News' })
