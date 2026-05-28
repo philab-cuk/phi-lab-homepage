@@ -3,6 +3,15 @@ import { supabase } from './supabase'
 // DB(snake_case) → 기존 공개 페이지가 기대하는 JSON(camelCase) 형태로 변환.
 // 표시 순서는 display_order asc 로 LIVE DOM 순서 보존.
 
+// 사이트 내부 절대경로(/photos/..)에 vite base 를 붙인다. 외부 URL(http..)은
+// 그대로. base 가 '/' 면 변화 없음, '/phi-lab-homepage/' 면 prefix.
+function withBase(path) {
+  if (!path) return path
+  if (/^https?:\/\//.test(path) || path.startsWith('data:')) return path
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+  return base + (path.startsWith('/') ? path : '/' + path)
+}
+
 // ── Members ────────────────────────────────────────────────────────────────
 function mapMember(m) {
   return {
@@ -15,8 +24,8 @@ function mapMember(m) {
     year: m.student_number,
     department: m.department,
     institution: m.institution,
-    photo: m.photo_url,
-    photoLive: m.photo_url,
+    photo: withBase(m.photo_url),
+    photoLive: withBase(m.photo_url),
     email: m.email,
     personalSite: m.personal_site,
     linkedin: m.linkedin,
@@ -75,7 +84,7 @@ function mapLecture(l) {
     language: l.language,
     description: l.description,
     objectives: l.objectives ?? [],
-    images: l.images ?? [],
+    images: (l.images ?? []).map(withBase),
     tags: l.tags ?? [],
   }
 }
