@@ -57,15 +57,17 @@ export default function AdminLayout() {
             PHI Lab Admin
           </Link>
         </div>
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+        <nav style={{ display: 'flex', flexDirection: 'column' }}>
           {sections.map((sec) => (
-            <div key={sec.title} style={{ marginBottom: '0.75rem' }}>
-              <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#777', padding: '0.25rem 0.6rem' }}>
+            <div key={sec.title} style={{ marginBottom: '1.5rem' }}>
+              <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#777', padding: '0.25rem 0.6rem', marginBottom: '0.25rem' }}>
                 {sec.title}
               </div>
-              {sec.items.map((m) => (
-                <NavMenuLink key={m.to} to={m.to} label={m.label} end={m.end} />
-              ))}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                {sec.items.map((m) => (
+                  <NavMenuLink key={m.to} to={m.to} label={m.label} end={m.end} />
+                ))}
+              </div>
             </div>
           ))}
         </nav>
@@ -97,10 +99,10 @@ function NavMenuLink({ to, label, end }) {
       style={({ isActive }) => ({
         color: isActive ? '#fff' : '#bbb',
         background: isActive ? '#333' : 'transparent',
-        padding: '0.4rem 0.6rem',
+        padding: '0.6rem 0.7rem',
         textDecoration: 'none',
         fontSize: '0.9rem',
-        borderRadius: 2,
+        borderRadius: 3,
       })}
     >
       {label}

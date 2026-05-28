@@ -34,6 +34,7 @@ export default function AdminMembers() {
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
   const [uploading, setUploading] = useState(false)
+  const [accounts, setAccounts] = useState([]) // admin_users 목록 (멤버↔계정 매핑용)
 
   async function handlePhotoUpload(file) {
     if (!file) return
@@ -58,9 +59,13 @@ export default function AdminMembers() {
 
   async function load() {
     setLoading(true); setError(null)
-    const { data, error } = await supabase.from('members').select('*').order('status').order('created_at').order('display_order')
+    const [{ data, error }, { data: accs }] = await Promise.all([
+      supabase.from('members').select('*').order('status').order('created_at').order('display_order'),
+      supabase.from('admin_users').select('email, role, display_name').order('added_at'),
+    ])
     if (error) setError(error)
     setRows(data || [])
+    setAccounts(accs || [])
     setLoading(false)
   }
   useEffect(() => { load() }, [])
@@ -194,7 +199,18 @@ export default function AdminMembers() {
                 </div>
               </Field>
             </div>
-            <Field label="Email"><TextInput value={edit.email||''} onChange={e => setEdit({...edit, email: e.target.value || null})} /></Field>
+            <Field label="연결 계정 (Email)" hint="이 멤버를 쓸 user 계정. 연결하면 그 user 가 'My Profile' 에서 이 정보를 보고 직접 수정합니다.">
+              <Select
+                value={edit.email || ''}
+                options={[
+                  { value: '', label: '(연결 안 함)' },
+                  ...accounts.map(a => ({ value: a.email, label: `${a.email}${a.display_name ? ` · ${a.display_name}` : ''} (${a.role})` })),
+                  ...(edit.email && !accounts.some(a => a.email === edit.email)
+                    ? [{ value: edit.email, label: `${edit.email} (목록 외)` }] : []),
+                ]}
+                onChange={e => setEdit({ ...edit, email: e.target.value || null })}
+              />
+            </Field>
             <Field label="Personal site"><TextInput value={edit.personal_site||''} onChange={e => setEdit({...edit, personal_site: e.target.value || null})} /></Field>
             <Field label="LinkedIn"><TextInput value={edit.linkedin||''} onChange={e => setEdit({...edit, linkedin: e.target.value || null})} /></Field>
             <Field label="Google Scholar"><TextInput value={edit.google_scholar||''} onChange={e => setEdit({...edit, google_scholar: e.target.value || null})} /></Field>
