@@ -8,31 +8,41 @@ const ROLE_LABEL = {
   alumni: 'Alumni',
 }
 
-// role -> 메뉴 항목 매핑
+// role -> 섹션별 메뉴. 공통(whitelist 전원) / Admin(editor 전용)
 function buildMenu(role) {
   const editor = role === 'admin' || role === 'professor'
-  const whitelisted = !!role
-  const items = []
+
+  const sections = [
+    {
+      title: '공통',
+      items: [
+        { to: '/admin', label: 'Dashboard', end: true },
+        { to: '/admin/my-profile', label: 'My Profile' },
+        { to: '/admin/news', label: 'News' },
+        { to: '/admin/posts', label: 'Posts' },
+      ],
+    },
+  ]
 
   if (editor) {
-    items.push({ to: '/admin/users',        label: 'Users / Invites' })
-    items.push({ to: '/admin/members',      label: 'Members' })
-    items.push({ to: '/admin/publications', label: 'Publications' })
-    items.push({ to: '/admin/research',     label: 'Research' })
-    items.push({ to: '/admin/lectures',     label: 'Lectures' })
+    sections.push({
+      title: 'Admin',
+      items: [
+        { to: '/admin/users', label: 'Users / Invites' },
+        { to: '/admin/members', label: 'Members' },
+        { to: '/admin/publications', label: 'Publications' },
+        { to: '/admin/research', label: 'Research' },
+        { to: '/admin/lectures', label: 'Lectures' },
+      ],
+    })
   }
-  if (whitelisted) {
-    items.push({ to: '/admin/my-profile', label: '내 프로필' })
-    items.push({ to: '/admin/news',  label: 'News' })
-    items.push({ to: '/admin/posts', label: 'Posts' })
-  }
-  return items
+  return sections
 }
 
 export default function AdminLayout() {
   const { profile, role, signOut } = useAuth()
   const navigate = useNavigate()
-  const menu = buildMenu(role)
+  const sections = buildMenu(role)
 
   async function handleSignOut() {
     await signOut()
@@ -48,9 +58,15 @@ export default function AdminLayout() {
           </Link>
         </div>
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-          <NavMenuLink to="/admin" end label="Dashboard" />
-          {menu.map((m) => (
-            <NavMenuLink key={m.to} to={m.to} label={m.label} />
+          {sections.map((sec) => (
+            <div key={sec.title} style={{ marginBottom: '0.75rem' }}>
+              <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#777', padding: '0.25rem 0.6rem' }}>
+                {sec.title}
+              </div>
+              {sec.items.map((m) => (
+                <NavMenuLink key={m.to} to={m.to} label={m.label} end={m.end} />
+              ))}
+            </div>
           ))}
         </nav>
         <div style={{ marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid #444', fontSize: '0.875rem' }}>
