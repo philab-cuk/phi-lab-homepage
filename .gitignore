@@ -35,3 +35,7 @@ dist-ssr
 # react-router framework build
 build/
 .react-router/
+
+# supabase CLI local state
+supabase/.branches/
+supabase/.temp/

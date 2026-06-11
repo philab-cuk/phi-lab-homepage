@@ -12,12 +12,14 @@ function withBase(path) {
   return base + (path.startsWith('/') ? path : '/' + path)
 }
 
-// Supabase Storage 이미지 변환: 원본(object URL)을 리사이즈 URL(render/image)로.
-// 원본은 Storage 에 그대로 두고, 페이지에선 리사이즈본을 받는다.
-// width 만 주면 height 가 원본 유지돼 비율이 깨지므로, width+height 박스 +
-// resize=contain 으로 비율을 유지하며 축소한다. storage URL 이 아니면 원본 그대로.
+// Supabase Storage 이미지 변환(render/image)은 Pro 플랜 전용 기능이다.
+// Free 플랜(및 로컬 스택)에서는 변환 엔드포인트가 404 → 원본 object URL 그대로 서빙.
+// Pro 로 올리면 VITE_SUPABASE_IMAGE_TRANSFORM=true 로 켜서 리사이즈본을 받게 한다.
+const IMAGE_TRANSFORM = import.meta.env.VITE_SUPABASE_IMAGE_TRANSFORM === 'true'
+
 function resized(url, width, height) {
   if (!url || !url.includes('/storage/v1/object/public/')) return url
+  if (!IMAGE_TRANSFORM) return url // 변환 불가 플랜 → 원본 그대로
   return url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/') +
     `?width=${width}&height=${height}&resize=contain&quality=80`
 }
