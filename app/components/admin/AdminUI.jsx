@@ -50,7 +50,9 @@ export function useDeleteMode() {
   return [deleteMode, toggle]
 }
 
-export function Table({ columns, rows, empty = '데이터 없음' }) {
+// onRowClick 을 주면 행 전체가 클릭 영역이 된다. 행 안의 버튼/링크/입력 클릭은
+// 행 클릭으로 번지지 않게 무시한다(편집·삭제 버튼과 충돌 방지).
+export function Table({ columns, rows, empty = '데이터 없음', onRowClick }) {
   if (!rows?.length) return <div style={{ color: '#777', padding: '1rem 0' }}>{empty}</div>
   return (
     <div style={{ overflow: 'auto' }}>
@@ -66,7 +68,14 @@ export function Table({ columns, rows, empty = '데이터 없음' }) {
         </thead>
         <tbody>
           {rows.map((r, i) => (
-            <tr key={r.id ?? r.email ?? r.token ?? i} style={{ borderBottom: '1px solid #eee', background: i % 2 ? '#fafafa' : '#fff' }}>
+            <tr
+              key={r.id ?? r.email ?? r.token ?? i}
+              style={{ borderBottom: '1px solid #eee', background: i % 2 ? '#fafafa' : '#fff', cursor: onRowClick ? 'pointer' : undefined }}
+              onClick={onRowClick ? (e) => {
+                if (e.target.closest('button, a, input, select, textarea, label')) return
+                onRowClick(r)
+              } : undefined}
+            >
               {columns.map(c => (
                 <td key={c.key} style={{ padding: '0.5rem', verticalAlign: 'top' }}>
                   {c.render ? c.render(r) : r[c.key] ?? ''}

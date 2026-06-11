@@ -2,6 +2,17 @@ import { useEffect, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { PageHeader, Button, Table, Modal, Field, TextInput, TextArea, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
+import NewsCard from '../../components/NewsCard'
+
+// DB 행(snake_case, images=[{url,path}]) → 공개 카드 입력(camelCase, url 배열)
+function toCardItem(r) {
+  return {
+    title: r.title,
+    bodyShort: r.body_short,
+    publishedAt: r.published_at,
+    images: (r.images || []).map((i) => (typeof i === 'string' ? i : i?.url)).filter(Boolean),
+  }
+}
 
 const STATUSES = ['draft', 'published']
 
@@ -21,6 +32,7 @@ export default function AdminNews() {
   const [error, setError] = useState(null)
   const [edit, setEdit] = useState(null)
   const [isNew, setIsNew] = useState(false)
+  const [preview, setPreview] = useState(null) // 클릭한 행을 공개 카드 모양으로 미리보기
   const [uploading, setUploading] = useState(false)
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
@@ -139,6 +151,7 @@ export default function AdminNews() {
             },
           ]}
           rows={rows}
+          onRowClick={(r) => setPreview(r)}
         />
       )}
 
@@ -179,6 +192,25 @@ export default function AdminNews() {
               <Field label="Status"><Select value={edit.status} options={STATUSES} onChange={e => setEdit({...edit, status: e.target.value})} /></Field>
               <Field label="Author email" hint="본인 이메일이 아니면 RLS 로 차단됩니다."><TextInput value={edit.author_email} onChange={e => setEdit({...edit, author_email: e.target.value})} disabled={!isEditor} /></Field>
             </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* 미리보기 — 공개 News 페이지와 같은 NewsCard 로 렌더 */}
+      <Modal
+        open={!!preview}
+        onClose={() => setPreview(null)}
+        title="미리보기"
+        footer={<Button onClick={() => setPreview(null)}>닫기</Button>}
+      >
+        {preview && (
+          <div style={{ maxWidth: 640 }}>
+            {preview.status === 'draft' && (
+              <div style={{ background: '#fff8e1', border: '1px solid #e6c656', color: '#7a5c00', padding: '0.4rem 0.6rem', fontSize: '0.8rem', marginBottom: '0.5rem' }}>
+                draft — 공개 페이지에는 아직 안 보입니다. 발행(published)하면 이 모양으로 나옵니다.
+              </div>
+            )}
+            <NewsCard item={toCardItem(preview)} />
           </div>
         )}
       </Modal>
