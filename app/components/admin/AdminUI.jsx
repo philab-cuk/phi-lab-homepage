@@ -91,17 +91,23 @@ export function Table({ columns, rows, empty = '데이터 없음', onRowClick })
 
 // width: 모달 본문 너비(px). 글쓰기처럼 넓어야 편한 모달은 크게 지정 —
 // 화면이 좁으면 94vw 로 자동 축소된다.
-export function Modal({ open, onClose, title, children, footer, width }) {
+// headerActions: 헤더 우측에 둘 버튼들. 주면 × 닫기 대신 이게 들어가고,
+//   헤더가 sticky 라 본문이 길어도 항상 보인다(미리보기의 편집/닫기 용).
+// fixedHeight: true 면 본문 길이와 무관하게 항상 86vh 고정(News/Posts 모달
+//   처럼 보기/편집 전환·짧은 글에서도 크기가 일관되게).
+export function Modal({ open, onClose, title, children, footer, width, headerActions, fixedHeight }) {
   if (!open) return null
   return (
     <div
       onClick={onClose}
       style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 100, paddingTop: '3rem' }}
     >
-      <div onClick={(e) => e.stopPropagation()} style={{ background: '#fff', width: width ? `min(${width}px, 94vw)` : undefined, minWidth: 480, maxWidth: '94vw', maxHeight: '86vh', overflow: 'auto', padding: '1.25rem', borderRadius: 4 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', borderBottom: '1px solid #eee', paddingBottom: '0.5rem', marginBottom: '0.75rem' }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ background: '#fff', width: width ? `min(${width}px, 94vw)` : undefined, minWidth: 480, maxWidth: '94vw', height: fixedHeight ? '86vh' : undefined, maxHeight: '86vh', overflow: 'auto', padding: '1.25rem', borderRadius: 4 }}>
+        <div style={{ position: 'sticky', top: '-1.25rem', background: '#fff', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', borderBottom: '1px solid #eee', margin: '-1.25rem -1.25rem 0.75rem', padding: '1.1rem 1.25rem 0.5rem' }}>
           <h2 style={{ margin: 0, fontSize: '1.1rem' }}>{title}</h2>
-          <button onClick={onClose} style={{ background: 'transparent', border: 'none', fontSize: '1.2rem', cursor: 'pointer', color: '#666' }}>×</button>
+          {headerActions
+            ? <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>{headerActions}</div>
+            : <button onClick={onClose} style={{ background: 'transparent', border: 'none', fontSize: '1.2rem', cursor: 'pointer', color: '#666' }}>×</button>}
         </div>
         <div>{children}</div>
         {footer && <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid #eee' }}>{footer}</div>}

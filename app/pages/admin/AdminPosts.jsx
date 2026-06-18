@@ -26,9 +26,17 @@ export default function AdminPosts() {
   const [error, setError] = useState(null)
   const [edit, setEdit] = useState(null)
   const [isNew, setIsNew] = useState(false)
-  const [preview, setPreview] = useState(null) // 행 클릭 → 공개 상세와 같은 모양 미리보기
+  const [editing, setEditing] = useState(false) // 한 모달 안에서 보기(false)/편집(true) 전환
+  const [original, setOriginal] = useState(null) // 편집 취소 시 되돌릴 원본 스냅샷
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
+
+  function openView(row) { setIsNew(false); setEditing(false); setOriginal({ ...row }); setEdit({ ...row }) }
+  function openEdit(row) { setIsNew(false); setEditing(true); setOriginal({ ...row }); setEdit({ ...row }) }
+  function openNew() { setIsNew(true); setEditing(true); setOriginal(null); setEdit(emptyPost(user.email)) }
+  function closeModal() { setEdit(null); setEditing(false) }
+  // 편집 취소: 새 글이면 닫고, 기존 글이면 미저장 변경 버리고 보기 모드로 복귀
+  function cancelEdit() { if (isNew) closeModal(); else { setEdit(original); setEditing(false) } }
 
   async function load() {
     setLoading(true); setError(null)
@@ -58,7 +66,7 @@ export default function AdminPosts() {
         : supabase.from('posts').update(payload).eq('id', edit.id)
       const { error } = await op
       if (error) throw error
-      setEdit(null); load()
+      closeModal(); load()
     } catch (e) { setError(e) }
   }
 
@@ -84,7 +92,7 @@ export default function AdminPosts() {
             <Button onClick={() => setStatusFilter('published')} primary={statusFilter==='published'}>Published</Button>
             <Button onClick={() => setStatusFilter('draft')} primary={statusFilter==='draft'}>Draft</Button>
             {deleteModeToggle}
-            <Button primary onClick={() => { setIsNew(true); setEdit(emptyPost(user.email)) }}>+ 새 글</Button>
+            <Button primary onClick={openNew}>+ 새 글</Button>
           </>
         }
       />
@@ -102,26 +110,36 @@ export default function AdminPosts() {
             {
               key: 'actions', label: '', render: r => (
                 <div style={{ display: 'flex', gap: '0.25rem' }}>
-                  <Button onClick={() => { setIsNew(false); setEdit({ ...r }) }}>편집</Button>
+                  <Button onClick={() => openEdit(r)}>편집</Button>
                   <Button danger disabled={!deleteMode} onClick={() => del(r)}>삭제</Button>
                 </div>
               )
             },
           ]}
           rows={rows}
-          onRowClick={(r) => setPreview(r)}
+          onRowClick={openView}
         />
       )}
 
+      {/* 보기/편집 통합 모달 — 기본은 보기(메타+본문 렌더), '편집하기' 누르면 편집 폼 */}
       <Modal
         open={!!edit}
-        onClose={() => setEdit(null)}
+        onClose={closeModal}
         width={920}
-        title={edit ? (isNew ? '새 글' : `Edit: ${edit.id}`) : ''}
-        footer={<><Button onClick={() => setEdit(null)}>취소</Button><Button primary onClick={save}>저장</Button></>}
+        fixedHeight
+        title={editing ? (isNew ? '새 글' : `Edit: ${edit?.id}`) : '미리보기'}
+        headerActions={editing
+          ? <><Button primary onClick={save}>저장</Button><Button onClick={cancelEdit}>취소</Button></>
+          : <><Button primary onClick={() => setEditing(true)}>편집하기</Button><Button onClick={closeModal}>닫기</Button></>}
       >
-        {edit && (
+        {edit && (editing ? (
           <div>
+            {/* 발행 설정(메타) — 본문이 아니라 publishing 정보라 제목 위에 모은다. */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem', background: '#f7f7f7', padding: '0.6rem 0.75rem', borderRadius: 4, marginBottom: '0.9rem' }}>
+              <Field label="Status"><Select value={edit.status} options={STATUSES} onChange={e => setEdit({...edit, status: e.target.value})} /></Field>
+              <Field label="Author email" hint="본인 이메일이 아니면 RLS 차단"><TextInput value={edit.author_email} onChange={e => setEdit({...edit, author_email: e.target.value})} disabled={!isEditor} /></Field>
+            </div>
+
             <Field label="Title"><TextInput value={edit.title||''} onChange={e => setEdit({...edit, title: e.target.value})} /></Field>
             {/* Body 는 Field(label 래퍼)를 쓰면 안 됨 — label 이 contenteditable 의
                 클릭 포커스를 가로채 타이핑이 안 된다(Vimium 등 키보드 확장 발동). */}
@@ -136,34 +154,24 @@ export default function AdminPosts() {
                 {"'/' 를 입력하면 블록 메뉴(제목·목록·이미지 등)가 열립니다."}
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
-              <Field label="Status"><Select value={edit.status} options={STATUSES} onChange={e => setEdit({...edit, status: e.target.value})} /></Field>
-              <Field label="Author email" hint="본인 이메일이 아니면 RLS 차단"><TextInput value={edit.author_email} onChange={e => setEdit({...edit, author_email: e.target.value})} disabled={!isEditor} /></Field>
-            </div>
           </div>
-        )}
-      </Modal>
-
-      {/* 미리보기 — 공개 상세(/posts/:id)와 같은 구성: 날짜 + 제목 + PostBody */}
-      <Modal
-        open={!!preview}
-        onClose={() => setPreview(null)}
-        width={860}
-        title="미리보기"
-        footer={<Button onClick={() => setPreview(null)}>닫기</Button>}
-      >
-        {preview && (
+        ) : (
+          // 보기 모드 — 발행 메타 + 제목 + 본문(공개 상세와 같은 렌더)
           <div style={{ maxWidth: 772, margin: '0 auto' }}>
-            {preview.status === 'draft' && (
-              <div style={{ background: '#fff8e1', border: '1px solid #e6c656', color: '#7a5c00', padding: '0.4rem 0.6rem', fontSize: '0.8rem', marginBottom: '0.5rem' }}>
+            {edit.status === 'draft' && (
+              <div style={{ background: '#fff8e1', border: '1px solid #e6c656', color: '#7a5c00', padding: '0.4rem 0.6rem', fontSize: '0.8rem', marginBottom: '0.6rem' }}>
                 draft — 공개 페이지에는 아직 안 보입니다. 발행(published)하면 이 모양으로 나옵니다.
               </div>
             )}
-            <p style={{ margin: 0, color: '#888', fontSize: '0.8rem' }}>{formatNewsDate(preview.published_at)}</p>
-            <h2 style={{ margin: '0.2rem 0 0.5rem' }}>{preview.title}</h2>
-            <PostBody json={preview.body_json} />
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', color: '#666', fontSize: '0.8rem', marginBottom: '0.4rem' }}>
+              <span>{edit.status === 'published' ? '● published' : '○ draft'}</span>
+              <span>게시일: {formatNewsDate(edit.published_at) || '—'}</span>
+              <span>작성자: {edit.author_email || '—'}</span>
+            </div>
+            <h1 style={{ margin: '0 0 0.6rem' }}>{edit.title}</h1>
+            <PostBody json={edit.body_json} />
           </div>
-        )}
+        ))}
       </Modal>
       {confirmUI}
     </div>

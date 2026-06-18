@@ -75,8 +75,10 @@
   button:disabled       { cursor: not-allowed; }
 }
 
-/* PostBody — TipTap 본문 렌더 결과(생성 HTML 이라 태그에 클래스를 못 붙임).
-   전역 base 가 못 덮는 코드/이미지 여백만 보강. */
+/* PostBody — BlockNote full HTML 본문(.bn-editor) 렌더 결과.
+   bn-editor 기본 좌우 패딩(54px)을 없애 제목·날짜와 좌측 정렬을 맞춘다. */
+.post-body.bn-editor { padding-inline: 0; }
+
 .post-body code {
   background: #f4f4f4;
   padding: 0.1em 0.35em;

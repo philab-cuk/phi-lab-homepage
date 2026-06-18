@@ -5,17 +5,18 @@ import '@blocknote/mantine/style.css'
 import { supabase } from '../../lib/supabase'
 
 /**
- * BlockNote(노션 스타일) 본문 편집기 — posts 전용.
+ * BlockNote(노션 스타일) 본문 편집기 — posts/news 공용.
  * - value: 블록 배열(body_json) 또는 null(빈 문서로 시작)
  * - onChange: 편집할 때마다 editor.document(블록 배열)를 그대로 넘김
  *   → body_json 형식은 "블록 배열"이다 (옛 TipTap {type:'doc'} 형식과
  *     Array.isArray 로 구분 가능)
- * - entityKey: 이미지 업로드 폴더 prefix (post id 등, 미지정 시 '_temp')
+ * - bucket: 본문 이미지 업로드 대상 Storage 버킷 (post-images / news-images)
+ * - entityKey: 이미지 업로드 폴더 prefix (post/news id 등, 미지정 시 '_temp')
  *
- * 이 파일의 css import(mantine 스타일)는 AdminPosts 에서만 불려서
+ * 이 파일의 css import(mantine 스타일)는 admin 페이지에서만 불려서
  * admin 라우트 청크에만 포함된다 — 공개 페이지 무게에 영향 없음.
  */
-export default function BlockNoteEditor({ value, onChange, entityKey = '_temp' }) {
+export default function BlockNoteEditor({ value, onChange, bucket = 'post-images', entityKey = '_temp' }) {
   const editor = useCreateBlockNote({
     initialContent: Array.isArray(value) && value.length ? value : undefined,
     uploadFile: async (file) => {
@@ -23,9 +24,9 @@ export default function BlockNoteEditor({ value, onChange, entityKey = '_temp' }
       if (!['jpg', 'jpeg', 'png', 'webp'].includes(ext)) throw new Error('jpg/png/webp 만 허용')
       if (file.size > 10 * 1024 * 1024) throw new Error('10MB 초과')
       const path = `${entityKey}/${crypto.randomUUID()}.${ext}`
-      const { error } = await supabase.storage.from('post-images').upload(path, file, { contentType: file.type })
+      const { error } = await supabase.storage.from(bucket).upload(path, file, { contentType: file.type })
       if (error) throw new Error('업로드 실패: ' + error.message)
-      const { data } = supabase.storage.from('post-images').getPublicUrl(path)
+      const { data } = supabase.storage.from(bucket).getPublicUrl(path)
       return data.publicUrl
     },
   })

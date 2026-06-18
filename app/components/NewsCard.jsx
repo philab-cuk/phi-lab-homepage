@@ -1,5 +1,8 @@
-// 소식 카드 — 공개 News 페이지와 admin 미리보기가 공유하는 단일 모양.
-// 입력: { title, bodyShort, publishedAt, images: [url] } (camelCase, 사진은 URL 배열)
+import PostBody from './PostBody'
+
+// 소식 "전체 보기" — News 상세 페이지(/news/:id)에서 쓴다.
+// 본문은 Posts 와 동일한 BlockNote 본문이라 PostBody 로 렌더한다.
+// 입력: { title, publishedAt, bodyJson }
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -9,33 +12,12 @@ export function formatNewsDate(iso) {
   return `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`
 }
 
-function NewsImages({ images, title }) {
-  if (!images.length) return null
-  const gridCls = images.length === 1 ? 'grid grid-cols-1' : 'grid grid-cols-2'
-  return (
-    <div className={`${gridCls} gap-2 mt-3`}>
-      {images.map((src, i) => (
-        <img
-          key={i}
-          src={src}
-          alt={images.length > 1 ? `${title} (${i + 1})` : title}
-          className="w-full max-h-[420px] object-contain rounded border border-rule bg-white"
-          loading="lazy"
-        />
-      ))}
-    </div>
-  )
-}
-
 export default function NewsCard({ item }) {
   return (
-    <article className="border border-rule rounded-lg p-5 my-4">
+    <article>
       <p className="my-0 text-meta text-[14px]">{formatNewsDate(item.publishedAt)}</p>
-      <h2 className="mt-1 mb-0 text-[1.15rem]">{item.title}</h2>
-      {item.bodyShort && (
-        <p className="mt-2 mb-0 text-muted whitespace-pre-line">{item.bodyShort}</p>
-      )}
-      <NewsImages images={item.images ?? []} title={item.title} />
+      <h1 className="mt-1 mb-2">{item.title}</h1>
+      <PostBody json={item.bodyJson} />
     </article>
   )
 }

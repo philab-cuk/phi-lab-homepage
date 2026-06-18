@@ -207,13 +207,19 @@ export async function fetchCollaboratingInstitutions() {
 // 공개 News 페이지용. 발행(published)된 소식만, 최신이 위로.
 // status 필터는 RLS(anon) 에도 있지만, 로그인 상태로 공개 페이지를 볼 때
 // draft 가 섞여 보이지 않도록 쿼리에서도 명시한다.
+// body_json(BlockNote 블록 배열)에서 첫 image 블록의 URL 추출 → 격자 커버.
+function coverFromBody(blocks) {
+  if (!Array.isArray(blocks)) return null
+  const img = blocks.find((b) => b.type === 'image' && b.props?.url)
+  return img ? withBase(img.props.url) : null
+}
+
 function mapNews(n) {
   return {
     id: n.id,
     title: n.title,
-    bodyShort: n.body_short,
-    // images jsonb: [{url, path}] (AdminNews 업로드 형식). 문자열이어도 안전 처리.
-    images: (n.images ?? []).map((i) => withBase(typeof i === 'string' ? i : i?.url)).filter(Boolean),
+    bodyJson: n.body_json,           // Posts 와 동일한 리치 본문(BlockNote)
+    cover: coverFromBody(n.body_json), // 격자 썸네일 = 본문 첫 이미지
     publishedAt: n.published_at,
     authorEmail: n.author_email,
   }
@@ -227,6 +233,18 @@ export async function fetchNews() {
     .order('published_at', { ascending: false })
   if (error) throw error
   return (data ?? []).map(mapNews)
+}
+
+// 단건(상세 페이지용). 없거나 draft 면 null — 'News not found' 처리용.
+export async function fetchNewsItem(id) {
+  const { data, error } = await supabase
+    .from('news')
+    .select('*')
+    .eq('id', id)
+    .eq('status', 'published')
+    .maybeSingle()
+  if (error) throw error
+  return data ? mapNews(data) : null
 }
 
 // ── Posts ───────────────────────────────────────────────────────────────────

@@ -13,6 +13,7 @@ export default [
     // News/Posts 는 CSR — prerender(react-router.config.js) 목록에 넣지 않는다.
     // 글은 admin 에서 올리는 즉시 보여야 해서 빌드에 굽지 않음.
     route('news', 'pages/News.jsx'),
+    route('news/:id', 'pages/NewsItem.jsx'),
     route('posts', 'pages/Posts.jsx'),
     route('posts/:id', 'pages/Post.jsx'),
   ]),
