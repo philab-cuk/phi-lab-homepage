@@ -173,7 +173,7 @@ export default function Members() {
   }, [location.hash, alumni])
 
   return (
-    <div className="mx-auto max-w-[800px] px-6 py-12">
+    <div className="mx-auto max-w-[1200px] px-6 py-12">
       <h1>Members</h1>
 
       <div className="mt-6 border-b border-rule pb-3">

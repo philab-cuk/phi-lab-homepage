@@ -45,7 +45,7 @@ export default function News() {
   }, [])
 
   return (
-    <div className="mx-auto max-w-[1100px] px-6 py-12">
+    <div className="mx-auto max-w-[1200px] px-6 py-12">
       <h1 className="text-center">News</h1>
 
       {error && (

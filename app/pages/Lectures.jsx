@@ -226,7 +226,7 @@ export default function Lectures() {
 
   return (
     <LightboxContext.Provider value={openLightbox}>
-      <div className="mx-auto max-w-[820px] px-6 py-12">
+      <div className="mx-auto max-w-[1200px] px-6 py-12">
         <h1>Lectures &amp; Courses</h1>
         <p className="text-[15px] text-meta">
           {lecturesData.length} total · {gradCount} graduate · {undergradCount} undergraduate

@@ -53,7 +53,7 @@ export default function Posts() {
   }
 
   return (
-    <div className="mx-auto max-w-[1000px] px-6 py-12">
+    <div className="mx-auto max-w-[1200px] px-6 py-12">
       <h1>Posts</h1>
 
       {/* 검색 */}

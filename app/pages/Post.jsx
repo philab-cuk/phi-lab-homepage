@@ -28,21 +28,21 @@ export default function Post() {
 
   if (error) {
     return (
-      <div className="mx-auto max-w-[820px] px-6 py-12">
+      <div className="mx-auto max-w-[1200px] px-6 py-12">
         <p className="text-muted">Failed to load the post. Please try again later.</p>
       </div>
     )
   }
   if (post === undefined) {
     return (
-      <div className="mx-auto max-w-[820px] px-6 py-12">
+      <div className="mx-auto max-w-[1200px] px-6 py-12">
         <p className="text-muted">Loading…</p>
       </div>
     )
   }
   if (post === null) {
     return (
-      <div className="mx-auto max-w-[820px] px-6 py-12">
+      <div className="mx-auto max-w-[1200px] px-6 py-12">
         <h1>Post not found</h1>
         <p className="text-muted">
           The post does not exist or is not published.{' '}
@@ -53,7 +53,7 @@ export default function Post() {
   }
 
   return (
-    <div className="mx-auto max-w-[820px] px-6 py-12">
+    <div className="mx-auto max-w-[1200px] px-6 py-12">
       <p className="my-0 text-meta text-[14px]">{formatNewsDate(post.publishedAt)}</p>
       <h1 className="mt-1">{post.title}</h1>
       <PostBody json={post.bodyJson} />

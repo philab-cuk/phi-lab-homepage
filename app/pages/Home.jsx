@@ -44,7 +44,7 @@ export default function Home() {
   const publicationsCount = data.publicationsCount
 
   return (
-    <div className="mx-auto max-w-[820px] px-6 py-12">
+    <div className="mx-auto max-w-[1200px] px-6 py-12">
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <p className="text-meta text-[15px] my-0">{HERO.kicker}</p>
       <h1 className="mt-1 text-[2.1rem]">{HERO.headline}</h1>

@@ -2,7 +2,7 @@ import { Link } from 'react-router'
 
 export default function NotFound() {
   return (
-    <div className="mx-auto max-w-[720px] px-6 py-20">
+    <div className="mx-auto max-w-[1200px] px-6 py-20">
       <p className="text-meta text-[15px] my-0">404</p>
       <h1 className="mt-1">Page not found</h1>
       <p className="text-muted">

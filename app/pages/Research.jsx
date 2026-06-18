@@ -129,7 +129,7 @@ export default function Research() {
   const gridFiltered = gridSource.filter((p) => matchesFilter(p, activeFilter))
 
   return (
-    <div className="mx-auto max-w-[820px] px-6 py-12">
+    <div className="mx-auto max-w-[1200px] px-6 py-12">
       <h1>Current Research</h1>
 
       {featured.length > 0 && (

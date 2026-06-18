@@ -182,7 +182,7 @@ export default function Publications() {
   }, [publicationsData])
 
   return (
-    <div className="mx-auto max-w-[820px] px-6 py-12">
+    <div className="mx-auto max-w-[1200px] px-6 py-12">
       <h1>Publications</h1>
       <p className="text-muted">
         Peer-reviewed research and conference presentations from the PHI Lab spanning

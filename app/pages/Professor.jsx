@@ -75,7 +75,7 @@ export default function Professor() {
   const bioParagraphs = (PI.bioFull ?? '').split('\n\n')
 
   return (
-    <div className="mx-auto max-w-[760px] px-6 py-12">
+    <div className="mx-auto max-w-[1200px] px-6 py-12">
       <h1>Professor</h1>
 
       <div className="flex flex-col sm:flex-row gap-6 items-start mt-6 mb-4">

@@ -4,12 +4,11 @@ import PostBody from './PostBody'
 // 본문은 Posts 와 동일한 BlockNote 본문이라 PostBody 로 렌더한다.
 // 입력: { title, publishedAt, bodyJson }
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
+// 날짜를 숫자 '년. 월. 일.' 로 (Posts 게시판과 동일 스타일)
 export function formatNewsDate(iso) {
   if (!iso) return ''
   const d = new Date(iso)
-  return `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`
+  return `${d.getFullYear()}. ${d.getMonth() + 1}. ${d.getDate()}.`
 }
 
 export default function NewsCard({ item }) {

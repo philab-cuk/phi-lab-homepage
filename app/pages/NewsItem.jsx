@@ -22,21 +22,21 @@ export default function NewsItem() {
 
   if (error) {
     return (
-      <div className="mx-auto max-w-[820px] px-6 py-12">
+      <div className="mx-auto max-w-[1200px] px-6 py-12">
         <p className="text-muted">Failed to load the news. Please try again later.</p>
       </div>
     )
   }
   if (item === undefined) {
     return (
-      <div className="mx-auto max-w-[820px] px-6 py-12">
+      <div className="mx-auto max-w-[1200px] px-6 py-12">
         <p className="text-muted">Loading…</p>
       </div>
     )
   }
   if (item === null) {
     return (
-      <div className="mx-auto max-w-[820px] px-6 py-12">
+      <div className="mx-auto max-w-[1200px] px-6 py-12">
         <h1>News not found</h1>
         <p className="text-muted">
           The news does not exist or is not published.{' '}
@@ -47,7 +47,7 @@ export default function NewsItem() {
   }
 
   return (
-    <div className="mx-auto max-w-[820px] px-6 py-12">
+    <div className="mx-auto max-w-[1200px] px-6 py-12">
       <NewsCard item={item} />
       <p className="mt-8">
         <Link to="/news">← Back to News</Link>
