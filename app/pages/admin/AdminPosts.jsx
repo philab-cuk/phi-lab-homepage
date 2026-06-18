@@ -2,13 +2,17 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
-import RichTextEditor from '../../components/admin/RichTextEditor'
+import BlockNoteEditor from '../../components/admin/BlockNoteEditor'
+import PostBody from '../../components/PostBody'
+import { formatNewsDate } from '../../components/NewsCard'
 
 const STATUSES = ['draft', 'published']
 
+// body_json 은 BlockNote 블록 배열. null 이면 에디터가 빈 문서로 시작.
+// (옛 TipTap {type:'doc'} 형식은 폐기 — Array.isArray 로 구분된다)
 function emptyPost(email) {
   return {
-    title: '', body_json: { type: 'doc', content: [{ type: 'paragraph' }] },
+    title: '', body_json: null,
     status: 'draft', author_email: email,
   }
 }
@@ -22,6 +26,7 @@ export default function AdminPosts() {
   const [error, setError] = useState(null)
   const [edit, setEdit] = useState(null)
   const [isNew, setIsNew] = useState(false)
+  const [preview, setPreview] = useState(null) // 행 클릭 → 공개 상세와 같은 모양 미리보기
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
 
@@ -104,30 +109,59 @@ export default function AdminPosts() {
             },
           ]}
           rows={rows}
+          onRowClick={(r) => setPreview(r)}
         />
       )}
 
       <Modal
         open={!!edit}
         onClose={() => setEdit(null)}
+        width={920}
         title={edit ? (isNew ? '새 글' : `Edit: ${edit.id}`) : ''}
         footer={<><Button onClick={() => setEdit(null)}>취소</Button><Button primary onClick={save}>저장</Button></>}
       >
         {edit && (
           <div>
             <Field label="Title"><TextInput value={edit.title||''} onChange={e => setEdit({...edit, title: e.target.value})} /></Field>
-            <Field label="Body">
-              <RichTextEditor
+            {/* Body 는 Field(label 래퍼)를 쓰면 안 됨 — label 이 contenteditable 의
+                클릭 포커스를 가로채 타이핑이 안 된다(Vimium 등 키보드 확장 발동). */}
+            <div style={{ marginBottom: '0.6rem' }}>
+              <span style={{ display: 'block', fontSize: '0.8rem', color: '#444', marginBottom: '0.2rem' }}>Body</span>
+              <BlockNoteEditor
                 value={edit.body_json}
-                onChange={(json) => setEdit({...edit, body_json: json})}
-                bucket="post-images"
+                onChange={(blocks) => setEdit({...edit, body_json: blocks})}
                 entityKey={edit.id || '_temp'}
               />
-            </Field>
+              <div style={{ fontSize: '0.75rem', color: '#888', marginTop: '0.2rem' }}>
+                {"'/' 를 입력하면 블록 메뉴(제목·목록·이미지 등)가 열립니다."}
+              </div>
+            </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
               <Field label="Status"><Select value={edit.status} options={STATUSES} onChange={e => setEdit({...edit, status: e.target.value})} /></Field>
               <Field label="Author email" hint="본인 이메일이 아니면 RLS 차단"><TextInput value={edit.author_email} onChange={e => setEdit({...edit, author_email: e.target.value})} disabled={!isEditor} /></Field>
             </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* 미리보기 — 공개 상세(/posts/:id)와 같은 구성: 날짜 + 제목 + PostBody */}
+      <Modal
+        open={!!preview}
+        onClose={() => setPreview(null)}
+        width={860}
+        title="미리보기"
+        footer={<Button onClick={() => setPreview(null)}>닫기</Button>}
+      >
+        {preview && (
+          <div style={{ maxWidth: 772, margin: '0 auto' }}>
+            {preview.status === 'draft' && (
+              <div style={{ background: '#fff8e1', border: '1px solid #e6c656', color: '#7a5c00', padding: '0.4rem 0.6rem', fontSize: '0.8rem', marginBottom: '0.5rem' }}>
+                draft — 공개 페이지에는 아직 안 보입니다. 발행(published)하면 이 모양으로 나옵니다.
+              </div>
+            )}
+            <p style={{ margin: 0, color: '#888', fontSize: '0.8rem' }}>{formatNewsDate(preview.published_at)}</p>
+            <h2 style={{ margin: '0.2rem 0 0.5rem' }}>{preview.title}</h2>
+            <PostBody json={preview.body_json} />
           </div>
         )}
       </Modal>

@@ -9,6 +9,7 @@ const NAV_ROUTES = [
   { to: '/about', label: 'About Lab' },
   { to: '/members', label: 'Members' },
   { to: '/news', label: 'News' },
+  { to: '/posts', label: 'Posts' },
 ]
 
 const FOOTER = {

@@ -15,6 +15,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@blocknote/core": "^0.51.4",
+    "@blocknote/mantine": "^0.51.4",
+    "@blocknote/react": "^0.51.4",
     "@react-router/node": "^7.15.1",
     "@supabase/supabase-js": "^2.106.0",
     "@tailwindcss/vite": "^4.2.4",
@@ -30,6 +33,7 @@
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
+    "@blocknote/server-util": "^0.51.4",
     "@eslint/js": "^10.0.1",
     "@react-router/dev": "^7.15.1",
     "@types/react": "^19.2.14",

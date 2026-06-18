@@ -158,6 +158,7 @@ export default function AdminNews() {
       <Modal
         open={!!edit}
         onClose={() => setEdit(null)}
+        width={760}
         title={edit ? (isNew ? '새 뉴스' : `Edit: ${edit.id}`) : ''}
         footer={<><Button onClick={() => setEdit(null)}>취소</Button><Button primary onClick={save}>저장</Button></>}
       >
@@ -200,11 +201,12 @@ export default function AdminNews() {
       <Modal
         open={!!preview}
         onClose={() => setPreview(null)}
+        width={860}
         title="미리보기"
         footer={<Button onClick={() => setPreview(null)}>닫기</Button>}
       >
         {preview && (
-          <div style={{ maxWidth: 640 }}>
+          <div style={{ maxWidth: 772, margin: '0 auto' }}>
             {preview.status === 'draft' && (
               <div style={{ background: '#fff8e1', border: '1px solid #e6c656', color: '#7a5c00', padding: '0.4rem 0.6rem', fontSize: '0.8rem', marginBottom: '0.5rem' }}>
                 draft — 공개 페이지에는 아직 안 보입니다. 발행(published)하면 이 모양으로 나옵니다.

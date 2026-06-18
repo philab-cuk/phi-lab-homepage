@@ -229,6 +229,60 @@ export async function fetchNews() {
   return (data ?? []).map(mapNews)
 }
 
+// ── Posts ───────────────────────────────────────────────────────────────────
+// 공개 Posts(블로그형 장문) — published 만. News 와 같은 이중 방어(쿼리에도 필터).
+// 작성자 이메일은 공개 화면에 표시하지 않기로 결정 — 반환에 포함하지 않는다.
+
+// BlockNote 블록 배열에서 목록 카드용 발췌(첫 문단 텍스트 ~160자) 추출.
+// heading/image 등은 건너뛰고 첫 paragraph 블록의 글자만 이어붙인다.
+// inline content 는 text 노드와 link 노드(안에 text 배열)가 섞여 있다.
+function inlineText(content) {
+  return (content ?? [])
+    .map((n) => (n.type === 'link' ? inlineText(n.content) : n.text ?? ''))
+    .join('')
+}
+function excerptFromBody(blocks, max = 160) {
+  if (!Array.isArray(blocks)) return ''
+  const para = blocks.find((b) => b.type === 'paragraph' && b.content?.length)
+  if (!para) return ''
+  const text = inlineText(para.content)
+  return text.length > max ? text.slice(0, max).trimEnd() + '…' : text
+}
+
+export async function fetchPosts() {
+  const { data, error } = await supabase
+    .from('posts')
+    .select('*')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+  if (error) throw error
+  return (data ?? []).map((p) => ({
+    id: p.id,
+    title: p.title,
+    excerpt: excerptFromBody(p.body_json),
+    publishedAt: p.published_at,
+  }))
+}
+
+// 단건. 없거나 draft(익명에겐 RLS 로도 안 보임)면 null — 상세 페이지의
+// 'Post not found' 처리용.
+export async function fetchPost(id) {
+  const { data, error } = await supabase
+    .from('posts')
+    .select('*')
+    .eq('id', id)
+    .eq('status', 'published')
+    .maybeSingle()
+  if (error) throw error
+  if (!data) return null
+  return {
+    id: data.id,
+    title: data.title,
+    bodyJson: data.body_json,
+    publishedAt: data.published_at,
+  }
+}
+
 // ── Home 집계 ───────────────────────────────────────────────────────────────
 export async function fetchHomeStats() {
   const [{ count: activeResearch }, { count: publications }] = await Promise.all([

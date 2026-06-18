@@ -10,9 +10,11 @@ export default [
     route('research', 'pages/Research.jsx'),
     route('publications', 'pages/Publications.jsx'),
     route('lectures', 'pages/Lectures.jsx'),
-    // News 는 CSR — prerender(react-router.config.js) 목록에 넣지 않는다.
-    // 소식은 admin 에서 올리는 즉시 보여야 해서 빌드에 굽지 않음.
+    // News/Posts 는 CSR — prerender(react-router.config.js) 목록에 넣지 않는다.
+    // 글은 admin 에서 올리는 즉시 보여야 해서 빌드에 굽지 않음.
     route('news', 'pages/News.jsx'),
+    route('posts', 'pages/Posts.jsx'),
+    route('posts/:id', 'pages/Post.jsx'),
   ]),
 
   // admin 로그인 / 초대 수락 (가드 밖 — 로그인 전 접근)

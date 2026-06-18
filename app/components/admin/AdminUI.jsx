@@ -89,14 +89,16 @@ export function Table({ columns, rows, empty = '데이터 없음', onRowClick })
   )
 }
 
-export function Modal({ open, onClose, title, children, footer }) {
+// width: 모달 본문 너비(px). 글쓰기처럼 넓어야 편한 모달은 크게 지정 —
+// 화면이 좁으면 94vw 로 자동 축소된다.
+export function Modal({ open, onClose, title, children, footer, width }) {
   if (!open) return null
   return (
     <div
       onClick={onClose}
-      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 100, paddingTop: '4rem' }}
+      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 100, paddingTop: '3rem' }}
     >
-      <div onClick={(e) => e.stopPropagation()} style={{ background: '#fff', minWidth: 480, maxWidth: '90vw', maxHeight: '80vh', overflow: 'auto', padding: '1.25rem', borderRadius: 4 }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ background: '#fff', width: width ? `min(${width}px, 94vw)` : undefined, minWidth: 480, maxWidth: '94vw', maxHeight: '86vh', overflow: 'auto', padding: '1.25rem', borderRadius: 4 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', borderBottom: '1px solid #eee', paddingBottom: '0.5rem', marginBottom: '0.75rem' }}>
           <h2 style={{ margin: 0, fontSize: '1.1rem' }}>{title}</h2>
           <button onClick={onClose} style={{ background: 'transparent', border: 'none', fontSize: '1.2rem', cursor: 'pointer', color: '#666' }}>×</button>
