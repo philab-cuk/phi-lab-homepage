@@ -17,6 +17,8 @@ export default function AdminUsers() {
 
   // 모달 상태
   const [editUser, setEditUser] = useState(null)
+  const [viewingUser, setViewingUser] = useState(false) // 행 클릭 → 보기(읽기 전용)
+  const [originalUser, setOriginalUser] = useState(null) // 편집 취소 시 되돌릴 원본
   const [newInvite, setNewInvite] = useState(null)
 
   async function load() {
@@ -120,13 +122,14 @@ export default function AdminUsers() {
             {
               key: 'actions', label: '', render: r => (
                 <div style={{ display: 'flex', gap: '0.25rem' }}>
-                  <Button onClick={() => setEditUser({ ...r })}>편집</Button>
+                  <Button onClick={() => { setViewingUser(false); setOriginalUser({ ...r }); setEditUser({ ...r }) }}>편집</Button>
                   <Button danger onClick={() => handleDeleteUser(r)} disabled={!deleteMode || r.email === user.email}>삭제</Button>
                 </div>
               )
             },
           ]}
           rows={users}
+          onRowClick={(r) => { setViewingUser(true); setOriginalUser({ ...r }); setEditUser({ ...r }) }}
         />
       ) : (
         <Table
@@ -164,17 +167,16 @@ export default function AdminUsers() {
       {/* edit user modal */}
       <Modal
         open={!!editUser}
-        onClose={() => setEditUser(null)}
-        title={editUser ? `Edit: ${editUser.email}` : ''}
-        footer={
-          <>
-            <Button onClick={() => setEditUser(null)}>취소</Button>
-            <Button primary onClick={handleSaveUser}>저장</Button>
-          </>
-        }
+        onClose={() => { setViewingUser(false); setEditUser(null) }}
+        width={920}
+        fixedHeight
+        title={editUser ? (viewingUser ? `보기: ${editUser.email}` : `Edit: ${editUser.email}`) : ''}
+        headerActions={viewingUser
+          ? <><Button primary onClick={() => setViewingUser(false)}>편집하기</Button><Button onClick={() => { setViewingUser(false); setEditUser(null) }}>닫기</Button></>
+          : <><Button primary onClick={handleSaveUser}>저장</Button><Button onClick={() => { setEditUser(originalUser); setViewingUser(true) }}>취소</Button></>}
       >
         {editUser && (
-          <>
+          <fieldset disabled={viewingUser} style={{ border: 0, padding: 0, margin: 0, minInlineSize: 0 }}>
             <Field label="Email"><TextInput value={editUser.email} disabled /></Field>
             <Field label="Role">
               <Select value={editUser.role} options={ROLES} onChange={e => setEditUser({ ...editUser, role: e.target.value })} />
@@ -182,7 +184,7 @@ export default function AdminUsers() {
             <Field label="Display name">
               <TextInput value={editUser.display_name || ''} onChange={e => setEditUser({ ...editUser, display_name: e.target.value })} />
             </Field>
-          </>
+          </fieldset>
         )}
       </Modal>
 

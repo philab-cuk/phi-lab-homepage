@@ -85,7 +85,16 @@ export default function Professor() {
           className="w-40 h-40 object-cover flex-shrink-0"
         />
         <div className="min-w-0">
-          <p className="my-0 text-xl font-semibold text-ink">{PI.name}</p>
+          <p className="my-0">
+            {PI.nameKo ? (
+              <span className="inline-flex items-baseline gap-2 flex-wrap">
+                <span className="font-bold text-ink text-2xl">{PI.nameKo}</span>
+                <span className="font-normal text-muted text-lg">{PI.name}</span>
+              </span>
+            ) : (
+              <span className="font-bold text-ink text-2xl">{PI.name}</span>
+            )}
+          </p>
           <p className="my-0 text-muted">
             {PI.title}, {PI.department}
           </p>

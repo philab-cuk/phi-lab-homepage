@@ -34,6 +34,7 @@ function mapMember(m) {
     title: m.title,
     degree: m.degree,
     year: m.student_number,
+    college: m.college,
     department: m.department,
     institution: m.institution,
     photo: resized(withBase(m.photo_url), 450, 600),
@@ -78,7 +79,7 @@ export async function fetchProfessor() {
   if (error) throw error
   const list = (data ?? []).map(mapMember)
   return (
-    list.find((m) => m.role === 'Principal Investigator') ||
+    list.find((m) => m.role === '지도교수') ||
     list.find((m) => m.id === 'hkim') ||
     null
   )

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { PageHeader, Button, Table, Modal, Field, TextInput, TextArea, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
 
-const STATUSES = ['active', 'completed']
+const STATUSES = [{ value: 'active', label: '진행' }, { value: 'completed', label: '완료' }]
 
 function arrJoin(a) { return Array.isArray(a) ? a.join(', ') : '' }
 function arrSplit(s) { return s ? s.split(',').map(x => x.trim()).filter(Boolean) : null }
@@ -29,6 +29,8 @@ export default function AdminResearch() {
   const [error, setError] = useState(null)
   const [edit, setEdit] = useState(null)
   const [isNew, setIsNew] = useState(false)
+  const [viewing, setViewing] = useState(false) // 행 클릭 → 보기(읽기 전용)
+  const [original, setOriginal] = useState(null) // 편집 취소 시 되돌릴 원본
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
 
@@ -95,9 +97,8 @@ export default function AdminResearch() {
     load()
   }
 
-  function openEdit(row) {
-    setIsNew(false)
-    setEdit({
+  function rowToEdit(row) {
+    return {
       ...row,
       _affiliations_text: JSON.stringify(row._affiliations.map(a => ({
         institution_id: a.institution_id,
@@ -105,15 +106,19 @@ export default function AdminResearch() {
         department_ko: a.department_ko,
       })), null, 2),
       _collaborators_text: jsonText(row.collaborators),
-    })
+    }
   }
+  function openView(row) { setIsNew(false); setViewing(true); const s = rowToEdit(row); setOriginal(s); setEdit(s) }
+  function openEdit(row) { setIsNew(false); setViewing(false); const s = rowToEdit(row); setOriginal(s); setEdit(s) }
+  function closeEdit() { setViewing(false); setEdit(null) }
+  function cancelEdit() { if (isNew) closeEdit(); else { setEdit(original); setViewing(true) } }
 
   return (
     <div>
       <PageHeader
         title="Research"
         subtitle={`${rows.length}개 (institutions ${institutions.length})`}
-        actions={<>{deleteModeToggle}<Button primary onClick={() => { setIsNew(true); setEdit({ ...emptyResearch(), id: crypto.randomUUID() }) }}>+ 새 연구</Button></>}
+        actions={<>{deleteModeToggle}<Button primary onClick={() => { setIsNew(true); setViewing(false); setOriginal(null); setEdit({ ...emptyResearch(), id: crypto.randomUUID() }) }}>+ 새 연구</Button></>}
       />
       <ErrorBanner error={error} />
       {loading ? <div>로딩 중…</div> : (
@@ -121,7 +126,7 @@ export default function AdminResearch() {
           columns={[
             { key: 'id', label: 'ID', render: r => <code style={{ fontSize: '0.7rem' }}>{r.id}</code> },
             { key: 'title', label: 'Title', render: r => <>{r.title}{r.featured ? <span style={{ color: '#a60', marginLeft: 4 }}>★</span> : null}</> },
-            { key: 'status', label: 'Status' },
+            { key: 'status', label: '상태', render: r => r.status === 'active' ? '진행' : (r.status === 'completed' ? '완료' : r.status) },
             { key: 'tags', label: 'Tags', render: r => (r.tags || []).slice(0, 4).join(', ') },
             { key: 'aff', label: 'Inst.', render: r => r._affiliations.length },
             {
@@ -134,19 +139,24 @@ export default function AdminResearch() {
             },
           ]}
           rows={rows}
+          onRowClick={openView}
         />
       )}
 
       <Modal
         open={!!edit}
-        onClose={() => setEdit(null)}
-        title={edit ? (isNew ? '새 연구' : `Edit: ${edit.id}`) : ''}
-        footer={<><Button onClick={() => setEdit(null)}>취소</Button><Button primary onClick={save}>저장</Button></>}
+        onClose={closeEdit}
+        width={920}
+        fixedHeight
+        title={edit ? (viewing ? `보기: ${edit.title || edit.id}` : (isNew ? '새 연구' : `Edit: ${edit.id}`)) : ''}
+        headerActions={viewing
+          ? <><Button primary onClick={() => setViewing(false)}>편집하기</Button><Button onClick={closeEdit}>닫기</Button></>
+          : <><Button primary onClick={save}>저장</Button><Button onClick={cancelEdit}>취소</Button></>}
       >
         {edit && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
+          <fieldset disabled={viewing} style={{ border: 0, padding: 0, margin: 0, minInlineSize: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
             <Field label="ID" hint={isNew ? '자동 생성된 UID (변경 불가)' : '변경 불가.'}><TextInput value={edit.id} disabled /></Field>
-            <Field label="Status"><Select value={edit.status} options={STATUSES} onChange={e => setEdit({...edit, status: e.target.value})} /></Field>
+            <Field label="상태"><Select value={edit.status} options={STATUSES} onChange={e => setEdit({...edit, status: e.target.value})} /></Field>
             <div style={{ gridColumn: '1 / -1' }}>
               <Field label="Title"><TextInput value={edit.title||''} onChange={e => setEdit({...edit, title: e.target.value})} /></Field>
             </div>
@@ -190,7 +200,7 @@ export default function AdminResearch() {
                 />
               </Field>
             </div>
-          </div>
+          </fieldset>
         )}
       </Modal>
       {confirmUI}

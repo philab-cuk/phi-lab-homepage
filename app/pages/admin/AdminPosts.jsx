@@ -6,7 +6,7 @@ import BlockNoteEditor from '../../components/admin/BlockNoteEditor'
 import PostBody from '../../components/PostBody'
 import { formatNewsDate } from '../../components/NewsCard'
 
-const STATUSES = ['draft', 'published']
+const STATUSES = [{ value: 'draft', label: '초안' }, { value: 'published', label: '발행' }]
 
 // body_json 은 BlockNote 블록 배열. null 이면 에디터가 빈 문서로 시작.
 // (옛 TipTap {type:'doc'} 형식은 폐기 — Array.isArray 로 구분된다)
@@ -97,9 +97,9 @@ export default function AdminPosts() {
               <Button onClick={() => setFilter('mine')} primary={filter==='mine'}>내 글</Button>
               <Button onClick={() => setFilter('all')} primary={filter==='all'}>전체</Button>
             </>)}
-            <Button onClick={() => setStatusFilter('all')} primary={statusFilter==='all'}>All</Button>
-            <Button onClick={() => setStatusFilter('published')} primary={statusFilter==='published'}>Published</Button>
-            <Button onClick={() => setStatusFilter('draft')} primary={statusFilter==='draft'}>Draft</Button>
+            <Button onClick={() => setStatusFilter('all')} primary={statusFilter==='all'}>전체</Button>
+            <Button onClick={() => setStatusFilter('published')} primary={statusFilter==='published'}>발행</Button>
+            <Button onClick={() => setStatusFilter('draft')} primary={statusFilter==='draft'}>초안</Button>
             {deleteModeToggle}
             <Button primary onClick={openNew}>+ 새 글</Button>
           </>
@@ -145,7 +145,7 @@ export default function AdminPosts() {
           <div>
             {/* 발행 설정(메타) — 본문이 아니라 publishing 정보라 제목 위에 모은다. */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem 1rem', background: '#f7f7f7', padding: '0.6rem 0.75rem', borderRadius: 4, marginBottom: '0.9rem' }}>
-              <Field label="Status"><Select value={edit.status} options={STATUSES} onChange={e => setEdit({...edit, status: e.target.value})} /></Field>
+              <Field label="상태"><Select value={edit.status} options={STATUSES} onChange={e => setEdit({...edit, status: e.target.value})} /></Field>
               <Field label="공지 고정" hint="켜면 목록 맨 위 Notice 로 고정.">
                 <Select value={edit.pinned ? 'true' : 'false'} options={[{value:'false',label:'일반'},{value:'true',label:'공지(Notice)'}]} onChange={e => setEdit({...edit, pinned: e.target.value === 'true'})} />
               </Field>
@@ -168,21 +168,28 @@ export default function AdminPosts() {
             </div>
           </div>
         ) : (
-          // 보기 모드 — 발행 메타 + 제목 + 본문(공개 상세와 같은 렌더)
+          // 보기 모드 — 메타 / 제목 / 본문을 시각적으로 분리
           <div style={{ maxWidth: 772, margin: '0 auto' }}>
             {edit.status === 'draft' && (
-              <div style={{ background: '#fff8e1', border: '1px solid #e6c656', color: '#7a5c00', padding: '0.4rem 0.6rem', fontSize: '0.8rem', marginBottom: '0.6rem' }}>
-                draft — 공개 페이지에는 아직 안 보입니다. 발행(published)하면 이 모양으로 나옵니다.
+              <div style={{ background: '#fff8e1', border: '1px solid #e6c656', color: '#7a5c00', padding: '0.4rem 0.6rem', fontSize: '0.8rem', marginBottom: '0.8rem', borderRadius: 4 }}>
+                초안 — 공개 페이지에는 아직 안 보입니다. 발행하면 이 모양으로 나옵니다.
               </div>
             )}
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', color: '#666', fontSize: '0.8rem', marginBottom: '0.4rem' }}>
-              <span>{edit.status === 'published' ? '● published' : '○ draft'}</span>
-              {edit.pinned && <span style={{ color: '#c0392b' }}>● 공지(Notice)</span>}
-              <span>게시일: {formatNewsDate(edit.published_at) || '—'}</span>
-              <span>작성자: {edit.author_name || edit.author_email || '—'}</span>
-              <span>조회 {edit.views ?? 0}</span>
+            {/* 헤더(메타 + 제목)를 한 묶음으로, 본문과는 구분선으로 분리 */}
+            <div style={{ borderBottom: '1px solid #e5e5e5', paddingBottom: '1rem', marginBottom: '1.4rem' }}>
+              <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', alignItems: 'center', color: '#999', fontSize: '0.8rem', marginBottom: '0.6rem' }}>
+                <span style={{ display: 'inline-block', padding: '0.1rem 0.55rem', borderRadius: 999, fontSize: '0.72rem', fontWeight: 600, background: edit.status === 'published' ? '#e6f4ea' : '#f0f0f0', color: edit.status === 'published' ? '#1a7f37' : '#777' }}>
+                  {edit.status === 'published' ? '발행' : '초안'}
+                </span>
+                {edit.pinned && <span style={{ display: 'inline-block', padding: '0.1rem 0.55rem', borderRadius: 999, fontSize: '0.72rem', fontWeight: 600, background: '#fdecea', color: '#c0392b' }}>공지</span>}
+                <span>{formatNewsDate(edit.published_at) || '—'}</span>
+                <span style={{ color: '#ccc' }}>·</span>
+                <span>{edit.author_name || edit.author_email || '—'}</span>
+                <span style={{ color: '#ccc' }}>·</span>
+                <span>조회 {edit.views ?? 0}</span>
+              </div>
+              <h1 style={{ margin: 0, fontSize: '1.7rem', lineHeight: 1.3 }}>{edit.title}</h1>
             </div>
-            <h1 style={{ margin: '0 0 0.6rem' }}>{edit.title}</h1>
             <PostBody json={edit.body_json} />
           </div>
         ))}

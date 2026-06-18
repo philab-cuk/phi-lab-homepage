@@ -53,6 +53,20 @@ function ResearchInterests({ tags }) {
   )
 }
 
+// 이름 표기 — 한글 이름 진하게/크게, 그 옆에 영문 이름 연하게.
+// 한글 이름이 없으면 영문만 진하게.
+function MemberName({ member, korClass = 'text-xl', engClass = 'text-base' }) {
+  const ko = member.nameKo
+  const en = member.name
+  if (!ko) return <span className={`font-bold text-ink ${korClass}`}>{en}</span>
+  return (
+    <span className="inline-flex items-baseline gap-2 flex-wrap">
+      <span className={`font-bold text-ink ${korClass}`}>{ko}</span>
+      {en && <span className={`font-normal text-muted ${engClass}`}>{en}</span>}
+    </span>
+  )
+}
+
 function ProfessorRow({ member }) {
   return (
     <div
@@ -65,7 +79,7 @@ function ProfessorRow({ member }) {
         className="w-40 sm:w-44 aspect-[3/4] object-cover flex-shrink-0"
       />
       <div className="min-w-0">
-        <p className="my-0 text-xl font-semibold text-ink">{member.name}</p>
+        <p className="my-0"><MemberName member={member} korClass="text-2xl" engClass="text-lg" /></p>
         <p className="my-0 text-muted">{member.title}</p>
         <p className="my-0 text-muted">{member.degree}</p>
         {member.bioShort && <p className="text-muted">{member.bioShort}</p>}
@@ -87,10 +101,10 @@ function StudentRow({ member }) {
         alt={member.name}
         loading="lazy"
         decoding="async"
-        className="w-32 sm:w-36 aspect-[3/4] object-cover flex-shrink-0"
+        className="w-40 sm:w-44 aspect-[3/4] object-cover flex-shrink-0"
       />
       <div className="min-w-0">
-        <p className="my-0 text-lg font-semibold text-ink">{member.name}</p>
+        <p className="my-0"><MemberName member={member} korClass="text-xl" engClass="text-base" /></p>
         <p className="my-0 text-muted">{member.degree}</p>
         <ResearchInterests tags={member.researchInterests} />
         <SocialLine member={member} />
@@ -106,7 +120,7 @@ function AlumnusItem({ member }) {
       className="scroll-mt-24 py-4 border-b border-rule last:border-b-0"
     >
       <p className="my-0">
-        <span className="font-semibold text-ink">{member.name}</span>
+        <MemberName member={member} korClass="text-lg" engClass="text-[15px]" />
         <span className="text-muted">
           {' '}· {member.degree} · {member.graduatedYear}
         </span>
@@ -154,8 +168,8 @@ export default function Members() {
   const data = useLoaderData()
   const location = useLocation()
 
-  const professor = data.current.find((m) => m.role === 'Principal Investigator')
-  const students = data.current.filter((m) => m.role !== 'Principal Investigator')
+  const professor = data.current.find((m) => m.role === '지도교수')
+  const students = data.current.filter((m) => m.role !== '지도교수')
   const alumni = data.alumni
 
   // Hash navigation: if URL has #<id>, force the tab that contains that
@@ -195,13 +209,13 @@ export default function Members() {
         <>
           {professor && (
             <>
-              <h2>Principal Investigator</h2>
+              <h2>지도교수</h2>
               <ProfessorRow member={professor} />
             </>
           )}
           {students.length > 0 && (
             <>
-              <h2>Undergraduate Researchers</h2>
+              <h2>학부연구생</h2>
               <div>
                 {students.map((member) => (
                   <StudentRow key={member.id} member={member} />
@@ -215,7 +229,7 @@ export default function Members() {
       {activeTab === 'Alumni' && (
         <>
           <h2>
-            {alumni.length} {alumni.length === 1 ? 'Graduate' : 'Graduates'}
+            졸업생 {alumni.length}명
           </h2>
           <div>
             {alumni.map((member) => (

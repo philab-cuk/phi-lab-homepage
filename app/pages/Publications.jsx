@@ -111,25 +111,29 @@ function PubItem({ pub }) {
   const link = pub.doi ? `https://doi.org/${pub.doi}` : pub.url
   return (
     <article className="py-4 border-b border-rule last:border-b-0">
-      <p className="my-0">
-        <AuthorList authors={pub.authors} /> ({pub.year}).{' '}
-        <strong className="text-ink">{pub.title}</strong>.{' '}
-        <em>{pub.venue}</em>
-        {isArticle && pub.venueDetails && <>, {pub.venueDetails}</>}
-        {!isArticle && pub.location && <>, {pub.location}</>}
-        {!isArticle && pub.date && <>, {pub.date}</>}
-        .
-      </p>
+      {/* 인용 줄(큰 글씨) 전체에 DOI/원문 링크를 녹임 — 링크 있으면 줄 전체가 클릭 */}
+      {(() => {
+        const cite = (
+          <>
+            <AuthorList authors={pub.authors} /> ({pub.year}).{' '}
+            <strong className="text-ink">{pub.title}</strong>.{' '}
+            <em>{pub.venue}</em>
+            {isArticle && pub.venueDetails && <>, {pub.venueDetails}</>}
+            {!isArticle && pub.location && <>, {pub.location}</>}
+            {!isArticle && pub.date && <>, {pub.date}</>}
+            .
+          </>
+        )
+        return link ? (
+          <a href={link} target="_blank" rel="noopener noreferrer" className="block my-0 text-ink no-underline hover:underline">
+            {cite}
+          </a>
+        ) : (
+          <p className="my-0">{cite}</p>
+        )
+      })()}
       <p className="my-1 text-[15px] text-meta">
         {CATEGORY_LABEL[pub.category]}
-        {link && (
-          <>
-            {' · '}
-            <a href={link} target="_blank" rel="noopener noreferrer">
-              {pub.doi ? 'DOI' : 'Link'}
-            </a>
-          </>
-        )}
         {' · '}
         <CopyBibtex pub={pub} />
       </p>

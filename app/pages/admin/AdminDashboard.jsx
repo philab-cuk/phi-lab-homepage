@@ -3,7 +3,7 @@ import { useAuth } from '../../contexts/AuthContext'
 
 // 사이드바 메뉴와 같은 순서/구분. 카드마다 한 줄 설명.
 const COMMON = [
-  { to: '/admin/my-profile', label: '내 프로필', desc: '내 멤버 정보 등록·수정' },
+  { to: '/admin/my-profile', label: 'My Profile', desc: '내 멤버 정보 등록·수정' },
   { to: '/admin/news',       label: 'News',      desc: '소식 작성' },
   { to: '/admin/posts',      label: 'Posts',     desc: '글 작성' },
 ]

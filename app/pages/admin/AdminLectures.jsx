@@ -3,7 +3,7 @@ import { supabase } from '../../lib/supabase'
 import { PageHeader, Button, Table, Modal, Field, TextInput, TextArea, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
 
 const TERMS  = ['Spring', 'Summer', 'Fall', 'Winter']
-const LEVELS = ['undergraduate', 'graduate']
+const LEVELS = [{ value: 'undergraduate', label: '학부' }, { value: 'graduate', label: '대학원' }]
 const MAX_IMAGES = 10
 const IMG_EXT = ['jpg', 'jpeg', 'png', 'webp']
 
@@ -25,6 +25,8 @@ export default function AdminLectures() {
   const [error, setError] = useState(null)
   const [edit, setEdit] = useState(null)
   const [isNew, setIsNew] = useState(false)
+  const [viewing, setViewing] = useState(false) // 행 클릭 → 보기(읽기 전용)
+  const [original, setOriginal] = useState(null) // 편집 취소 시 되돌릴 원본
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
   const [pendingImages, setPendingImages] = useState([]) // [{ file, url }] 선택만 하고 저장 시 업로드
@@ -43,9 +45,11 @@ export default function AdminLectures() {
     for (const p of pendingImages) URL.revokeObjectURL(p.url)
     setPendingImages([])
   }
-  function openNew() { resetImages(); setIsNew(true); setEdit({ ...emptyLecture(), id: crypto.randomUUID() }) }
-  function openEdit(row) { resetImages(); setIsNew(false); setEdit({ ...row }) }
-  function closeEdit() { resetImages(); setEdit(null) }
+  function openNew() { resetImages(); setIsNew(true); setViewing(false); setOriginal(null); setEdit({ ...emptyLecture(), id: crypto.randomUUID() }) }
+  function openView(row) { resetImages(); setIsNew(false); setViewing(true); setOriginal({ ...row }); setEdit({ ...row }) }
+  function openEdit(row) { resetImages(); setIsNew(false); setViewing(false); setOriginal({ ...row }); setEdit({ ...row }) }
+  function closeEdit() { resetImages(); setViewing(false); setEdit(null) }
+  function cancelEdit() { if (isNew) closeEdit(); else { setEdit(original); setViewing(true) } }
 
   // 사진 선택 시: 검증 후 메모리에만 보관(업로드는 저장 때). 최대 10장.
   function onSelectImages(fileList) {
@@ -140,7 +144,7 @@ export default function AdminLectures() {
           columns={[
             { key: 'id', label: 'ID', render: r => <code style={{ fontSize: '0.7rem' }}>{r.id}</code> },
             { key: 'semester', label: 'Semester' },
-            { key: 'level', label: 'Level' },
+            { key: 'level', label: '구분', render: r => r.level === 'undergraduate' ? '학부' : (r.level === 'graduate' ? '대학원' : r.level) },
             { key: 'title_en', label: 'Title', render: r => <>{r.title_en}{r.title_ko ? <div style={{ fontSize: '0.75rem', color: '#666' }}>{r.title_ko}</div> : null}</> },
             { key: 'images', label: '사진', render: r => `${r.images?.length || 0}장` },
             { key: 'code', label: 'Code' },
@@ -154,17 +158,22 @@ export default function AdminLectures() {
             },
           ]}
           rows={rows}
+          onRowClick={openView}
         />
       )}
 
       <Modal
         open={!!edit}
         onClose={closeEdit}
-        title={edit ? (isNew ? '새 강의' : `Edit: ${edit.id}`) : ''}
-        footer={<><Button onClick={closeEdit} disabled={uploading}>취소</Button><Button primary onClick={save} disabled={uploading}>{uploading ? '저장 중…' : '저장'}</Button></>}
+        width={920}
+        fixedHeight
+        title={edit ? (viewing ? `보기: ${edit.title_en || edit.id}` : (isNew ? '새 강의' : `Edit: ${edit.id}`)) : ''}
+        headerActions={viewing
+          ? <><Button primary onClick={() => setViewing(false)}>편집하기</Button><Button onClick={closeEdit}>닫기</Button></>
+          : <><Button primary onClick={save} disabled={uploading}>{uploading ? '저장 중…' : '저장'}</Button><Button onClick={cancelEdit} disabled={uploading}>취소</Button></>}
       >
         {edit && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
+          <fieldset disabled={viewing} style={{ border: 0, padding: 0, margin: 0, minInlineSize: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
             <Field label="ID" hint={isNew ? '자동 생성된 UID (변경 불가)' : '변경 불가.'}><TextInput value={edit.id} disabled /></Field>
             <Field label="Code"><TextInput value={edit.code||''} onChange={e => setEdit({...edit, code: e.target.value || null})} /></Field>
             <Field label="Title (EN)"><TextInput value={edit.title_en||''} onChange={e => setEdit({...edit, title_en: e.target.value})} /></Field>
@@ -174,7 +183,7 @@ export default function AdminLectures() {
             <Field label="Semester (자동)" hint="Year + Term 으로 자동 생성됩니다.">
               <TextInput value={`${edit.term} ${edit.year}`} disabled />
             </Field>
-            <Field label="Level"><Select value={edit.level} options={LEVELS} onChange={e => setEdit({...edit, level: e.target.value})} /></Field>
+            <Field label="구분"><Select value={edit.level} options={LEVELS} onChange={e => setEdit({...edit, level: e.target.value})} /></Field>
             <div style={{ gridColumn: '1 / -1' }}>
               <Field label="Description"><TextArea rows={4} value={edit.description||''} onChange={e => setEdit({...edit, description: e.target.value || null})} /></Field>
             </div>
@@ -214,7 +223,7 @@ export default function AdminLectures() {
             <div style={{ gridColumn: '1 / -1' }}>
               <Field label="Tags (콤마)"><TextInput value={typeof edit.tags === 'string' ? edit.tags : arrJoin(edit.tags)} onChange={e => setEdit({...edit, tags: e.target.value})} /></Field>
             </div>
-          </div>
+          </fieldset>
         )}
       </Modal>
       {confirmUI}

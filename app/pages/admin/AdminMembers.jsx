@@ -4,11 +4,12 @@ import { PageHeader, Button, Table, Modal, Field, TextInput, TextArea, Select, E
 import AdminRoles from './AdminRoles'
 
 const STATUSES = ['current', 'alumni']
+const DEGREES = ['학부생', '학사', '석사', '박사', '박사수료']
 
 function emptyMember() {
   return {
     id: '', name: '', name_ko: null, role: '', title: null, degree: null,
-    student_number: null, department: null, institution: null,
+    student_number: null, college: null, department: null, institution: null,
     photo_url: null, email: null, personal_site: null, linkedin: null, google_scholar: null,
     research_interests: null, bio_short: null, bio_full: null,
     education: null, experience: null, service: null,
@@ -27,6 +28,8 @@ export default function AdminMembers() {
   const [error, setError] = useState(null)
   const [edit, setEdit] = useState(null)
   const [isNew, setIsNew] = useState(false)
+  const [viewing, setViewing] = useState(false) // 행 클릭 → 보기(읽기 전용)
+  const [original, setOriginal] = useState(null) // 편집 취소 시 되돌릴 원본
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
   const [uploading, setUploading] = useState(false)
@@ -78,17 +81,31 @@ export default function AdminMembers() {
   function openNew() {
     setIsNew(true)
     resetPhoto()
+    setViewing(false)
+    setOriginal(null)
     setEdit({ ...emptyMember(), id: crypto.randomUUID(), status: tab })
+  }
+  function openView(row) {
+    setIsNew(false)
+    resetPhoto()
+    setViewing(true)
+    setOriginal({ ...row })
+    setEdit({ ...row })
   }
   function openEdit(row) {
     setIsNew(false)
     resetPhoto()
+    setViewing(false)
+    setOriginal({ ...row })
     setEdit({ ...row })
   }
   function closeEdit() {
     resetPhoto()
+    setViewing(false)
     setEdit(null)
   }
+  // 편집 취소: 새 멤버면 닫고, 기존이면 변경 버리고 보기 모드로 복귀
+  function cancelEdit() { if (isNew) closeEdit(); else { setEdit(original); setViewing(true) } }
 
   async function save() {
     setError(null); setUploading(true)
@@ -132,7 +149,7 @@ export default function AdminMembers() {
   }
 
   // PI(교수)는 Members 목록에서 숨김 — Professor 화면에서 관리
-  const filtered = rows.filter(r => r.status === tab && r.role !== 'Principal Investigator')
+  const filtered = rows.filter(r => r.status === tab && r.role !== '지도교수')
 
   if (view === 'roles') {
     return (
@@ -154,11 +171,11 @@ export default function AdminMembers() {
       </div>
       <PageHeader
         title="Members"
-        subtitle={`current ${rows.filter(r=>r.status==='current').length} · alumni ${rows.filter(r=>r.status==='alumni').length}`}
+        subtitle={`재학 ${rows.filter(r=>r.status==='current').length} · 졸업 ${rows.filter(r=>r.status==='alumni').length}`}
         actions={
           <>
-            <Button onClick={() => setTab('current')} primary={tab==='current'}>Current</Button>
-            <Button onClick={() => setTab('alumni')} primary={tab==='alumni'}>Alumni</Button>
+            <Button onClick={() => setTab('current')} primary={tab==='current'}>재학</Button>
+            <Button onClick={() => setTab('alumni')} primary={tab==='alumni'}>졸업</Button>
             {deleteModeToggle}
             <Button primary onClick={openNew}>+ 새 멤버</Button>
           </>
@@ -169,11 +186,13 @@ export default function AdminMembers() {
         <Table
           columns={[
             { key: 'id', label: 'ID', render: r => <code style={{ fontSize: '0.7rem' }}>{r.id}</code> },
-            { key: 'name', label: 'Name', render: r => <>{r.name}{r.name_ko ? ` (${r.name_ko})` : ''}</> },
-            { key: 'role', label: 'Role' },
+            { key: 'name', label: '이름', render: r => (
+              <><strong>{r.name_ko || r.name}</strong>{r.name_ko && r.name ? <span style={{ color: '#888', marginLeft: 6 }}>{r.name}</span> : null}</>
+            ) },
+            { key: 'role', label: '역할' },
             { key: 'joined_at', label: '합류일', render: r => r.joined_at || <span style={{ color: '#c33' }}>미입력</span> },
             { key: 'photo', label: '사진', render: r => r.photo_url ? <img src={r.photo_url} alt="" style={{ width: 32, height: 32, objectFit: 'cover' }} /> : '' },
-            { key: 'email', label: 'Email' },
+            { key: 'email', label: '이메일' },
             {
               key: 'actions', label: '', render: r => (
                 <div style={{ display: 'flex', gap: '0.25rem' }}>
@@ -184,34 +203,36 @@ export default function AdminMembers() {
             },
           ]}
           rows={filtered}
+          onRowClick={openView}
         />
       )}
 
       <Modal
         open={!!edit}
         onClose={closeEdit}
-        title={edit ? (isNew ? '새 멤버' : `Edit: ${edit.id}`) : ''}
-        footer={
-          <>
-            <Button onClick={closeEdit} disabled={uploading}>취소</Button>
-            <Button primary onClick={save} disabled={uploading}>{uploading ? '저장 중…' : '저장'}</Button>
-          </>
-        }
+        width={920}
+        fixedHeight
+        title={edit ? (viewing ? `보기: ${edit.name_ko || edit.name}` : (isNew ? '새 멤버' : `Edit: ${edit.id}`)) : ''}
+        headerActions={viewing
+          ? <><Button primary onClick={() => setViewing(false)}>편집하기</Button><Button onClick={closeEdit}>닫기</Button></>
+          : <><Button primary onClick={save} disabled={uploading}>{uploading ? '저장 중…' : '저장'}</Button><Button onClick={cancelEdit} disabled={uploading}>취소</Button></>}
       >
         {edit && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
+          <fieldset disabled={viewing} style={{ border: 0, padding: 0, margin: 0, minInlineSize: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
             <Field label="ID" hint={isNew ? '자동 생성된 UID (변경 불가)' : '변경 불가.'}>
               <TextInput value={edit.id} disabled />
             </Field>
-            <Field label="Status">
-              <Select value={edit.status} options={STATUSES} onChange={e => setEdit({ ...edit, status: e.target.value })} />
+            <Field label="상태">
+              <Select
+                value={edit.status}
+                options={[{ value: 'current', label: '재학' }, { value: 'alumni', label: '졸업' }]}
+                onChange={e => setEdit({ ...edit, status: e.target.value })}
+              />
             </Field>
             <Field label="연구실 합류일" required hint="이 날짜 순서로 멤버가 정렬됩니다.">
               <TextInput type="date" value={edit.joined_at || ''} onChange={e => setEdit({ ...edit, joined_at: e.target.value || null })} />
             </Field>
-            <Field label="Name (English)" required><TextInput value={edit.name||''} onChange={e => setEdit({...edit, name: e.target.value})} /></Field>
-            <Field label="Name (Korean)" required><TextInput value={edit.name_ko||''} onChange={e => setEdit({...edit, name_ko: e.target.value || null})} /></Field>
-            <Field label="Role" required hint="목록은 위 'Member Roles' 탭에서 관리합니다.">
+            <Field label="역할" required hint="목록은 위 'Member Roles' 탭에서 관리합니다.">
               <Select
                 value={edit.role || ''}
                 options={[
@@ -222,11 +243,21 @@ export default function AdminMembers() {
                 onChange={e => setEdit({ ...edit, role: e.target.value })}
               />
             </Field>
-            <Field label="Title"><TextInput value={edit.title||''} onChange={e => setEdit({...edit, title: e.target.value || null})} /></Field>
-            <Field label="Degree"><TextInput value={edit.degree||''} onChange={e => setEdit({...edit, degree: e.target.value || null})} /></Field>
-            <Field label="Student number / 학번"><TextInput value={edit.student_number||''} onChange={e => setEdit({...edit, student_number: e.target.value || null})} /></Field>
-            <Field label="Department"><TextInput value={edit.department||''} onChange={e => setEdit({...edit, department: e.target.value || null})} /></Field>
-            <Field label="Institution"><TextInput value={edit.institution||''} onChange={e => setEdit({...edit, institution: e.target.value || null})} /></Field>
+            <Field label="이름 (한글)" required hint="대표 이름. 목록·공개 페이지에서 메인으로 표시됩니다."><TextInput value={edit.name_ko||''} onChange={e => setEdit({...edit, name_ko: e.target.value || null})} /></Field>
+            <Field label="이름 (영문)" required><TextInput value={edit.name||''} onChange={e => setEdit({...edit, name: e.target.value})} /></Field>
+            <Field label="학위">
+              <Select
+                value={edit.degree || ''}
+                options={[
+                  { value: '', label: '(선택 안 함)' },
+                  ...DEGREES.map(d => ({ value: d, label: d })),
+                  ...(edit.degree && !DEGREES.includes(edit.degree) ? [{ value: edit.degree, label: `${edit.degree} (목록 외)` }] : []),
+                ]}
+                onChange={e => setEdit({ ...edit, degree: e.target.value || null })}
+              />
+            </Field>
+            <Field label="학부" hint="예: 의생명·건강과학부"><TextInput value={edit.college||''} onChange={e => setEdit({...edit, college: e.target.value || null})} /></Field>
+            <Field label="학과" hint="예: 바이오메디컬소프트웨어공학과"><TextInput value={edit.department||''} onChange={e => setEdit({...edit, department: e.target.value || null})} /></Field>
             <div style={{ gridColumn: '1 / -1' }}>
               <Field label="사진" hint="jpg/png/webp, 10MB 이내. 저장을 눌러야 실제로 업로드됩니다.">
                 <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
@@ -246,7 +277,7 @@ export default function AdminMembers() {
                 </div>
               </Field>
             </div>
-            <Field label="연결 계정 (Email)" hint="이 멤버를 쓸 user 계정. 연결하면 그 user 가 'My Profile' 에서 이 정보를 보고 직접 수정합니다.">
+            <Field label="연결 계정 (이메일)" hint="이 멤버를 쓸 user 계정. 연결하면 그 user 가 'My Profile' 에서 이 정보를 보고 직접 수정합니다.">
               <Select
                 value={edit.email || ''}
                 options={[
@@ -258,11 +289,11 @@ export default function AdminMembers() {
                 onChange={e => setEdit({ ...edit, email: e.target.value || null })}
               />
             </Field>
-            <Field label="Personal site"><TextInput value={edit.personal_site||''} onChange={e => setEdit({...edit, personal_site: e.target.value || null})} /></Field>
-            <Field label="LinkedIn"><TextInput value={edit.linkedin||''} onChange={e => setEdit({...edit, linkedin: e.target.value || null})} /></Field>
-            <Field label="Google Scholar"><TextInput value={edit.google_scholar||''} onChange={e => setEdit({...edit, google_scholar: e.target.value || null})} /></Field>
+            <Field label="개인 홈페이지"><TextInput value={edit.personal_site||''} onChange={e => setEdit({...edit, personal_site: e.target.value || null})} /></Field>
+            <Field label="링크드인 (LinkedIn)"><TextInput value={edit.linkedin||''} onChange={e => setEdit({...edit, linkedin: e.target.value || null})} /></Field>
+            <Field label="구글 스칼라 (Google Scholar)"><TextInput value={edit.google_scholar||''} onChange={e => setEdit({...edit, google_scholar: e.target.value || null})} /></Field>
             <div style={{ gridColumn: '1 / -1' }}>
-              <Field label="Research interests (콤마 구분)">
+              <Field label="연구 관심분야 (콤마로 구분)">
                 <TextInput
                   value={typeof edit.research_interests === 'string' ? edit.research_interests : arrJoin(edit.research_interests)}
                   onChange={e => setEdit({...edit, research_interests: e.target.value})}
@@ -270,20 +301,9 @@ export default function AdminMembers() {
               </Field>
             </div>
             <div style={{ gridColumn: '1 / -1' }}>
-              <Field label="Service (콤마 구분)">
-                <TextInput
-                  value={typeof edit.service === 'string' ? edit.service : arrJoin(edit.service)}
-                  onChange={e => setEdit({...edit, service: e.target.value})}
-                />
-              </Field>
+              <Field label="소개 (짧게)"><TextArea value={edit.bio_short||''} onChange={e => setEdit({...edit, bio_short: e.target.value || null})} /></Field>
             </div>
-            <div style={{ gridColumn: '1 / -1' }}>
-              <Field label="Bio short"><TextArea value={edit.bio_short||''} onChange={e => setEdit({...edit, bio_short: e.target.value || null})} /></Field>
-            </div>
-            <div style={{ gridColumn: '1 / -1' }}>
-              <Field label="Bio full"><TextArea rows={6} value={edit.bio_full||''} onChange={e => setEdit({...edit, bio_full: e.target.value || null})} /></Field>
-            </div>
-          </div>
+          </fieldset>
         )}
       </Modal>
       {confirmUI}

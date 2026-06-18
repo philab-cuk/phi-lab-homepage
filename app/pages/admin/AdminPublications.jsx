@@ -26,6 +26,8 @@ export default function AdminPublications() {
   const [error, setError] = useState(null)
   const [edit, setEdit] = useState(null)
   const [isNew, setIsNew] = useState(false)
+  const [viewing, setViewing] = useState(false) // 행 클릭 → 보기(읽기 전용)
+  const [original, setOriginal] = useState(null) // 편집 취소 시 되돌릴 원본
   const [importMode, setImportMode] = useState(null)  // 'doi' | 'bibtex' | null
   const [importInput, setImportInput] = useState('')
   const [importing, setImporting] = useState(false)
@@ -117,8 +119,7 @@ export default function AdminPublications() {
     load()
   }
 
-  function openEdit(row) {
-    setIsNew(false)
+  function rowToEdit(row) {
     const auths = row._authors.map(pa => {
       const a = authorById.get(pa.author_id)
       return {
@@ -127,11 +128,17 @@ export default function AdminPublications() {
         is_pi: pa.is_pi, is_co_first: pa.is_co_first, is_co_correspond: pa.is_co_correspond,
       }
     })
-    setEdit({ ...row, _authors: auths })
+    return { ...row, _authors: auths }
   }
+  function openView(row) { setIsNew(false); setViewing(true); const s = rowToEdit(row); setOriginal(s); setEdit(s) }
+  function openEdit(row) { setIsNew(false); setViewing(false); const s = rowToEdit(row); setOriginal(s); setEdit(s) }
+  function closeEdit() { setViewing(false); setEdit(null) }
+  function cancelEdit() { if (isNew) closeEdit(); else { setEdit(original); setViewing(true) } }
 
   function openNew() {
     setIsNew(true)
+    setViewing(false)
+    setOriginal(null)
     setEdit({ ...emptyPub(), id: crypto.randomUUID() })
   }
 
@@ -191,8 +198,8 @@ export default function AdminPublications() {
                 {c.label} ({rows.filter(r => r.category === c.value).length})
               </Button>
             ))}
-            <Button onClick={() => { setImportMode('doi'); setImportInput('') }}>DOI import</Button>
-            <Button onClick={() => { setImportMode('bibtex'); setImportInput('') }}>BibTeX import</Button>
+            <Button onClick={() => { setImportMode('doi'); setImportInput('') }}>DOI 가져오기</Button>
+            <Button onClick={() => { setImportMode('bibtex'); setImportInput('') }}>BibTeX 가져오기</Button>
             {deleteModeToggle}
             <Button primary onClick={openNew}>+ 새 출판물</Button>
           </>
@@ -221,6 +228,7 @@ export default function AdminPublications() {
             },
           ]}
           rows={filtered}
+          onRowClick={openView}
         />
       )}
 
@@ -228,7 +236,7 @@ export default function AdminPublications() {
       <Modal
         open={!!importMode}
         onClose={() => setImportMode(null)}
-        title={importMode === 'doi' ? 'DOI import' : 'BibTeX import'}
+        title={importMode === 'doi' ? 'DOI 가져오기' : 'BibTeX 가져오기'}
         footer={<><Button onClick={() => setImportMode(null)}>취소</Button><Button primary disabled={!importInput || importing} onClick={doImport}>{importing ? '가져오는 중…' : '가져오기'}</Button></>}
       >
         {importMode === 'doi' ? (
@@ -248,12 +256,16 @@ export default function AdminPublications() {
       {/* edit modal */}
       <Modal
         open={!!edit}
-        onClose={() => setEdit(null)}
-        title={edit ? (isNew ? '새 출판물' : `Edit: ${edit.id}`) : ''}
-        footer={<><Button onClick={() => setEdit(null)}>취소</Button><Button primary onClick={save}>저장</Button></>}
+        onClose={closeEdit}
+        width={920}
+        fixedHeight
+        title={edit ? (viewing ? `보기: ${edit.title || edit.id}` : (isNew ? '새 출판물' : `Edit: ${edit.id}`)) : ''}
+        headerActions={viewing
+          ? <><Button primary onClick={() => setViewing(false)}>편집하기</Button><Button onClick={closeEdit}>닫기</Button></>
+          : <><Button primary onClick={save}>저장</Button><Button onClick={cancelEdit}>취소</Button></>}
       >
         {edit && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
+          <fieldset disabled={viewing} style={{ border: 0, padding: 0, margin: 0, minInlineSize: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
             <Field label="ID" hint={isNew ? '자동 생성된 UID (변경 불가)' : '변경 불가.'}><TextInput value={edit.id} disabled /></Field>
             <Field label="Category"><Select value={edit.category} options={CATEGORIES} onChange={e => setEdit({...edit, category: e.target.value})} /></Field>
             <div style={{ gridColumn: '1 / -1' }}>
@@ -297,7 +309,7 @@ export default function AdminPublications() {
                 ))}
               </div>
             </div>
-          </div>
+          </fieldset>
         )}
       </Modal>
       {confirmUI}

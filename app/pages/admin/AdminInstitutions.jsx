@@ -13,6 +13,8 @@ export default function AdminInstitutions() {
   const [error, setError] = useState(null)
   const [edit, setEdit] = useState(null)   // { id?, name_en, name_ko, is_internal }
   const [isNew, setIsNew] = useState(false)
+  const [viewing, setViewing] = useState(false) // 행 클릭 → 보기(읽기 전용), 편집하기 → 수정
+  const [original, setOriginal] = useState(null) // 편집 취소 시 되돌릴 원본
   const [saving, setSaving] = useState(false)
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
@@ -51,9 +53,13 @@ export default function AdminInstitutions() {
   }
   useEffect(() => { load() }, [])
 
-  function openNew() { resetLogo(); setIsNew(true); setEdit({ id: crypto.randomUUID(), name_en: '', name_ko: null, is_internal: false, logo_url: null }) }
-  function openEdit(row) { resetLogo(); setIsNew(false); setEdit({ id: row.id, name_en: row.name_en, name_ko: row.name_ko, is_internal: row.is_internal, logo_url: row.logo_url || null }) }
-  function closeEdit() { resetLogo(); setEdit(null) }
+  function rowToEdit(row) { return { id: row.id, name_en: row.name_en, name_ko: row.name_ko, is_internal: row.is_internal, logo_url: row.logo_url || null } }
+  function openNew() { resetLogo(); setIsNew(true); setViewing(false); setOriginal(null); setEdit({ id: crypto.randomUUID(), name_en: '', name_ko: null, is_internal: false, logo_url: null }) }
+  function openView(row) { resetLogo(); setIsNew(false); setViewing(true); const s = rowToEdit(row); setOriginal(s); setEdit(s) }
+  function openEdit(row) { resetLogo(); setIsNew(false); setViewing(false); const s = rowToEdit(row); setOriginal(s); setEdit(s) }
+  function closeEdit() { resetLogo(); setEdit(null); setViewing(false) }
+  // 편집 취소: 새 항목이면 닫고, 기존이면 변경 버리고 보기 모드로 복귀
+  function cancelEdit() { if (isNew) closeEdit(); else { setEdit(original); setViewing(true) } }
 
   async function save() {
     setError(null); setSaving(true)
@@ -87,7 +93,7 @@ export default function AdminInstitutions() {
   }
 
   return (
-    <div style={{ maxWidth: 720 }}>
+    <div>
       <PageHeader
         title="Institutions"
         subtitle="연구의 소속/협력 기관 목록입니다."
@@ -113,22 +119,22 @@ export default function AdminInstitutions() {
             },
           ]}
           rows={rows}
+          onRowClick={openView}
         />
       )}
 
       <Modal
         open={!!edit}
         onClose={closeEdit}
-        title={edit ? (isNew ? '새 기관' : `Edit: ${edit.name_en}`) : ''}
-        footer={
-          <>
-            <Button onClick={closeEdit} disabled={saving}>취소</Button>
-            <Button primary onClick={save} disabled={saving}>{saving ? '저장 중…' : '저장'}</Button>
-          </>
-        }
+        width={920}
+        fixedHeight
+        title={edit ? (viewing ? `보기: ${edit.name_en}` : (isNew ? '새 기관' : `Edit: ${edit.name_en}`)) : ''}
+        headerActions={viewing
+          ? <><Button primary onClick={() => setViewing(false)}>편집하기</Button><Button onClick={closeEdit}>닫기</Button></>
+          : <><Button primary onClick={save} disabled={saving}>{saving ? '저장 중…' : '저장'}</Button><Button onClick={cancelEdit} disabled={saving}>취소</Button></>}
       >
         {edit && (
-          <div style={{ display: 'grid', gap: '0.25rem' }}>
+          <fieldset disabled={viewing} style={{ border: 0, padding: 0, margin: 0, minInlineSize: 0, display: 'grid', gap: '0.25rem' }}>
             <Field label="기관명 (영문)" required>
               <TextInput value={edit.name_en} autoFocus onChange={e => setEdit({ ...edit, name_en: e.target.value })} />
             </Field>
@@ -153,7 +159,7 @@ export default function AdminInstitutions() {
                 {pendingFile && <span style={{ fontSize: '0.75rem', color: '#888' }}>저장 시 업로드 예정</span>}
               </div>
             </Field>
-          </div>
+          </fieldset>
         )}
       </Modal>
       {confirmUI}

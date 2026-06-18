@@ -96,7 +96,7 @@ export default function AdminMyProfile() {
   }
 
   if (existing === undefined || !edit) {
-    return <div><PageHeader title="내 프로필" /><p>로딩 중…</p></div>
+    return <div><PageHeader title="My Profile" /><p>로딩 중…</p></div>
   }
 
   const isNew = !existing
@@ -105,7 +105,7 @@ export default function AdminMyProfile() {
   return (
     <div style={{ maxWidth: 720 }}>
       <PageHeader
-        title="내 프로필"
+        title="My Profile"
         subtitle={isNew ? '아직 멤버 정보가 없습니다. 등록해 주세요.' : '내 멤버 정보를 수정할 수 있습니다.'}
       />
       <ErrorBanner error={error} />

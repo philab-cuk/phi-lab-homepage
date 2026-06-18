@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { PageHeader, Button, Field, TextInput, TextArea, Select, ErrorBanner } from '../../components/admin/AdminUI'
 
-const PI_ROLE = 'Principal Investigator'
+const PI_ROLE = '지도교수'
 const EXP_CATEGORIES = [
   { value: 'academic', label: 'Academic (학술)' },
   { value: 'technical', label: 'Technical (기술)' },
@@ -139,7 +139,7 @@ export default function AdminProfessor() {
       <div>
         <PageHeader title="Professor" />
         <ErrorBanner error={error} />
-        <p>책임교수(role = <code>{PI_ROLE}</code>) 멤버가 없습니다. Members 에서 한 명의 역할을 <strong>{PI_ROLE}</strong> 로 지정하면 여기서 관리됩니다.</p>
+        <p>역할이 <strong>{PI_ROLE}</strong> 인 멤버가 없습니다. Members 에서 한 명의 역할을 <strong>{PI_ROLE}</strong> 로 지정하면 여기서 관리됩니다.</p>
       </div>
     )
   }

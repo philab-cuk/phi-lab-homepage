@@ -6,7 +6,7 @@ import BlockNoteEditor from '../../components/admin/BlockNoteEditor'
 import PostBody from '../../components/PostBody'
 import { formatNewsDate } from '../../components/NewsCard'
 
-const STATUSES = ['draft', 'published']
+const STATUSES = [{ value: 'draft', label: '초안' }, { value: 'published', label: '발행' }]
 
 // 게시 날짜(published_at, timestamptz) ↔ <input type="date"> 의 'YYYY-MM-DD' 변환.
 // 로컬 시간 기준으로 날짜를 잡아 화면 표시(local)와 어긋나지 않게 한다.
@@ -103,9 +103,9 @@ export default function AdminNews() {
                 <Button onClick={() => setFilter('all')} primary={filter==='all'}>전체</Button>
               </>
             )}
-            <Button onClick={() => setStatusFilter('all')} primary={statusFilter==='all'}>All</Button>
-            <Button onClick={() => setStatusFilter('published')} primary={statusFilter==='published'}>Published</Button>
-            <Button onClick={() => setStatusFilter('draft')} primary={statusFilter==='draft'}>Draft</Button>
+            <Button onClick={() => setStatusFilter('all')} primary={statusFilter==='all'}>전체</Button>
+            <Button onClick={() => setStatusFilter('published')} primary={statusFilter==='published'}>발행</Button>
+            <Button onClick={() => setStatusFilter('draft')} primary={statusFilter==='draft'}>초안</Button>
             {deleteModeToggle}
             <Button primary onClick={() => { setIsNew(true); setEdit(emptyNews(user.email)) }}>+ 새 뉴스</Button>
           </>
@@ -151,7 +151,7 @@ export default function AdminNews() {
           <div>
             {/* 발행 설정(메타) — 본문이 아니라 publishing 정보라 제목 위에 모은다. */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem 1rem', background: '#f7f7f7', padding: '0.6rem 0.75rem', borderRadius: 4, marginBottom: '0.9rem' }}>
-              <Field label="Status"><Select value={edit.status} options={STATUSES} onChange={e => setEdit({...edit, status: e.target.value})} /></Field>
+              <Field label="상태"><Select value={edit.status} options={STATUSES} onChange={e => setEdit({...edit, status: e.target.value})} /></Field>
               <Field label="게시 날짜" hint="공개 페이지 표시 날짜. 비우면 발행 시 오늘.">
                 <TextInput type="date" value={tsToDateInput(edit.published_at)} onChange={e => setEdit({...edit, published_at: dateInputToTs(e.target.value)})} />
               </Field>
@@ -176,19 +176,25 @@ export default function AdminNews() {
             </div>
           </div>
         ) : (
-          // 보기 모드 — 발행 메타 + 제목 + 본문(공개 상세와 같은 렌더)
+          // 보기 모드 — 메타 / 제목 / 본문을 시각적으로 분리
           <div style={{ maxWidth: 772, margin: '0 auto' }}>
             {edit.status === 'draft' && (
-              <div style={{ background: '#fff8e1', border: '1px solid #e6c656', color: '#7a5c00', padding: '0.4rem 0.6rem', fontSize: '0.8rem', marginBottom: '0.6rem' }}>
-                draft — 공개 페이지에는 아직 안 보입니다. 발행(published)하면 이 모양으로 나옵니다.
+              <div style={{ background: '#fff8e1', border: '1px solid #e6c656', color: '#7a5c00', padding: '0.4rem 0.6rem', fontSize: '0.8rem', marginBottom: '0.8rem', borderRadius: 4 }}>
+                초안 — 공개 페이지에는 아직 안 보입니다. 발행하면 이 모양으로 나옵니다.
               </div>
             )}
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', color: '#666', fontSize: '0.8rem', marginBottom: '0.4rem' }}>
-              <span>{edit.status === 'published' ? '● published' : '○ draft'}</span>
-              <span>게시일: {formatNewsDate(edit.published_at) || '—'}</span>
-              <span>작성자: {edit.author_email || '—'}</span>
+            {/* 헤더(메타 + 제목)를 한 묶음으로, 본문과는 구분선으로 분리 */}
+            <div style={{ borderBottom: '1px solid #e5e5e5', paddingBottom: '1rem', marginBottom: '1.4rem' }}>
+              <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', alignItems: 'center', color: '#999', fontSize: '0.8rem', marginBottom: '0.6rem' }}>
+                <span style={{ display: 'inline-block', padding: '0.1rem 0.55rem', borderRadius: 999, fontSize: '0.72rem', fontWeight: 600, background: edit.status === 'published' ? '#e6f4ea' : '#f0f0f0', color: edit.status === 'published' ? '#1a7f37' : '#777' }}>
+                  {edit.status === 'published' ? '발행' : '초안'}
+                </span>
+                <span>{formatNewsDate(edit.published_at) || '—'}</span>
+                <span style={{ color: '#ccc' }}>·</span>
+                <span>{edit.author_email || '—'}</span>
+              </div>
+              <h1 style={{ margin: 0, fontSize: '1.7rem', lineHeight: 1.3 }}>{edit.title}</h1>
             </div>
-            <h1 style={{ margin: '0 0 0.6rem' }}>{edit.title}</h1>
             <PostBody json={edit.body_json} />
           </div>
         ))}
