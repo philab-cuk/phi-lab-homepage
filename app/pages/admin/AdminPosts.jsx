@@ -13,12 +13,12 @@ const STATUSES = ['draft', 'published']
 function emptyPost(email) {
   return {
     title: '', body_json: null,
-    status: 'draft', author_email: email,
+    status: 'draft', author_email: email, pinned: false,
   }
 }
 
 export default function AdminPosts() {
-  const { user, isEditor } = useAuth()
+  const { user, isEditor, profile } = useAuth()
   const [rows, setRows] = useState([])
   const [filter, setFilter] = useState(isEditor ? 'all' : 'mine')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -54,11 +54,20 @@ export default function AdminPosts() {
     setError(null)
     try {
       if (!edit.title) throw new Error('title 필수')
+      // 작성자 표시이름 채우기(공개 목록용 — anon 이 admin_users 못 읽으므로 복사)
+      let author_name
+      if (edit.author_email === user.email) author_name = profile?.display_name || edit.author_email
+      else {
+        const { data: au } = await supabase.from('admin_users').select('display_name').eq('email', edit.author_email).maybeSingle()
+        author_name = au?.display_name || edit.author_email
+      }
       const payload = {
         title: edit.title,
         body_json: edit.body_json || null,
         status: edit.status,
         author_email: edit.author_email,
+        author_name,
+        pinned: !!edit.pinned,
         published_at: edit.status === 'published' && !edit.published_at ? new Date().toISOString() : edit.published_at,
       }
       const op = isNew
@@ -135,8 +144,11 @@ export default function AdminPosts() {
         {edit && (editing ? (
           <div>
             {/* 발행 설정(메타) — 본문이 아니라 publishing 정보라 제목 위에 모은다. */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem', background: '#f7f7f7', padding: '0.6rem 0.75rem', borderRadius: 4, marginBottom: '0.9rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem 1rem', background: '#f7f7f7', padding: '0.6rem 0.75rem', borderRadius: 4, marginBottom: '0.9rem' }}>
               <Field label="Status"><Select value={edit.status} options={STATUSES} onChange={e => setEdit({...edit, status: e.target.value})} /></Field>
+              <Field label="공지 고정" hint="켜면 목록 맨 위 Notice 로 고정.">
+                <Select value={edit.pinned ? 'true' : 'false'} options={[{value:'false',label:'일반'},{value:'true',label:'공지(Notice)'}]} onChange={e => setEdit({...edit, pinned: e.target.value === 'true'})} />
+              </Field>
               <Field label="Author email" hint="본인 이메일이 아니면 RLS 차단"><TextInput value={edit.author_email} onChange={e => setEdit({...edit, author_email: e.target.value})} disabled={!isEditor} /></Field>
             </div>
 
@@ -165,8 +177,10 @@ export default function AdminPosts() {
             )}
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', color: '#666', fontSize: '0.8rem', marginBottom: '0.4rem' }}>
               <span>{edit.status === 'published' ? '● published' : '○ draft'}</span>
+              {edit.pinned && <span style={{ color: '#c0392b' }}>● 공지(Notice)</span>}
               <span>게시일: {formatNewsDate(edit.published_at) || '—'}</span>
-              <span>작성자: {edit.author_email || '—'}</span>
+              <span>작성자: {edit.author_name || edit.author_email || '—'}</span>
+              <span>조회 {edit.views ?? 0}</span>
             </div>
             <h1 style={{ margin: '0 0 0.6rem' }}>{edit.title}</h1>
             <PostBody json={edit.body_json} />

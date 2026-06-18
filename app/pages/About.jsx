@@ -3,7 +3,7 @@
 
 export default function About() {
   return (
-    <div className="mx-auto max-w-[720px] px-6 py-12">
+    <div className="mx-auto max-w-[820px] px-6 py-12">
       <h1>About Lab</h1>
 
       <p>
