@@ -1,0 +1,136 @@
+[
+  {
+    "id": "sp26-aiprog",
+    "code": null,
+    "titleEn": "Artificial Intelligence Programming Design",
+    "titleKo": "인공지능프로그래밍설계",
+    "semester": "Spring 2026",
+    "level": "undergraduate",
+    "language": "Python",
+    "description": "This course will provide a basic concept and hands-on introduction to Artificial Intelligence. Students will learn the nueral networks including Convolutional Neural Network(CNN), Recurrent Neural Network(RNN), the Auto-encoder. It also covers a basic introduction of Reinforcement Learning and Transformer.\n\nBy the end of this course, students will understand the basic algorithm of neural networks and be familiar with Artificial Intellence (deep learning) programming. Students can not only use the AI-related Python libraries such as Tensorflow, Keras, but design their own network with these libraries. In addition, it is possible to increase practical coding skills and insight of analyzing data in terms of data science.",
+    "images": [],
+    "tags": ["Python", "TensorFlow", "Keras", "Neural Networks"]
+  },
+  {
+    "id": "sp26-medbigdata",
+    "code": null,
+    "titleEn": "Biomedical Big Data Analysis",
+    "titleKo": "의료빅데이터분석",
+    "semester": "Spring 2026",
+    "level": "undergraduate",
+    "language": "R",
+    "description": "",
+    "images": [
+      "https://i0.wp.com/philabcuk.org/wp-content/uploads/2026/03/image-2.png?resize=750%2C539&ssl=1"
+    ],
+    "tags": ["R", "EHR", "Statistics"]
+  },
+  {
+    "id": "sp26-capstone1",
+    "code": null,
+    "titleEn": "Capstone Design for BMSW 1",
+    "titleKo": "BMSW캡스톤디자인1",
+    "semester": "Spring 2026",
+    "level": "undergraduate",
+    "language": null,
+    "description": "",
+    "images": [],
+    "tags": ["Capstone", "Project-Based"]
+  },
+  {
+    "id": "sp26-dhealth-ai",
+    "code": null,
+    "titleEn": "Digital Health AI System Design",
+    "titleKo": "디지털헬스인공지능시스템설계",
+    "semester": "Spring 2026",
+    "level": "graduate",
+    "language": null,
+    "description": "",
+    "images": [
+      "https://i0.wp.com/philabcuk.org/wp-content/uploads/2026/03/image-1.png?resize=750%2C350&ssl=1"
+    ],
+    "tags": ["AI", "Digital Health", "System Design"]
+  },
+  {
+    "id": "fa25-medbigdata",
+    "code": null,
+    "titleEn": "Biomedical Big Data Analysis",
+    "titleKo": "의료빅데이터분석",
+    "semester": "Fall 2025",
+    "level": "undergraduate",
+    "language": "R",
+    "description": "This course is designed to bridge the gap between your programming knowledge and the fascinating realm of healthcare analytics. You'll discover how data science transforms modern medicine, from predicting patient outcomes to improving healthcare delivery.\n\nBy the completion of this course, you will be able to:",
+    "objectives": [
+      "Understand Medical Data Ecosystems: Navigate complex healthcare data structures including EHR, insurance claims, and registry data",
+      "Apply Statistical Methods: Perform regression analysis, survival analysis, and hypothesis testing appropriate for medical research",
+      "Interpret Medical Standards: Work confidently with medical coding systems (ICD, SNOMED-CT) and understand their role in healthcare analytics",
+      "Conduct Ethical Research: Appreciate data privacy, quality considerations, and ethical implications in medical data science",
+      "Programming skill for data science: Develop proficiency in R for medical data analysis, from basic syntax to advanced statistical modeling"
+    ],
+    "images": [
+      "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/10/image-2.png?resize=750%2C528&ssl=1",
+      "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/10/image-4.png?resize=750%2C511&ssl=1"
+    ],
+    "tags": ["R", "EHR", "Claims", "ICD", "SNOMED-CT"]
+  },
+  {
+    "id": "fa25-ml",
+    "code": null,
+    "titleEn": "Machine Learning",
+    "titleKo": "머신러닝",
+    "semester": "Fall 2025",
+    "level": "undergraduate",
+    "language": "R",
+    "description": "This course provides a comprehensive introduction to statistical learning methods with applications in R. Students will learn fundamental concepts and practical techniques in machine learning. The course covers supervised learning methods including regression, classification, and tree-based methods, as well as unsupervised learning techniques. Through a combination of theoretical lectures and hands-on R programming labs, students will develop skills in data analysis, model selection, and interpretation of results. The course emphasizes both the mathematical foundations and practical implementation of statistical learning algorithms.\n\nRecommended Prerequisites: Introductory understanding to Statistics.",
+    "images": [
+      "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/10/image.png?resize=750%2C552&ssl=1"
+    ],
+    "tags": ["R", "Statistics", "Supervised", "Unsupervised"]
+  },
+  {
+    "id": "fa25-prog-ai",
+    "code": null,
+    "titleEn": "Programming for AI, Graduate Course",
+    "titleKo": "AI를 위한 프로그래밍, 의료인공지능대학원",
+    "semester": "Fall 2025",
+    "level": "graduate",
+    "language": "Python",
+    "description": "This course provides a comprehensive introduction to programming fundamentals essential for medical AI applications. Many students entering the Medical AI program come from diverse backgrounds including medicine, nursing, and other healthcare fields, and may have limited or no programming experience. This course bridges that gap by providing a gentle, step-by-step introduction to programming concepts using Python. Designed for graduate students with no prior programming experience, it covers Python basics, data analysis tools, and introductory machine learning concepts. Students will work with learning to process clinical data, medical images, and implement basic AI models. The course emphasizes practical skills needed for medical AI research and development.",
+    "images": [],
+    "tags": ["Python", "Machine Learning", "Clinical Data"]
+  },
+  {
+    "id": "sp25-aiprog",
+    "code": null,
+    "titleEn": "Artificial Intelligence Programming Design",
+    "titleKo": "인공지능프로그래밍설계",
+    "semester": "Spring 2025",
+    "level": "undergraduate",
+    "language": "Python",
+    "description": "This course will provide a basic concept and hands-on introduction to Artificial Intelligence. Students will learn the nueral networks including Convolutional Neural Network(CNN), Recurrent Neural Network(RNN), the Auto-encoder. It also covers a basic introduction of Reinforcement Learning and Transformer.\n\nBy the end of this course, students will understand the basic algorithm of neural networks and be familiar with Artificial Intellence (deep learning) programming. Students can not only use the AI-related Python libraries such as Tensorflow, Keras, but design their own network with these libraries. In addition, it is possible to increase practical coding skills and insight of analyzing data in terms of data science.",
+    "images": [
+      "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/03/calcuus-concept.jpg?resize=750%2C584&ssl=1"
+    ],
+    "tags": ["Python", "TensorFlow", "Keras", "Neural Networks"]
+  },
+  {
+    "id": "sp25-prog1",
+    "code": null,
+    "titleEn": "Computers & Programming 1",
+    "titleKo": "컴퓨터와프로그래밍1",
+    "semester": "Spring 2025",
+    "level": "undergraduate",
+    "language": "Python",
+    "description": "This course introduces beginners to essential concepts in computers and programming, with hands-on practice using Python. Known for its readability and simplicity, Python is often recommended as an ideal first programming language.\n\nThus, the class aims to:",
+    "objectives": [
+      "Understand Basic Concepts: Students will learn common concepts in computing and the history of programming languages.",
+      "Learn Python Programming: Through hands-on exercises, students will acquire basic knowledge and skills in Python. They will learn to manipulate basic data types and explore introductory functional and object-oriented programming techniques, setting the groundwork for further development in programming."
+    ],
+    "images": [
+      "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/03/type_of_programming_l.jpg?resize=750%2C451&ssl=1",
+      "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/03/abc_and_python.jpg?resize=750%2C537&ssl=1",
+      "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/03/data_types.jpg?resize=750%2C626&ssl=1"
+    ],
+    "tags": ["Python", "Programming Fundamentals"]
+  }
+]

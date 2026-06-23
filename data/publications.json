@@ -1,0 +1,1104 @@
+[
+  {
+    "id": "choo2026-covid-screening",
+    "title": "Enhancing COVID-19 Screening Models With Epidemiological and Mobility Features: Machine-Learning Model Study",
+    "authors": [
+      {
+        "name": "Choo H"
+      },
+      {
+        "name": "Lee D"
+      },
+      {
+        "name": "Shin SY"
+      },
+      {
+        "name": "Lee J"
+      },
+      {
+        "name": "Lee D"
+      },
+      {
+        "name": "Kim E"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      }
+    ],
+    "venue": "JMIR AI",
+    "venueDetails": "5(1), e54956",
+    "year": 2026,
+    "url": "https://ai.jmir.org/2026/1/e54956/",
+    "category": "article"
+  },
+  {
+    "id": "kim2025-capecitabine-tnbc",
+    "title": "Effectiveness of Adjuvant Capecitabine in Triple-Negative Breast Cancer Patients With Residual Disease After Neoadjuvant Treatment: A Real-World Evidence Study in Korea",
+    "authors": [
+      {
+        "name": "Kim MJ"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim JY"
+      },
+      {
+        "name": "Shin J"
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "Clinical Breast Cancer",
+    "year": 2025,
+    "url": "https://pubmed.ncbi.nlm.nih.gov/39909791/",
+    "category": "article"
+  },
+  {
+    "id": "jeon2024-neuroendocrine",
+    "title": "Breast cancers with neuroendocrine differentiation: Retrospective case studies series from a single institution based on the 2019 WHO classification",
+    "authors": [
+      {
+        "name": "Jeon Y"
+      },
+      {
+        "name": "Kim JY"
+      },
+      {
+        "name": "Ahn JS"
+      },
+      {
+        "name": "Im YH"
+      },
+      {
+        "name": "Choi K"
+      },
+      {
+        "name": "Jeong SY"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "Cancer Treatment and Research Communications",
+    "venueDetails": "Article 100857",
+    "year": 2024,
+    "url": "https://www.sciencedirect.com/science/article/pii/S2468294224000698",
+    "category": "article"
+  },
+  {
+    "id": "kim2024-fasttrack-faers",
+    "title": "Investigating the Safety Profile of Fast-Track COVID-19 Drugs Using the FDA Adverse Event Reporting System Database: A Comparative Observational Study",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true,
+        "coFirst": true
+      },
+      {
+        "name": "Yoon JH",
+        "coFirst": true
+      },
+      {
+        "name": "Lee KH"
+      }
+    ],
+    "venue": "Pharmacoepidemiology and Drug Safety",
+    "venueDetails": "33(11), e70043",
+    "year": 2024,
+    "url": "https://pubmed.ncbi.nlm.nih.gov/39533148/",
+    "category": "article"
+  },
+  {
+    "id": "kim2024-trastuzumab-hepatobiliary",
+    "title": "Long-term hepatobiliary disorder associated with trastuzumab emtansine: pharmacovigilance study using the FDA Adverse Event Reporting System database",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true,
+        "coFirst": true
+      },
+      {
+        "name": "Yoon JH",
+        "coFirst": true
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "Scientific Reports",
+    "venueDetails": "14(1), 19587",
+    "year": 2024,
+    "url": "https://www.nature.com/articles/s41598-024-69614-x",
+    "category": "article"
+  },
+  {
+    "id": "kang2024-charm-cohort",
+    "title": "Comprehensive Young Age Breast Cancer registry from clinical, genomics, and patient-reported outcomes measured with 15 years follow-up: the CHARM cohort profile",
+    "authors": [
+      {
+        "name": "Kang D"
+      },
+      {
+        "name": "Park S"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Lee J"
+      },
+      {
+        "name": "Han J"
+      },
+      {
+        "name": "Kim SW"
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "Breast Cancer",
+    "venueDetails": "31(3), 467–475",
+    "year": 2024,
+    "doi": "10.1007/s12282-024-01559-5",
+    "url": "https://link.springer.com/article/10.1007/s12282-024-01559-5",
+    "category": "article"
+  },
+  {
+    "id": "kim2024-traffic-medinfo",
+    "title": "Traffic Exposure and Breast Cancer Mortality by Area of Residence: Incorporating Clinical and Socioeconomic Data",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Cho S"
+      },
+      {
+        "name": "Shin SY"
+      },
+      {
+        "name": "Lee SK"
+      },
+      {
+        "name": "Kim H"
+      },
+      {
+        "name": "Srinivasan S"
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "MEDINFO 2023 — The Future Is Accessible (IOS Press)",
+    "venueDetails": "pp. 1566–1567",
+    "year": 2024,
+    "url": "https://pubmed.ncbi.nlm.nih.gov/38269748/",
+    "category": "article"
+  },
+  {
+    "id": "kang2024-social-support-charm",
+    "title": "Impact of Social Support during Diagnosis and Treatment on Disease Progression in Young Patients with Breast Cancer: A Prospective Cohort Study",
+    "authors": [
+      {
+        "name": "Kang D"
+      },
+      {
+        "name": "Park S"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim SW"
+      },
+      {
+        "name": "Lee JE"
+      },
+      {
+        "name": "Yu J"
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "Cancer Research and Treatment",
+    "venueDetails": "56(1), 125",
+    "year": 2024,
+    "url": "https://pubmed.ncbi.nlm.nih.gov/37669709/",
+    "category": "article"
+  },
+  {
+    "id": "kang2023-endocrine-symptoms",
+    "title": "Pretreatment endocrine symptoms and recurrence-free survival among young premenopausal patients with breast cancer: a prospective cohort study",
+    "authors": [
+      {
+        "name": "Kang D"
+      },
+      {
+        "name": "Cho J"
+      },
+      {
+        "name": "Park S"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim SW"
+      },
+      {
+        "name": "Lee JE"
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "Therapeutic Advances in Medical Oncology",
+    "venueDetails": "15, 17588359231189421",
+    "year": 2023,
+    "doi": "10.1177/17588359231189421",
+    "url": "https://journals.sagepub.com/doi/10.1177/17588359231189421",
+    "category": "article"
+  },
+  {
+    "id": "choe2023-active-pv-framework",
+    "title": "Development and Application of an Active Pharmacovigilance Framework Based on Electronic Healthcare Records from Multiple Centers in Korea",
+    "authors": [
+      {
+        "name": "Choe S"
+      },
+      {
+        "name": "Lee S"
+      },
+      {
+        "name": "Park CH"
+      },
+      {
+        "name": "Lee JH"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Byeon SJ"
+      },
+      {
+        "name": "Kim JH"
+      }
+    ],
+    "venue": "Drug Safety",
+    "venueDetails": "46(7), 647–660",
+    "year": 2023,
+    "url": "https://pubmed.ncbi.nlm.nih.gov/37243963/",
+    "category": "article"
+  },
+  {
+    "id": "kim2023-rwd-brain-mets",
+    "title": "Preliminary attainability assessment of real-world data for answering major clinical research questions in breast cancer brain metastasis: framework development and validation",
+    "authors": [
+      {
+        "name": "Kim MJ",
+        "coFirst": true
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true,
+        "coFirst": true
+      },
+      {
+        "name": "Kang D"
+      },
+      {
+        "name": "Ahn HK"
+      },
+      {
+        "name": "Shin S"
+      },
+      {
+        "name": "Park S"
+      },
+      {
+        "name": "Cho J"
+      },
+      {
+        "name": "Park Y"
+      }
+    ],
+    "venue": "Journal of Medical Internet Research",
+    "year": 2023,
+    "doi": "10.2196/43359",
+    "url": "https://doi.org/10.2196/43359",
+    "category": "article"
+  },
+  {
+    "id": "lee2022-hla-adr",
+    "title": "Reducing severe cutaneous adverse and type B adverse drug reactions using pre-stored human leukocyte antigen genotypes",
+    "authors": [
+      {
+        "name": "Lee KH"
+      },
+      {
+        "name": "Kang DY"
+      },
+      {
+        "name": "Kim HH"
+      },
+      {
+        "name": "Kim YJ"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim JH"
+      },
+      {
+        "name": "Kang HR"
+      }
+    ],
+    "venue": "Clinical and Translational Allergy",
+    "venueDetails": "12(1), e12098",
+    "year": 2022,
+    "doi": "10.1002/clt2.12098",
+    "url": "https://onlinelibrary.wiley.com/doi/10.1002/clt2.12098",
+    "category": "article"
+  },
+  {
+    "id": "kim2021-tnbc-cdw",
+    "title": "Real-world data from a refractory triple-negative breast cancer cohort selected using a clinical data warehouse approach",
+    "authors": [
+      {
+        "name": "Kim H",
+        "coFirst": true
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true,
+        "coFirst": true
+      },
+      {
+        "name": "Kim H"
+      },
+      {
+        "name": "Kim HR"
+      },
+      {
+        "name": "Jo H"
+      },
+      {
+        "name": "Hong J"
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "Cancers",
+    "venueDetails": "13(22), 5835",
+    "year": 2021,
+    "url": "https://www.mdpi.com/2072-6694/13/22/5835",
+    "category": "article"
+  },
+  {
+    "id": "kim2020-cgdm",
+    "title": "Clinical genome data model (cGDM) provides interactive clinical decision support for precision medicine",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim HJ"
+      },
+      {
+        "name": "Park Y"
+      },
+      {
+        "name": "Lee WS"
+      },
+      {
+        "name": "Lim Y"
+      },
+      {
+        "name": "Kim JH"
+      }
+    ],
+    "venue": "Scientific Reports",
+    "venueDetails": "10(1), 1–13",
+    "year": 2020,
+    "url": "https://www.nature.com/articles/s41598-020-58088-2",
+    "category": "article"
+  },
+  {
+    "id": "lee2020-hla-rule-based",
+    "title": "Extracting structured genotype information from free-text HLA reports using a rule-based approach",
+    "authors": [
+      {
+        "name": "Lee KH"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim YJ"
+      },
+      {
+        "name": "Kim JH"
+      },
+      {
+        "name": "Song EY"
+      }
+    ],
+    "venue": "Journal of Korean Medical Science",
+    "venueDetails": "35(12)",
+    "year": 2020,
+    "url": "https://ir.ymlib.yonsei.ac.kr/bitstream/22282913/134616/1/T012858.pdf",
+    "category": "article"
+  },
+  {
+    "id": "cho2013-chemotherapy-cap",
+    "title": "Assessment of efficiency and safety of the comprehensive chemotherapy assistance program for ordering oncology medications",
+    "authors": [
+      {
+        "name": "Cho E"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim GM"
+      },
+      {
+        "name": "Kum J"
+      },
+      {
+        "name": "Chung HK"
+      },
+      {
+        "name": "Lyu CJ"
+      },
+      {
+        "name": "Jung HK"
+      },
+      {
+        "name": "Shin SJ"
+      }
+    ],
+    "venue": "International Journal of Medical Informatics",
+    "venueDetails": "82(6), 504–513",
+    "year": 2013,
+    "url": "https://www.sciencedirect.com/science/article/abs/pii/S1386505613000245",
+    "category": "article"
+  },
+  {
+    "id": "yoon2025-aromatase-ispor",
+    "title": "Body weight-associated differences in adverse drug reaction profiles of aromatase inhibitors: A real-world pharmacovigilance study using FAERS Database",
+    "authors": [
+      {
+        "name": "Yoon JW"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "ISPOR Real-World Evidence Summit",
+    "location": "Tokyo, Japan",
+    "date": "September 30, 2025",
+    "year": 2025,
+    "category": "international-presentation"
+  },
+  {
+    "id": "kim2023-capecitabine-esmo",
+    "title": "Evaluating the Efficacy of Adjuvant Capecitabine in Triple Negative Breast Cancer Patients with Residual Disease: A Real-World Evidence Study",
+    "authors": [
+      {
+        "name": "Kim MJ"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim JY"
+      },
+      {
+        "name": "Shin J"
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "ESMO 2023",
+    "location": "Madrid, Spain",
+    "date": "October 21, 2023",
+    "year": 2023,
+    "category": "international-presentation"
+  },
+  {
+    "id": "yoon2023-rwe-prescription-amia",
+    "title": "Real World Evidence Generation for Prescription Support Model of 4 Covid-19 Drugs Using Drug Labels Combined with FAERS Dataset",
+    "authors": [
+      {
+        "name": "Yoon J",
+        "coFirst": true
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true,
+        "coFirst": true
+      },
+      {
+        "name": "Lee K"
+      }
+    ],
+    "venue": "AMIA Clinical Informatics Conference",
+    "location": "Chicago, USA",
+    "date": "May 25, 2023",
+    "year": 2023,
+    "category": "international-presentation"
+  },
+  {
+    "id": "kim2023-traffic-medinfo-presentation",
+    "title": "Traffic Exposure and Breast Cancer Mortality by Area of Residence: Incorporating Clinical and Socioeconomic Data",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true,
+        "coFirst": true
+      },
+      {
+        "name": "Cho S",
+        "coFirst": true
+      },
+      {
+        "name": "Shin S"
+      },
+      {
+        "name": "Lee SK"
+      },
+      {
+        "name": "Kim H"
+      },
+      {
+        "name": "Srinivasan S"
+      },
+      {
+        "name": "Subramanian SV"
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "MedInfo 2023",
+    "location": "Sydney, Australia",
+    "date": "July 8, 2023",
+    "year": 2023,
+    "category": "international-presentation"
+  },
+  {
+    "id": "kim2023-subtype-ksmi",
+    "title": "Towards Systematic Disease-Specific Data Transformation: Development of Clinical Subtype Classification Algorithm for Breast Cancer",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true,
+        "coFirst": true
+      },
+      {
+        "name": "Lee SK"
+      },
+      {
+        "name": "Kim H"
+      },
+      {
+        "name": "Cho J"
+      },
+      {
+        "name": "Shin S"
+      },
+      {
+        "name": "Kwon SE"
+      },
+      {
+        "name": "Lee G"
+      },
+      {
+        "name": "Pyo H"
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "Korean Society of Medical Informatics Autumn Conference",
+    "location": "Bundang Seoul National University Hospital",
+    "date": "December 1, 2023",
+    "year": 2023,
+    "category": "international-presentation"
+  },
+  {
+    "id": "kim2023-fasttrack-medinfo",
+    "title": "Is the Fast Track Safe? A Safety Evaluation of Covid-19 Drugs with Real-World Data",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true,
+        "coFirst": true
+      },
+      {
+        "name": "Yoon J",
+        "coFirst": true
+      },
+      {
+        "name": "Lee K"
+      }
+    ],
+    "venue": "MedInfo 2023",
+    "location": "Sydney, Australia",
+    "date": "July 8, 2023",
+    "year": 2023,
+    "category": "international-presentation"
+  },
+  {
+    "id": "kim2022-rwd-brain-mets-sabcs",
+    "title": "Preliminary Attainability Assessment of Real-World Data for Answering Clinical Questions about Breast Cancer Brain Metastases",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true,
+        "coFirst": true
+      },
+      {
+        "name": "Kim MJ",
+        "coFirst": true
+      },
+      {
+        "name": "Kang D"
+      },
+      {
+        "name": "Ahn HK"
+      },
+      {
+        "name": "Shin S"
+      },
+      {
+        "name": "Park S"
+      },
+      {
+        "name": "Cho J"
+      },
+      {
+        "name": "Park Y"
+      }
+    ],
+    "venue": "2022 San Antonio Breast Cancer Symposium® (SABCS®)",
+    "location": "San Antonio, USA",
+    "date": "December 6, 2022",
+    "year": 2022,
+    "category": "international-presentation"
+  },
+  {
+    "id": "jeon2022-neuroendocrine-sabcs",
+    "title": "Primary neuroendocrine carcinoma of the breast: A case series by WHO classification in 2019",
+    "authors": [
+      {
+        "name": "Jeon YK"
+      },
+      {
+        "name": "Kim JY"
+      },
+      {
+        "name": "Ahn JS"
+      },
+      {
+        "name": "Lim YH"
+      },
+      {
+        "name": "Jeong SY"
+      },
+      {
+        "name": "Jung Y"
+      },
+      {
+        "name": "Jang JY"
+      },
+      {
+        "name": "Choi D"
+      },
+      {
+        "name": "Hong J"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Cho SY"
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "2022 San Antonio Breast Cancer Symposium® (SABCS®)",
+    "location": "San Antonio, USA",
+    "date": "December 6, 2022",
+    "year": 2022,
+    "category": "international-presentation"
+  },
+  {
+    "id": "kim2021-tnbc-cdw-ksmo",
+    "title": "Real-world Data of Refractory Triple Negative Breast Cancer Cohort selected by Clinical Data Warehouse Approach",
+    "authors": [
+      {
+        "name": "Kim H"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim H"
+      },
+      {
+        "name": "Kim HR"
+      },
+      {
+        "name": "Jo H"
+      },
+      {
+        "name": "Hong H"
+      },
+      {
+        "name": "Kim R"
+      },
+      {
+        "name": "Kim JY"
+      },
+      {
+        "name": "Ahn JS"
+      },
+      {
+        "name": "Im YH"
+      },
+      {
+        "name": "Lee SK"
+      },
+      {
+        "name": "Kim HY"
+      },
+      {
+        "name": "Park YH"
+      }
+    ],
+    "venue": "14th Annual Meeting of the Korean Society of Medical Oncology & 2021 International Conference (KSMO 2021)",
+    "location": "Seoul, Korea",
+    "date": "August 31, 2021",
+    "year": 2021,
+    "category": "international-presentation"
+  },
+  {
+    "id": "lee2019-hla-medinfo",
+    "title": "HLA allele distribution associated with adverse drug reactions in organ transplant patients",
+    "authors": [
+      {
+        "name": "Lee KH"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim YJ"
+      }
+    ],
+    "venue": "MedInfo 2019",
+    "location": "Lyon, France",
+    "date": "August 26, 2019",
+    "year": 2019,
+    "category": "international-presentation"
+  },
+  {
+    "id": "kim2013-nursing-info-system",
+    "title": "Effectiveness, Usage and User Satisfaction of Nursing Information System in a General Hospital",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim IS"
+      },
+      {
+        "name": "Ko IS"
+      },
+      {
+        "name": "Kim SS"
+      }
+    ],
+    "venue": "9th International Nursing Conference",
+    "location": "Seoul, Korea",
+    "date": "October 16, 2013",
+    "year": 2013,
+    "category": "international-presentation"
+  },
+  {
+    "id": "kim2024-cgdm-ksmi-autumn",
+    "title": "Clinical Genome Data Model (cGDM) Provides Interactive Clinical Decision Support for Precision Medicine",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      }
+    ],
+    "venue": "Korean Society of Medical Informatics Autumn Conference",
+    "location": "Yeosu D Ocean Hotel",
+    "date": "November 22, 2024",
+    "year": 2024,
+    "category": "national-presentation"
+  },
+  {
+    "id": "kim2024-bigdata-symposium",
+    "title": "National Healthcare Database Path Forward: International Trends in Bio Big Data",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim HJ"
+      },
+      {
+        "name": "Kang S"
+      }
+    ],
+    "venue": "Digital Healthcare Union Symposium",
+    "location": "Catholic University of Korea, Songsin Campus",
+    "date": "May 29, 2024",
+    "year": 2024,
+    "category": "national-presentation"
+  },
+  {
+    "id": "nam2022-metaverse-kca",
+    "title": "Narrative Imagination and the Future of the Metaverse in Healthcare: Media Representation of Diseases and Digital Therapeutics",
+    "authors": [
+      {
+        "name": "Nam SS"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      }
+    ],
+    "venue": "Annual conference, The Korea Contents Association",
+    "location": null,
+    "date": "July 13, 2022",
+    "year": 2022,
+    "category": "national-presentation"
+  },
+  {
+    "id": "kim2022-sdoh-ksmi-spring",
+    "title": "Data Integration and Spatial Visualization of Social Determinants of Health in Seoul",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Cho S"
+      },
+      {
+        "name": "Park W"
+      },
+      {
+        "name": "Shin S"
+      }
+    ],
+    "venue": "Spring conference, The Korean Society of Medical Informatics",
+    "location": null,
+    "date": "June 22, 2022",
+    "year": 2022,
+    "category": "national-presentation"
+  },
+  {
+    "id": "kim2021-cdw-brain-mets-ksmi-fall",
+    "title": "Possibilities of the Clinical Data Warehouse for Clinical Research on Brain Metastases Breast Cancer Patients",
+    "authors": [
+      {
+        "name": "Kim MJ"
+      },
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      }
+    ],
+    "venue": "Fall conference, The Korean Society of Medical Informatics",
+    "location": null,
+    "date": "November 4, 2021",
+    "year": 2021,
+    "category": "national-presentation"
+  },
+  {
+    "id": "kim2020-bc-registry-ksmi-fall",
+    "title": "EHR-based Breast Cancer Registry Construction in SMC: data-intensive multidisciplinary collaboration",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Shin S"
+      }
+    ],
+    "venue": "Fall conference, The Korean Society of Medical Informatics",
+    "location": null,
+    "date": "November 11, 2020",
+    "year": 2020,
+    "category": "national-presentation"
+  },
+  {
+    "id": "kim2018-adr-signal-ksmi-spring",
+    "title": "Standard Query Design for an Active ADR Signal Detection Knowledge Pipeline",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim JG"
+      },
+      {
+        "name": "Kim JH"
+      }
+    ],
+    "venue": "Spring conference, The Korean Society of Medical Informatics",
+    "location": null,
+    "date": "June 14, 2018",
+    "year": 2018,
+    "category": "national-presentation"
+  },
+  {
+    "id": "kim2017-drug-cost-fellowship",
+    "title": "Development of Algorithm for Minimizing Cost of Drug Combination with the Same Therapeutic Effect",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      }
+    ],
+    "venue": "4th Korea Global PhD Fellowship Annual Conference, Korean Global PhD Fellows",
+    "location": null,
+    "date": "December 14, 2017",
+    "year": 2017,
+    "category": "national-presentation"
+  },
+  {
+    "id": "kim2017-drug-database-ksmi-spring",
+    "title": "Constructing an Integrated Drug Database for Utilization of Public Data in Korea",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim JH"
+      }
+    ],
+    "venue": "Spring conference, The Korean Society of Medical Informatics",
+    "location": null,
+    "date": "June 22, 2017",
+    "year": 2017,
+    "category": "national-presentation"
+  },
+  {
+    "id": "kim2015-medication-knowledge-fellowship",
+    "title": "Knowledge Representation of Medication applying in Clinical Decision Process",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      }
+    ],
+    "venue": "2nd Korea Global PhD Fellowship Annual Conference, Korean Global PhD Fellows",
+    "location": null,
+    "date": "December 12, 2015",
+    "year": 2015,
+    "category": "national-presentation"
+  },
+  {
+    "id": "kim2012-cdrs-ksmi-fall",
+    "title": "A Log Analysis of Query Patterns on YUHS Clinical Data Retrieval system (CDRS)",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Kim JH"
+      }
+    ],
+    "venue": "Fall conference, The Korean Society of Medical Informatics",
+    "location": null,
+    "date": "November 22, 2012",
+    "year": 2012,
+    "category": "national-presentation"
+  },
+  {
+    "id": "kim2011-cap-ksmi-spring",
+    "title": "Development of Chemotherapy Assistant Program (CAP) and Evaluation",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Lee HI"
+      },
+      {
+        "name": "Jung HK"
+      }
+    ],
+    "venue": "Spring conference, The Korean Society of Medical Informatics",
+    "location": null,
+    "date": "June 23, 2011",
+    "year": 2011,
+    "category": "national-presentation"
+  },
+  {
+    "id": "kim2008-nicu-infection-control",
+    "title": "Procedure Standardization in Neonatal Intensive Care Unit- For Quality Improvement of Infection control",
+    "authors": [
+      {
+        "name": "Kim HJ",
+        "isPi": true
+      },
+      {
+        "name": "Baek Y"
+      }
+    ],
+    "venue": "Spring conference, Korean Association of Infection Control Nurses",
+    "location": null,
+    "date": "February 14, 2008",
+    "year": 2008,
+    "category": "national-presentation"
+  }
+]
