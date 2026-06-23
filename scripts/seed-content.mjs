@@ -11,10 +11,11 @@ const admin = createClient(env.VITE_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY,
   auth: { persistSession: false },
 })
 
-const members = JSON.parse(readFileSync('src/data/members.json', 'utf8'))
-const lectures = JSON.parse(readFileSync('src/data/lectures.json', 'utf8'))
-const publications = JSON.parse(readFileSync('src/data/publications.json', 'utf8'))
-const research = JSON.parse(readFileSync('src/data/research.json', 'utf8'))
+const professor = JSON.parse(readFileSync('data/professor.json', 'utf8'))
+const members = JSON.parse(readFileSync('data/members.json', 'utf8'))
+const lectures = JSON.parse(readFileSync('data/lectures.json', 'utf8'))
+const publications = JSON.parse(readFileSync('data/publications.json', 'utf8'))
+const research = JSON.parse(readFileSync('data/research.json', 'utf8'))
 
 const log = (label, ok, info) =>
   console.log(`${ok ? '✓' : '✗'} ${label}${info != null ? ' — ' + JSON.stringify(info) : ''}`)
@@ -28,7 +29,8 @@ const bail = (label, error) => {
 {
   const rows = []
   const list = [
-    ...(members.current || []).map((m, i) => ({ m, i, status: 'current' })),
+    { m: professor, i: 0, status: 'current' },
+    ...(members.current || []).map((m, i) => ({ m, i: i + 1, status: 'current' })),
     ...(members.alumni  || []).map((m, i) => ({ m, i, status: 'alumni'  })),
   ]
   for (const { m, i, status } of list) {
@@ -222,7 +224,7 @@ function parseSemester(s) {
         author_id:      existingMap.get(a.name),
         position:       pos,
         is_pi:            !!a.isPi,
-        is_co_first:      !!a.isCoFirst,
+        is_co_first:      !!a.coFirst,
         is_co_correspond: !!a.isCoCorrespond,
       })
     })

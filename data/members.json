@@ -1,0 +1,119 @@
+{
+  "current": [
+    {
+      "id": "jsher",
+      "name": "Jun Seok Her",
+      "role": "Undergraduate Researcher",
+      "degree": "Undergraduate",
+      "year": null,
+      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/09/jsh.jpg?resize=413%2C516&ssl=1",
+      "email": null,
+      "linkedin": null,
+      "googleScholar": null,
+      "researchInterests": [
+        "Biomedical Data Science",
+        "Pharmacovigilance",
+        "Healthcare Data Engineering (Deduplication)"
+      ],
+      "status": "current"
+    },
+    {
+      "id": "jwyoo",
+      "name": "Jin Woo Yoo",
+      "role": "Undergraduate Researcher",
+      "degree": "Undergraduate",
+      "year": null,
+      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/09/eca69debaa85ec82aceca784.jpg?resize=689%2C886&ssl=1",
+      "email": null,
+      "linkedin": null,
+      "googleScholar": null,
+      "researchInterests": [
+        "Health Data Analytics",
+        "Claims and Public Health Data Experience"
+      ],
+      "status": "current"
+    },
+    {
+      "id": "ejjeong",
+      "name": "Eun Jin Jeong",
+      "role": "Undergraduate Researcher",
+      "degree": "Undergraduate",
+      "year": null,
+      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/09/ejj.jpg?resize=551%2C709&ssl=1",
+      "email": null,
+      "linkedin": null,
+      "googleScholar": null,
+      "researchInterests": [
+        "Biomedical Data Science",
+        "Clinical Informatics",
+        "Data Pipelining"
+      ],
+      "status": "current"
+    },
+    {
+      "id": "yslee",
+      "name": "Yeseo Lee",
+      "role": "Undergraduate Researcher",
+      "degree": "Undergraduate",
+      "year": null,
+      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/09/ysl.jpg?resize=750%2C961&ssl=1",
+      "email": null,
+      "linkedin": null,
+      "googleScholar": null,
+      "researchInterests": [
+        "Data Harmonization and Reuse in Public Health",
+        "Enhancing Utility of Linked Health Data"
+      ],
+      "status": "current"
+    },
+    {
+      "id": "ejkim",
+      "name": "Eun Ji Kim",
+      "role": "Undergraduate Researcher",
+      "degree": "Undergraduate",
+      "year": null,
+      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/09/ejk.jpeg?resize=750%2C964&ssl=1",
+      "email": null,
+      "linkedin": null,
+      "googleScholar": null,
+      "researchInterests": [
+        "Biomedical Data Science",
+        "Pharmacovigilance & Drug Safety"
+      ],
+      "status": "current"
+    },
+    {
+      "id": "smlim",
+      "name": "Sang Min Lim",
+      "role": "Undergraduate Researcher",
+      "degree": "Undergraduate",
+      "year": null,
+      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/12/ec9e84ec8381ebafbc_eca69debaa85ec82aceca784.jpg?resize=750%2C964&ssl=1",
+      "email": null,
+      "linkedin": null,
+      "googleScholar": null,
+      "researchInterests": [
+        "Clinical Informatics",
+        "Health Services Research"
+      ],
+      "status": "current"
+    },
+    {
+      "id": "jhhan",
+      "name": "Jae Hyeok Han",
+      "role": "Undergraduate Researcher",
+      "degree": "Undergraduate",
+      "year": null,
+      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/12/ed959cec9eaced9881_eca69debaa85ec82aceca784.jpg?resize=354%2C472&ssl=1",
+      "email": null,
+      "linkedin": null,
+      "googleScholar": null,
+      "researchInterests": [
+        "Biomedical Data Science",
+        "Clinical data management system"
+      ],
+      "status": "current"
+    }
+  ],
+  "alumni": []
+}
