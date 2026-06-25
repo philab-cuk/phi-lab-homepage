@@ -1,5 +1,6 @@
 import { NavLink, Outlet, Link, useLocation } from 'react-router'
 import { useEffect, useState } from 'react'
+import { useAuth } from '../contexts/AuthContext'
 
 const NAV_ROUTES = [
   { to: '/professor', label: 'Professor' },
@@ -41,6 +42,7 @@ function NavLinks({ linkClass, onClick }) {
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const close = () => setMobileOpen(false)
+  const { isAuthenticated, signOut } = useAuth()
 
   return (
     <header className="border-b border-rule">
@@ -50,9 +52,24 @@ function Header() {
           <a href="https://www.catholic.ac.kr" target="_blank" rel="noopener noreferrer" className="text-white/90 hover:text-white no-underline">
             가톨릭대학교
           </a>
-          <Link to="/admin/login" className="text-white/90 hover:text-white no-underline">
-            로그인
-          </Link>
+          {isAuthenticated ? (
+            <span className="flex items-center gap-4">
+              <Link to="/admin" className="text-white/90 hover:text-white no-underline">
+                마이페이지
+              </Link>
+              <button
+                type="button"
+                onClick={() => signOut()}
+                className="text-white/90 hover:text-white no-underline bg-transparent border-0 p-0 m-0 cursor-pointer text-[13px]"
+              >
+                로그아웃
+              </button>
+            </span>
+          ) : (
+            <Link to="/admin/login" className="text-white/90 hover:text-white no-underline">
+              로그인
+            </Link>
+          )}
         </div>
       </div>
 
@@ -61,8 +78,12 @@ function Header() {
         <Link to="/" onClick={close} className="flex items-center gap-3 no-underline shrink-0">
           <img src={import.meta.env.BASE_URL + 'logo.jpg'} alt="PHI Lab" className="h-12 w-auto max-[500px]:hidden" />
           <span className="leading-tight">
-            <span className="block font-bold text-ink text-[14px] lg:text-[16px] xl:text-[18px]">가톨릭대학교 보건의료정보학 연구실</span>
-            <span className="block text-meta text-[11px] lg:text-[12px] xl:text-[14px]">Precision &amp; Provenance Health Informatics Lab</span>
+            <span className="block font-semibold text-ink text-[14px] lg:text-[16px] xl:text-[18px] tracking-tight">
+              Precision &amp; Provenance Health Informatics Lab
+            </span>
+            <span className="block text-meta text-[10px] lg:text-[11px] xl:text-[12px] tracking-[0.18em] uppercase mt-0.5">
+              The Catholic University of Korea
+            </span>
           </span>
         </Link>
 

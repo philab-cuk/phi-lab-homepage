@@ -27,10 +27,11 @@ export default function AdminMyProfile() {
     if (error) { setError(error); return }
     setRoleOptions((roles || []).map(r => r.label))
     setExisting(data || null)
+    const today = new Date().toLocaleDateString('en-CA')   // 달력 기본값 = 오늘
     setEdit(data
-      ? { ...data }
+      ? { ...data, joined_at: data.joined_at || today }
       : { name: '', name_ko: null, role: '', title: null, degree: null, department: null, institution: null,
-          photo_url: null, personal_site: null, linkedin: null, google_scholar: null, joined_at: null,
+          photo_url: null, personal_site: null, linkedin: null, google_scholar: null, joined_at: today,
           research_interests: null, bio_short: null, bio_full: null })
   }
   useEffect(() => { if (email) load() }, [email])

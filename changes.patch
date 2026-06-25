@@ -1,0 +1,408 @@
+diff --git a/app/components/Layout.jsx b/app/components/Layout.jsx
+index 1aa7041..5471c2c 100644
+--- a/app/components/Layout.jsx
++++ b/app/components/Layout.jsx
+@@ -1,5 +1,6 @@
+ import { NavLink, Outlet, Link, useLocation } from 'react-router'
+ import { useEffect, useState } from 'react'
++import { useAuth } from '../contexts/AuthContext'
+ 
+ const NAV_ROUTES = [
+   { to: '/professor', label: 'Professor' },
+@@ -41,6 +42,7 @@ function NavLinks({ linkClass, onClick }) {
+ function Header() {
+   const [mobileOpen, setMobileOpen] = useState(false)
+   const close = () => setMobileOpen(false)
++  const { isAuthenticated, signOut } = useAuth()
+ 
+   return (
+     <header className="border-b border-rule">
+@@ -50,9 +52,24 @@ function Header() {
+           <a href="https://www.catholic.ac.kr" target="_blank" rel="noopener noreferrer" className="text-white/90 hover:text-white no-underline">
+             가톨릭대학교
+           </a>
+-          <Link to="/admin/login" className="text-white/90 hover:text-white no-underline">
+-            로그인
+-          </Link>
++          {isAuthenticated ? (
++            <span className="flex items-center gap-4">
++              <Link to="/admin" className="text-white/90 hover:text-white no-underline">
++                마이페이지
++              </Link>
++              <button
++                type="button"
++                onClick={() => signOut()}
++                className="text-white/90 hover:text-white no-underline bg-transparent border-0 p-0 m-0 cursor-pointer text-[13px]"
++              >
++                로그아웃
++              </button>
++            </span>
++          ) : (
++            <Link to="/admin/login" className="text-white/90 hover:text-white no-underline">
++              로그인
++            </Link>
++          )}
+         </div>
+       </div>
+ 
+@@ -61,8 +78,12 @@ function Header() {
+         <Link to="/" onClick={close} className="flex items-center gap-3 no-underline shrink-0">
+           <img src={import.meta.env.BASE_URL + 'logo.jpg'} alt="PHI Lab" className="h-12 w-auto max-[500px]:hidden" />
+           <span className="leading-tight">
+-            <span className="block font-bold text-ink text-[14px] lg:text-[16px] xl:text-[18px]">가톨릭대학교 보건의료정보학 연구실</span>
+-            <span className="block text-meta text-[11px] lg:text-[12px] xl:text-[14px]">Precision &amp; Provenance Health Informatics Lab</span>
++            <span className="block font-semibold text-ink text-[14px] lg:text-[16px] xl:text-[18px] tracking-tight">
++              Precision &amp; Provenance Health Informatics Lab
++            </span>
++            <span className="block text-meta text-[10px] lg:text-[11px] xl:text-[12px] tracking-[0.18em] uppercase mt-0.5">
++              The Catholic University of Korea
++            </span>
+           </span>
+         </Link>
+ 
+@@ -132,39 +153,4 @@ function Footer() {
+               <p>{FOOTER.department}</p>
+               <p>{FOOTER.institution}</p>
+               <p>{FOOTER.addressLine1}</p>
+-              <p>{FOOTER.addressLine2}</p>
+-              <p className="mt-2">
+-                <a href={`mailto:${FOOTER.email}`}>{FOOTER.email}</a>
+-              </p>
+-            </address>
+-          </div>
+-        </div>
+-
+-        <div className="px-6 pb-8 text-xs text-meta">
+-          © {new Date().getFullYear()} PHI Lab.
+-        </div>
+-      </div>
+-    </footer>
+-  )
+-}
+-
+-function ScrollToTop() {
+-  const { pathname } = useLocation()
+-  useEffect(() => {
+-    window.scrollTo({ top: 0, behavior: 'instant' })
+-  }, [pathname])
+-  return null
+-}
+-
+-export default function Layout() {
+-  return (
+-    <div className="min-h-screen flex flex-col">
+-      <ScrollToTop />
+-      <Header />
+-      <main className="flex-1">
+-        <Outlet />
+-      </main>
+-      <Footer />
+-    </div>
+-  )
+-}
++        
+\ No newline at end of file
+diff --git a/app/lib/publicData.js b/app/lib/publicData.js
+index 338928d..a841779 100644
+--- a/app/lib/publicData.js
++++ b/app/lib/publicData.js
+@@ -54,31 +54,49 @@ function mapMember(m) {
+   }
+ }
+ 
+-// members.json 과 동일한 { current: [...], alumni: [...] } 구조로 반환.
++// member_roles 의 라벨을 sort_order 순서대로 반환. 비로그인도 읽기 허용.
++// 첫 번째(=sort_order 가장 앞) 역할을 PI(지도교수)로 간주한다.
++export async function fetchRoleOrder() {
++  const { data } = await supabase
++    .from('member_roles')
++    .select('label')
++    .order('sort_order')
++  return (data ?? []).map((r) => r.label)
++}
++
++// members.json 과 동일한 { current, alumni } 구조 + 역할 순서/ PI 라벨 반환.
+ export async function fetchMembers() {
+-  const { data, error } = await supabase
+-    .from('members')
+-    .select('*')
+-    .order('status')
+-    .order('joined_at', { ascending: true, nullsFirst: true }) // 먼저 합류한 사람이 상단, 합류일 미입력(창립 멤버)은 맨 앞
+-    .order('display_order')   // 같은 합류일/미입력은 LIVE 순서 유지
++  const [{ data, error }, roleOrder] = await Promise.all([
++    supabase
++      .from('members')
++      .select('*')
++      .order('status')
++      .order('joined_at', { ascending: true, nullsFirst: true }) // 먼저 합류한 사람이 상단, 합류일 미입력(창립 멤버)은 맨 앞
++      .order('display_order'),   // 같은 합류일/미입력은 LIVE 순서 유지
++    fetchRoleOrder(),
++  ])
+   if (error) throw error
+   const all = (data ?? []).map(mapMember)
+   return {
+     current: all.filter((m) => m.status === 'current'),
+     alumni: all.filter((m) => m.status === 'alumni'),
++    roleOrder,
++    piRole: roleOrder[0] ?? null,   // 역할 목록 맨 앞 = PI
+   }
+ }
+ 
+-// Professor = members 의 PI (role 기준, 없으면 hkim).
++// Professor = members 의 PI. 역할 목록 맨 앞(piRole)으로 찾고, 과거 한글 값과
++// id('hkim') 까지 순서대로 폴백. 그래도 없으면 null (Professor.jsx 가 안내 표시).
+ export async function fetchProfessor() {
+-  const { data, error } = await supabase
+-    .from('members')
+-    .select('*')
+-    .order('display_order')
++  const [{ data, error }, roleOrder] = await Promise.all([
++    supabase.from('members').select('*').order('display_order'),
++    fetchRoleOrder(),
++  ])
+   if (error) throw error
+   const list = (data ?? []).map(mapMember)
++  const piRole = roleOrder[0] ?? null
+   return (
++    (piRole && list.find((m) => m.role === piRole)) ||
+     list.find((m) => m.role === '지도교수') ||
+     list.find((m) => m.id === 'hkim') ||
+     null
+@@ -292,19 +310,4 @@ export async function fetchPost(id) {
+   }
+ }
+ 
+-// 상세 조회 시 조회수 +1 (익명 가능 — SECURITY DEFINER RPC).
+-export async function incrementPostViews(id) {
+-  await supabase.rpc('increment_post_views', { p_id: id })
+-}
+-
+-// ── Home 집계 ───────────────────────────────────────────────────────────────
+-export async function fetchHomeStats() {
+-  const [{ count: activeResearch }, { count: publications }] = await Promise.all([
+-    supabase.from('research').select('id', { count: 'exact', head: true }).eq('status', 'active'),
+-    supabase.from('publications').select('id', { count: 'exact', head: true }),
+-  ])
+-  return {
+-    activeResearchCount: activeResearch ?? 0,
+-    publicationsCount: publications ?? 0,
+-  }
+-}
++// 상세
+\ No newline at end of file
+diff --git a/app/pages/Members.jsx b/app/pages/Members.jsx
+index 274fe99..5e43484 100644
+--- a/app/pages/Members.jsx
++++ b/app/pages/Members.jsx
+@@ -168,8 +168,23 @@ export default function Members() {
+   const data = useLoaderData()
+   const location = useLocation()
+ 
+-  const professor = data.current.find((m) => m.role === '지도교수')
+-  const students = data.current.filter((m) => m.role !== '지도교수')
++  const { roleOrder = [], piRole } = data
++  // PI(역할 목록 맨 앞)는 별도 섹션. 과거 한글 값('지도교수')도 함께 인정.
++  const isPi = (m) => m.role === piRole || m.role === '지도교수'
++  const professor = data.current.find(isPi)
++  const rest = data.current.filter((m) => !isPi(m))
++
++  // 역할별 그룹 — member_roles 의 순서대로, 목록에 없는 역할은 맨 뒤에 등장 순서로.
++  const seen = new Set()
++  const orderedRoles = [
++    ...roleOrder.filter((r) => r !== piRole),
++    ...rest.map((m) => m.role).filter((r) => r && !roleOrder.includes(r)),
++  ].filter((r) => (seen.has(r) ? false : seen.add(r)))
++  const groups = orderedRoles
++    .map((role) => ({ role, members: rest.filter((m) => m.role === role) }))
++    .filter((g) => g.members.length > 0)
++  const noRole = rest.filter((m) => !m.role)   // 역할 미지정
++
+   const alumni = data.alumni
+ 
+   // Hash navigation: if URL has #<id>, force the tab that contains that
+@@ -209,35 +224,4 @@ export default function Members() {
+         <>
+           {professor && (
+             <>
+-              <h2>지도교수</h2>
+-              <ProfessorRow member={professor} />
+-            </>
+-          )}
+-          {students.length > 0 && (
+-            <>
+-              <h2>학부연구생</h2>
+-              <div>
+-                {students.map((member) => (
+-                  <StudentRow key={member.id} member={member} />
+-                ))}
+-              </div>
+-            </>
+-          )}
+-        </>
+-      )}
+-
+-      {activeTab === 'Alumni' && (
+-        <>
+-          <h2>
+-            졸업생 {alumni.length}명
+-          </h2>
+-          <div>
+-            {alumni.map((member) => (
+-              <AlumnusItem key={member.id} member={member} />
+-            ))}
+-          </div>
+-        </>
+-      )}
+-    </div>
+-  )
+-}
++            
+\ No newline at end of file
+diff --git a/app/pages/Professor.jsx b/app/pages/Professor.jsx
+index d0c6f7d..fb29e40 100644
+--- a/app/pages/Professor.jsx
++++ b/app/pages/Professor.jsx
+@@ -65,6 +65,20 @@ function ExperienceGroup({ category, items }) {
+ 
+ export default function Professor() {
+   const PI = useLoaderData()
++
++  // PI 미등록(또는 역할 매칭 실패) 시 크래시 대신 안내.
++  if (!PI) {
++    return (
++      <div className="mx-auto max-w-[1200px] px-6 py-12">
++        <h1>Professor</h1>
++        <p className="text-muted">
++          교수 정보가 아직 등록되지 않았습니다. 관리자(Members)에서 역할 목록 맨 위
++          역할(예: Principal Investigator)을 가진 멤버를 추가해 주세요.
++        </p>
++      </div>
++    )
++  }
++
+   const experience = PI.experience ?? []
+   const grouped = CATEGORY_ORDER.map((cat) => ({
+     category: cat,
+@@ -107,24 +121,4 @@ export default function Professor() {
+                 <a href={PI.personalSite} target="_blank" rel="noopener noreferrer">
+                   Personal site
+                 </a>
+-              </>
+-            )}
+-          </p>
+-        </div>
+-      </div>
+-
+-      <h2>Bio and Accomplishments</h2>
+-      {bioParagraphs.map((p, i) => (
+-        <p key={i}>{p}</p>
+-      ))}
+-
+-      <h2>Work Experience</h2>
+-      {grouped.map((g) => (
+-        <ExperienceGroup key={g.category} category={g.category} items={g.items} />
+-      ))}
+-      {ungrouped.length > 0 && (
+-        <ExperienceGroup category="other" items={ungrouped} />
+-      )}
+-    </div>
+-  )
+-}
++       
+\ No newline at end of file
+diff --git a/app/pages/admin/AdminMembers.jsx b/app/pages/admin/AdminMembers.jsx
+index 68b10ef..3371183 100644
+--- a/app/pages/admin/AdminMembers.jsx
++++ b/app/pages/admin/AdminMembers.jsx
+@@ -13,7 +13,7 @@ function emptyMember() {
+     photo_url: null, email: null, personal_site: null, linkedin: null, google_scholar: null,
+     research_interests: null, bio_short: null, bio_full: null,
+     education: null, experience: null, service: null,
+-    joined_at: null, status: 'current', display_order: 0,
++    joined_at: new Date().toLocaleDateString('en-CA'), status: 'current', display_order: 0,
+   }
+ }
+ 
+@@ -148,8 +148,10 @@ export default function AdminMembers() {
+     load()
+   }
+ 
+-  // PI(교수)는 Members 목록에서 숨김 — Professor 화면에서 관리
+-  const filtered = rows.filter(r => r.status === tab && r.role !== '지도교수')
++  // PI(교수)는 Members 목록에서 숨김 — Professor 화면에서 관리.
++  // PI 역할 = member_roles 목록 맨 앞(roleOptions[0]). 과거 한글 값도 함께 제외.
++  const piRole = roleOptions[0]
++  const filtered = rows.filter(r => r.status === tab && r.role !== '지도교수' && r.role !== piRole)
+ 
+   if (view === 'roles') {
+     return (
+@@ -301,12 +303,4 @@ export default function AdminMembers() {
+               </Field>
+             </div>
+             <div style={{ gridColumn: '1 / -1' }}>
+-              <Field label="소개 (짧게)"><TextArea value={edit.bio_short||''} onChange={e => setEdit({...edit, bio_short: e.target.value || null})} /></Field>
+-            </div>
+-          </fieldset>
+-        )}
+-      </Modal>
+-      {confirmUI}
+-    </div>
+-  )
+-}
++              <Field label="소개 (짧게)"><TextArea value={edit.bio_short||'
+\ No newline at end of file
+diff --git a/app/pages/admin/AdminMyProfile.jsx b/app/pages/admin/AdminMyProfile.jsx
+index e483782..cc974c7 100644
+--- a/app/pages/admin/AdminMyProfile.jsx
++++ b/app/pages/admin/AdminMyProfile.jsx
+@@ -27,10 +27,11 @@ export default function AdminMyProfile() {
+     if (error) { setError(error); return }
+     setRoleOptions((roles || []).map(r => r.label))
+     setExisting(data || null)
++    const today = new Date().toLocaleDateString('en-CA')   // 달력 기본값 = 오늘
+     setEdit(data
+-      ? { ...data }
++      ? { ...data, joined_at: data.joined_at || today }
+       : { name: '', name_ko: null, role: '', title: null, degree: null, department: null, institution: null,
+-          photo_url: null, personal_site: null, linkedin: null, google_scholar: null, joined_at: null,
++          photo_url: null, personal_site: null, linkedin: null, google_scholar: null, joined_at: today,
+           research_interests: null, bio_short: null, bio_full: null })
+   }
+   useEffect(() => { if (email) load() }, [email])
+@@ -172,9 +173,4 @@ export default function AdminMyProfile() {
+           {saving ? '저장 중…' : (isNew ? '멤버 등록' : '변경 저장')}
+         </Button>
+         {!isNew && <span style={{ marginLeft: '0.75rem', fontSize: '0.8rem', color: '#888' }}>
+-          상태(current/alumni)·노출 순서는 운영자(교수님)가 조정합니다.
+-        </span>}
+-      </div>
+-    </div>
+-  )
+-}
++          상�
+\ No newline at end of file
+diff --git a/app/pages/admin/AdminNews.jsx b/app/pages/admin/AdminNews.jsx
+index 5332906..73ee681 100644
+--- a/app/pages/admin/AdminNews.jsx
++++ b/app/pages/admin/AdminNews.jsx
+@@ -26,6 +26,7 @@ function emptyNews(email) {
+   return {
+     title: '', body_json: null,
+     status: 'draft', author_email: email,
++    published_at: new Date().toISOString(),   // 달력 기본값 = 오늘
+   }
+ }
+ 
+@@ -196,10 +197,4 @@ export default function AdminNews() {
+               <h1 style={{ margin: 0, fontSize: '1.7rem', lineHeight: 1.3 }}>{edit.title}</h1>
+             </div>
+             <PostBody json={edit.body_json} />
+-          </div>
+-        ))}
+-      </Modal>
+-      {confirmUI}
+-    </div>
+-  )
+-}
++    
+\ No newline at end of file

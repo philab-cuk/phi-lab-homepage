@@ -168,8 +168,23 @@ export default function Members() {
   const data = useLoaderData()
   const location = useLocation()
 
-  const professor = data.current.find((m) => m.role === '지도교수')
-  const students = data.current.filter((m) => m.role !== '지도교수')
+  const { roleOrder = [], piRole } = data
+  // PI(역할 목록 맨 앞)는 별도 섹션. 과거 한글 값('지도교수')도 함께 인정.
+  const isPi = (m) => m.role === piRole || m.role === '지도교수'
+  const professor = data.current.find(isPi)
+  const rest = data.current.filter((m) => !isPi(m))
+
+  // 역할별 그룹 — member_roles 의 순서대로, 목록에 없는 역할은 맨 뒤에 등장 순서로.
+  const seen = new Set()
+  const orderedRoles = [
+    ...roleOrder.filter((r) => r !== piRole),
+    ...rest.map((m) => m.role).filter((r) => r && !roleOrder.includes(r)),
+  ].filter((r) => (seen.has(r) ? false : seen.add(r)))
+  const groups = orderedRoles
+    .map((role) => ({ role, members: rest.filter((m) => m.role === role) }))
+    .filter((g) => g.members.length > 0)
+  const noRole = rest.filter((m) => !m.role)   // 역할 미지정
+
   const alumni = data.alumni
 
   // Hash navigation: if URL has #<id>, force the tab that contains that
@@ -209,19 +224,29 @@ export default function Members() {
         <>
           {professor && (
             <>
-              <h2>지도교수</h2>
+              <h2>{professor.role || piRole || 'Principal Investigator'}</h2>
               <ProfessorRow member={professor} />
             </>
           )}
-          {students.length > 0 && (
-            <>
-              <h2>학부연구생</h2>
+          {groups.map((g) => (
+            <section key={g.role}>
+              <h2>{g.role}</h2>
               <div>
-                {students.map((member) => (
+                {g.members.map((member) => (
                   <StudentRow key={member.id} member={member} />
                 ))}
               </div>
-            </>
+            </section>
+          ))}
+          {noRole.length > 0 && (
+            <section>
+              <h2>Members</h2>
+              <div>
+                {noRole.map((member) => (
+                  <StudentRow key={member.id} member={member} />
+                ))}
+              </div>
+            </section>
           )}
         </>
       )}

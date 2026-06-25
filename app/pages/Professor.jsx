@@ -65,6 +65,20 @@ function ExperienceGroup({ category, items }) {
 
 export default function Professor() {
   const PI = useLoaderData()
+
+  // PI 미등록(또는 역할 매칭 실패) 시 크래시 대신 안내.
+  if (!PI) {
+    return (
+      <div className="mx-auto max-w-[1200px] px-6 py-12">
+        <h1>Professor</h1>
+        <p className="text-muted">
+          교수 정보가 아직 등록되지 않았습니다. 관리자(Members)에서 역할 목록 맨 위
+          역할(예: Principal Investigator)을 가진 멤버를 추가해 주세요.
+        </p>
+      </div>
+    )
+  }
+
   const experience = PI.experience ?? []
   const grouped = CATEGORY_ORDER.map((cat) => ({
     category: cat,

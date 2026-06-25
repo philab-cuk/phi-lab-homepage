@@ -13,7 +13,7 @@ function emptyMember() {
     photo_url: null, email: null, personal_site: null, linkedin: null, google_scholar: null,
     research_interests: null, bio_short: null, bio_full: null,
     education: null, experience: null, service: null,
-    joined_at: null, status: 'current', display_order: 0,
+    joined_at: new Date().toLocaleDateString('en-CA'), status: 'current', display_order: 0,
   }
 }
 
@@ -148,8 +148,10 @@ export default function AdminMembers() {
     load()
   }
 
-  // PI(교수)는 Members 목록에서 숨김 — Professor 화면에서 관리
-  const filtered = rows.filter(r => r.status === tab && r.role !== '지도교수')
+  // PI(교수)는 Members 목록에서 숨김 — Professor 화면에서 관리.
+  // PI 역할 = member_roles 목록 맨 앞(roleOptions[0]). 과거 한글 값도 함께 제외.
+  const piRole = roleOptions[0]
+  const filtered = rows.filter(r => r.status === tab && r.role !== '지도교수' && r.role !== piRole)
 
   if (view === 'roles') {
     return (

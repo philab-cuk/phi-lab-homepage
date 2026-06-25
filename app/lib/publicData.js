@@ -54,31 +54,49 @@ function mapMember(m) {
   }
 }
 
-// members.json 과 동일한 { current: [...], alumni: [...] } 구조로 반환.
+// member_roles 의 라벨을 sort_order 순서대로 반환. 비로그인도 읽기 허용.
+// 첫 번째(=sort_order 가장 앞) 역할을 PI(지도교수)로 간주한다.
+export async function fetchRoleOrder() {
+  const { data } = await supabase
+    .from('member_roles')
+    .select('label')
+    .order('sort_order')
+  return (data ?? []).map((r) => r.label)
+}
+
+// members.json 과 동일한 { current, alumni } 구조 + 역할 순서/ PI 라벨 반환.
 export async function fetchMembers() {
-  const { data, error } = await supabase
-    .from('members')
-    .select('*')
-    .order('status')
-    .order('joined_at', { ascending: true, nullsFirst: true }) // 먼저 합류한 사람이 상단, 합류일 미입력(창립 멤버)은 맨 앞
-    .order('display_order')   // 같은 합류일/미입력은 LIVE 순서 유지
+  const [{ data, error }, roleOrder] = await Promise.all([
+    supabase
+      .from('members')
+      .select('*')
+      .order('status')
+      .order('joined_at', { ascending: true, nullsFirst: true }) // 먼저 합류한 사람이 상단, 합류일 미입력(창립 멤버)은 맨 앞
+      .order('display_order'),   // 같은 합류일/미입력은 LIVE 순서 유지
+    fetchRoleOrder(),
+  ])
   if (error) throw error
   const all = (data ?? []).map(mapMember)
   return {
     current: all.filter((m) => m.status === 'current'),
     alumni: all.filter((m) => m.status === 'alumni'),
+    roleOrder,
+    piRole: roleOrder[0] ?? null,   // 역할 목록 맨 앞 = PI
   }
 }
 
-// Professor = members 의 PI (role 기준, 없으면 hkim).
+// Professor = members 의 PI. 역할 목록 맨 앞(piRole)으로 찾고, 과거 한글 값과
+// id('hkim') 까지 순서대로 폴백. 그래도 없으면 null (Professor.jsx 가 안내 표시).
 export async function fetchProfessor() {
-  const { data, error } = await supabase
-    .from('members')
-    .select('*')
-    .order('display_order')
+  const [{ data, error }, roleOrder] = await Promise.all([
+    supabase.from('members').select('*').order('display_order'),
+    fetchRoleOrder(),
+  ])
   if (error) throw error
   const list = (data ?? []).map(mapMember)
+  const piRole = roleOrder[0] ?? null
   return (
+    (piRole && list.find((m) => m.role === piRole)) ||
     list.find((m) => m.role === '지도교수') ||
     list.find((m) => m.id === 'hkim') ||
     null

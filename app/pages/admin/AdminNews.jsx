@@ -26,6 +26,7 @@ function emptyNews(email) {
   return {
     title: '', body_json: null,
     status: 'draft', author_email: email,
+    published_at: new Date().toISOString(),   // 달력 기본값 = 오늘
   }
 }
 
