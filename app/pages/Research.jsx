@@ -117,7 +117,7 @@ function FilterBar({ activeFilter, onChange }) {
 
 export default function Research() {
   const [activeFilter, setActiveFilter] = useState('all')
-  const researchData = useLoaderData()
+  const researchData = useLoaderData() ?? []
 
   // Featured: LIVE Major Research Initiatives (MOMENTUM, AI-Trajectory)
   const featured = researchData.filter((p) => p.featured)
@@ -146,9 +146,11 @@ export default function Research() {
       </div>
 
       <div className="mt-2">
-        {gridFiltered.map((p) => (
-          <ProjectItem key={p.id} project={p} />
-        ))}
+        {gridFiltered.length > 0 ? (
+          gridFiltered.map((p) => <ProjectItem key={p.id} project={p} />)
+        ) : (
+          <p className="text-muted py-10">No projects to display yet.</p>
+        )}
       </div>
     </div>
   )

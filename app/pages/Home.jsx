@@ -37,11 +37,11 @@ const PILLARS = [
 ]
 
 export default function Home() {
-  const data = useLoaderData()
-  const collaborators = data.collaborators
+  const data = useLoaderData() ?? {}
+  const collaborators = data.collaborators ?? []
   const collaboratorsCount = collaborators.length
-  const activeProjectsCount = data.activeResearchCount
-  const publicationsCount = data.publicationsCount
+  const activeProjectsCount = data.activeResearchCount ?? 0
+  const publicationsCount = data.publicationsCount ?? 0
 
   return (
     <div className="mx-auto max-w-[1200px] px-6 py-12">
