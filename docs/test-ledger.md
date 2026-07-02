@@ -27,21 +27,24 @@ AdminRoles 는 /admin/members 내장 패널 → E4-adm-mem 셀에 귀속.
 
 mock supabase 로 DB row → 화면 JSON 변환만 검증. 파일: tests/unit/publicData.test.js
 
+파일: tests/unit/publicData.test.js (+ 에러 전파 1셀 추가 발견분)
+
 | 셀 | 함수 | 정상 | 빈 | 결손(null 필드) |
 |---|---|---|---|---|
-| U1-role | fetchRoleOrder | ⬜ | ⬜ | ⬜ |
-| U1-mem | fetchMembers (분류·순서·경로 처리 포함) | ⬜ | ⬜ | ⬜ |
-| U1-prof | fetchProfessor (역할 라벨 포함) | ⬜ | ⬜ | ⬜ |
-| U1-lec | fetchLectures | ⬜ | ⬜ | ⬜ |
-| U1-res | fetchResearch (display_order 보존) | ⬜ | ⬜ | ⬜ |
-| U1-pub | fetchPublications (순서 보존) | ⬜ | ⬜ | ⬜ |
-| U1-inst | fetchCollaboratingInstitutions | ⬜ | ⬜ | ⬜ |
-| U1-news | fetchNews (published 만) | ⬜ | ⬜ | ⬜ |
-| U1-news1 | fetchNewsItem | ⬜ | ⬜(404) | ⬜ |
-| U1-posts | fetchPosts (pinned 우선 정렬) | ⬜ | ⬜ | ⬜ |
-| U1-post1 | fetchPost | ⬜ | ⬜(404) | ⬜ |
-| U1-views | incrementPostViews | ⬜ | ⬜ | ⬜ |
-| U1-stats | fetchHomeStats | ⬜ | ⬜ | ⬜ |
+| U1-role | fetchRoleOrder | 🟢 | 🟢 | 🟢 |
+| U1-mem | fetchMembers (분류·순서·경로 처리 포함) | 🟢 | 🟢 | 🟢 |
+| U1-prof | fetchProfessor (라벨 폴백 3단 포함, QA버그1) | 🟢 | 🟢 | 🟢 |
+| U1-lec | fetchLectures | 🟢 | 🟢 | 🟢 |
+| U1-res | fetchResearch (position 정렬) | 🟢 | 🟢 | 🟢 |
+| U1-pub | fetchPublications (저자 정렬) | 🟢 | 🟢 | 🟢 |
+| U1-inst | fetchCollaboratingInstitutions | 🟢 | 🟢 | 🟢 |
+| U1-news | fetchNews (커버 추출 포함) | 🟢 | 🟢 | 🟢 |
+| U1-news1 | fetchNewsItem | 🟢 | 🟢(404) | 🟢 |
+| U1-posts | fetchPosts (authorName/views/pinned 기본값) | 🟢 | 🟢 | 🟢 |
+| U1-post1 | fetchPost | 🟢 | 🟢(404) | 🟢 |
+| U1-views | incrementPostViews (rpc 인자) | 🟢 | — | — |
+| U1-stats | fetchHomeStats | 🟢 | 🟢 | 🟢 |
+| U1-err | supabase error → throw 전파 (탐사 중 추가) | 🟢 | — | — |
 
 ## U2 — 기타 순수 로직 — 6셀
 
@@ -49,10 +52,10 @@ mock supabase 로 DB row → 화면 JSON 변환만 검증. 파일: tests/unit/pu
 |---|---|---|
 | U2-bib-1 | parseBibtex 정상 엔트리 | 🟢 |
 | U2-bib-2 | parseBibtex 깨진 입력(중괄호 불일치·빈 문자열) | 🟢 |
-| U2-doi-1 | fetchByDoi 응답 매핑 (fetch mock) | ⬜ |
-| U2-slug-1 | 멤버 ID slug 생성(년월일-영문이름) 정상/특수문자 | ⬜ |
-| U2-stub-1 | supabase env 미설정 stub 이 체이너블 (QA버그5 회귀) | ⬜ |
-| U2-base-1 | withBase/resized 경로 처리 (외부 URL/내부 경로/IMAGE_TRANSFORM 플래그) | ⬜ |
+| U2-doi-1 | fetchByDoi 응답 매핑 + 404 에러 (fetch mock) | 🟢 |
+| U2-slug-1 | ~~멤버 ID slug 생성~~ 폐기: 현재 구현은 crypto.randomUUID() (AdminMembers.jsx:85) — E3-mem-1 에서 커버 | 🚫 |
+| U2-stub-1 | supabase env 미설정 stub 체이너블 + 공개 fetch* 생존 (QA버그5 회귀) | 🟢 |
+| U2-base-1 | withBase/resized (외부 URL/base prefix/IMAGE_TRANSFORM 플래그) | 🟢 |
 
 ## I1 — 콘텐츠 테이블 RLS — 역할×CRUD (거부 케이스 포함)
 
