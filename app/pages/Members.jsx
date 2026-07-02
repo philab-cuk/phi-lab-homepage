@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { useLocation, useLoaderData } from 'react-router'
 import { fetchMembers } from '../lib/publicData'
 
-export async function loader() {
+// CSR: 브라우저에서 로드 — admin 저장이 재배포 없이 즉시 반영된다.
+export async function clientLoader() {
   return fetchMembers()
 }
 
