@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { PageHeader, Button, Field, TextInput, TextArea, Select, ErrorBanner } from '../../components/admin/AdminUI'
 
-const PI_ROLE = '지도교수'
 const EXP_CATEGORIES = [
   { value: 'academic', label: 'Academic (학술)' },
   { value: 'technical', label: 'Technical (기술)' },
@@ -61,6 +60,7 @@ function expToEdit(e) {
 
 export default function AdminProfessor() {
   const [pi, setPi] = useState(undefined) // undefined=로딩, null=없음, obj=있음
+  const [piRoleLabel, setPiRoleLabel] = useState('Principal Investigator') // member_roles 맨 앞
   const [edit, setEdit] = useState(null)
   const [error, setError] = useState(null)
   const [saving, setSaving] = useState(false)
@@ -70,7 +70,14 @@ export default function AdminProfessor() {
 
   async function load() {
     setError(null)
-    const { data, error } = await supabase.from('members').select('*').eq('role', PI_ROLE).order('created_at').limit(1).maybeSingle()
+    // PI 역할 = member_roles 의 맨 앞(sort_order). 과거 한글 값('지도교수') 폴백.
+    const { data: roleRows } = await supabase.from('member_roles').select('label').order('sort_order').limit(1)
+    const piRole = roleRows?.[0]?.label || '지도교수'
+    setPiRoleLabel(piRole)
+    let { data, error } = await supabase.from('members').select('*').eq('role', piRole).order('created_at').limit(1).maybeSingle()
+    if (!error && !data && piRole !== '지도교수') {
+      ;({ data, error } = await supabase.from('members').select('*').eq('role', '지도교수').order('created_at').limit(1).maybeSingle())
+    }
     if (error) { setError(error); return }
     setPi(data || null)
     if (data) {
@@ -139,7 +146,7 @@ export default function AdminProfessor() {
       <div>
         <PageHeader title="Professor" />
         <ErrorBanner error={error} />
-        <p>역할이 <strong>{PI_ROLE}</strong> 인 멤버가 없습니다. Members 에서 한 명의 역할을 <strong>{PI_ROLE}</strong> 로 지정하면 여기서 관리됩니다.</p>
+        <p>역할이 <strong>{piRoleLabel}</strong> 인 멤버가 없습니다. Members 에서 한 명의 역할을 <strong>{piRoleLabel}</strong> 로 지정하면 여기서 관리됩니다.</p>
       </div>
     )
   }
