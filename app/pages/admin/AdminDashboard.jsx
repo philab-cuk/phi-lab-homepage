@@ -8,9 +8,9 @@ const COMMON = [
   { to: '/admin/posts',      label: 'Posts',     desc: '글 작성' },
 ]
 const ADMIN = [
-  { to: '/admin/users',        label: 'Members / Invites', desc: '계정 권한·초대 현황' },
+  { to: '/admin/users',        label: 'Users',            desc: '가입 계정 권한 관리' },
   { to: '/admin/professor',    label: 'Professor',       desc: '교수 프로필 (학력·경력)' },
-  { to: '/admin/members',      label: 'Members',         desc: '멤버 + 역할(Member Roles)' },
+  { to: '/admin/members',      label: 'Members / Invites', desc: '멤버 + 역할 + 초대 현황' },
   { to: '/admin/institutions', label: 'Institutions',    desc: '협력 기관' },
   { to: '/admin/publications', label: 'Publications',    desc: '논문·발표' },
   { to: '/admin/research',     label: 'Research',        desc: '연구 과제' },

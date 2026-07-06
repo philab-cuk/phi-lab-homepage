@@ -42,7 +42,8 @@ export default function AdminMembers() {
   const [inviteBusy, setInviteBusy] = useState(false)
   const [copiedInvite, setCopiedInvite] = useState(false)
   const [copiedRow, setCopiedRow] = useState(null)      // 목록에서 링크 복사한 멤버 id (복사됨 표시)
-  const [invites, setInvites] = useState([])            // 전체 초대 (연결 상태 배지 + 활성 링크용)
+  const [copiedToken, setCopiedToken] = useState(null)  // Invites 탭에서 복사한 토큰
+  const [invites, setInvites] = useState([])            // 전체 초대 (연결 상태 배지 + 활성 링크용 + Invites 탭)
 
   // 파일 선택 시: 검증 후 메모리에만 보관 (업로드는 저장 때)
   function onSelectFile(file) {
@@ -72,7 +73,7 @@ export default function AdminMembers() {
 
   // 멤버 중심 초대(모든 초대의 정본): 이 멤버의 저장된 이메일로 researcher 초대 링크 발급.
   // 링크로 로그인하면 admin_users 화이트리스트 등록 + 이메일 일치로 이 멤버에 자동 연결.
-  // 권한 승격(admin/professor)은 가입 후 Members / Invites 에서. (여긴 멤버 연결 전용)
+  // 권한 승격(admin/professor)은 가입 후 Users 화면에서. (여긴 멤버 연결 전용)
   const inviteLinkFor = (token) => `${window.location.origin}/admin/accept?token=${token}`
   async function writeClipboard(link) {
     try { await navigator.clipboard.writeText(link) }
@@ -129,6 +130,18 @@ export default function AdminMembers() {
     if (inv) await revokeInvite(inv.token)
   }
 
+  // ── Invites 탭 (초대 현황 표) ──
+  const memberNameByEmail = (email) => { const m = rows.find(r => norm(r.email) === norm(email)); return m ? (m.name_ko || m.name) : null }
+  async function copyToken(token) {
+    await writeClipboard(inviteLinkFor(token))
+    setCopiedToken(token); setTimeout(() => setCopiedToken(t => (t === token ? null : t)), 2000)
+  }
+  async function revokeInviteRow(inv) {
+    if (inv.used_at) return
+    if (!(await confirm(`${inv.intended_email} 초대를 회수하시겠습니까?`))) return
+    await revokeInvite(inv.token)
+  }
+
   async function load() {
     setLoading(true); setError(null)
     const [{ data, error }, { data: accs }, { data: roles }, { data: inv }] = await Promise.all([
@@ -137,7 +150,7 @@ export default function AdminMembers() {
       supabase.from('members').select('*').order('id', { ascending: true }),
       supabase.from('admin_users').select('email, role, display_name').order('added_at'),
       supabase.from('member_roles').select('label').order('sort_order'),
-      supabase.from('invites').select('token, intended_email, expires_at, used_at').order('created_at', { ascending: false }),
+      supabase.from('invites').select('token, intended_email, role, created_at, created_by, expires_at, used_at, used_by_email').order('created_at', { ascending: false }),
     ])
     if (error) setError(error)
     setRows(data || [])
@@ -149,7 +162,7 @@ export default function AdminMembers() {
   useEffect(() => { load() }, [])
 
   async function refreshInvites() {
-    const { data } = await supabase.from('invites').select('token, intended_email, expires_at, used_at').order('created_at', { ascending: false })
+    const { data } = await supabase.from('invites').select('token, intended_email, role, created_at, created_by, expires_at, used_at, used_by_email').order('created_at', { ascending: false })
     setInvites(data || [])
   }
 
@@ -262,13 +275,67 @@ export default function AdminMembers() {
   const activeInvite = activeInviteFor(original?.email)
   const shownInviteLink = inviteLink || (activeInvite ? inviteLinkFor(activeInvite.token) : null)
 
+  const viewTabs = (
+    <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+      <Button primary={view === 'members'} onClick={() => { setView('members'); load() }}>Members</Button>
+      <Button primary={view === 'roles'} onClick={() => setView('roles')}>Member Roles</Button>
+      <Button primary={view === 'invites'} onClick={() => { setView('invites'); load() }}>Invites</Button>
+    </div>
+  )
+
+  if (view === 'invites') {
+    const activeCount = invites.filter(i => !i.used_at && new Date(i.expires_at) > new Date()).length
+    return (
+      <div>
+        {viewTabs}
+        <PageHeader
+          title="Members / Invites — 초대 현황"
+          subtitle={`활성 ${activeCount} · 전체 ${invites.length}`}
+          actions={<>{deleteModeToggle}</>}
+        />
+        <div style={{ fontSize: '0.78rem', color: '#666', background: '#f7f7f7', border: '1px solid #eee', padding: '0.5rem 0.6rem', marginBottom: '0.75rem' }}>
+          초대는 각 멤버 카드(<strong>Members</strong> 탭)에서 발급합니다. 여기서는 발급된 초대의 <strong>현황·링크 복사·회수</strong>를 관리합니다.
+        </div>
+        <ErrorBanner error={error} />
+        {loading ? <div>로딩 중…</div> : (
+          <Table
+            columns={[
+              { key: 'token', label: 'Token', render: r => <code style={{ fontSize: '0.7rem' }}>{r.token.slice(0, 8)}…</code> },
+              { key: 'intended_email', label: 'Intended email' },
+              { key: 'member', label: '멤버', render: r => {
+                  const nm = memberNameByEmail(r.intended_email)
+                  return nm ? nm : <span style={{ color: '#c33', fontSize: '0.72rem' }}>멤버 없음</span>
+                } },
+              { key: 'role', label: 'Role' },
+              { key: 'created_at', label: 'Created', render: r => new Date(r.created_at).toISOString().slice(0, 16).replace('T', ' ') },
+              { key: 'expires_at', label: 'Expires', render: r => new Date(r.expires_at).toISOString().slice(0, 16).replace('T', ' ') },
+              { key: 'status', label: 'Status', render: r => {
+                  if (r.used_at) return <span style={{ color: '#080' }}>used by {r.used_by_email}</span>
+                  if (new Date(r.expires_at) <= new Date()) return <span style={{ color: '#888' }}>expired</span>
+                  return <span style={{ color: '#06c' }}>active</span>
+                } },
+              { key: 'actions', label: '', render: r => {
+                  const active = !r.used_at && new Date(r.expires_at) > new Date()
+                  return (
+                    <div style={{ display: 'flex', gap: '0.25rem' }}>
+                      <Button onClick={() => copyToken(r.token)} disabled={!active}>{copiedToken === r.token ? '복사됨' : '링크 복사'}</Button>
+                      <Button danger onClick={() => revokeInviteRow(r)} disabled={!deleteMode || !active}>회수</Button>
+                    </div>
+                  )
+                } },
+            ]}
+            rows={invites}
+          />
+        )}
+        {confirmUI}
+      </div>
+    )
+  }
+
   if (view === 'roles') {
     return (
       <div>
-        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-          <Button primary={false} onClick={() => { setView('members'); load() }}>Members</Button>
-          <Button primary onClick={() => setView('roles')}>Member Roles</Button>
-        </div>
+        {viewTabs}
         <AdminRoles />
       </div>
     )
@@ -276,10 +343,7 @@ export default function AdminMembers() {
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-        <Button primary onClick={() => setView('members')}>Members</Button>
-        <Button primary={false} onClick={() => setView('roles')}>Member Roles</Button>
-      </div>
+      {viewTabs}
       <PageHeader
         title="Members"
         subtitle={`재학 ${rows.filter(r=>r.status==='current').length} · 졸업 ${rows.filter(r=>r.status==='alumni').length}`}
@@ -444,14 +508,14 @@ export default function AdminMembers() {
             <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid #eee' }}>
               <div style={{ fontSize: '0.8rem', color: '#666', marginBottom: '0.5rem' }}>
                 초대·연결 — 이 멤버의 이메일로 초대 링크(<strong>researcher</strong>)를 만들고, 그 링크로 로그인하면 이 멤버에 자동 연결됩니다.
-                <span style={{ color: '#999' }}> 권한 승격(admin·professor)은 가입 후 Members / Invites 에서.</span>
+                <span style={{ color: '#999' }}> 권한 승격(admin·professor)은 가입 후 Users 화면에서.</span>
               </div>
 
               {!original?.email ? (
                 <div style={{ fontSize: '0.8rem', color: '#b00' }}>이메일을 입력·저장한 뒤 초대 링크를 만들 수 있습니다.</div>
               ) : inviteStatus.key === 'linked' ? (
                 <div style={{ fontSize: '0.8rem', color: '#080' }}>
-                  ✓ 연결됨 — <code>{original.email}</code> 계정에 연결(가입 완료). 권한 변경·삭제는 Members / Invites 에서.
+                  ✓ 연결됨 — <code>{original.email}</code> 계정에 연결(가입 완료). 권한 변경·삭제는 Users 화면에서.
                 </div>
               ) : (
                 <>
