@@ -65,7 +65,12 @@ export default function AdminMembers() {
   async function load() {
     setLoading(true); setError(null)
     const [{ data, error }, { data: accs }, { data: roles }] = await Promise.all([
-      supabase.from('members').select('*').order('status').order('joined_at', { ascending: true, nullsFirst: true }).order('display_order'),
+      // 정렬: 합류일 → 역할 → 이름(영문) → ID. 합류일 미입력(창립 멤버)은 맨 앞.
+      supabase.from('members').select('*')
+        .order('joined_at', { ascending: true, nullsFirst: true })
+        .order('role', { ascending: true })
+        .order('name', { ascending: true })
+        .order('id', { ascending: true }),
       supabase.from('admin_users').select('email, role, display_name').order('added_at'),
       supabase.from('member_roles').select('label').order('sort_order'),
     ])
