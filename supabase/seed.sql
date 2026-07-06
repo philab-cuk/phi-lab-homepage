@@ -6,5 +6,6 @@
 
 insert into public.admin_users (email, role, display_name) values
   ('guboc11@gmail.com',          'admin',     '박태원'),
-  ('hyojung.kim@catholic.ac.kr', 'professor', '김효정 교수')
+  ('hyojung.kim@catholic.ac.kr', 'professor', '김효정 교수'),
+  ('philab.cuk@gmail.com',       'admin',     '연구실 공용')   -- PHI Lab 공용 계정
 on conflict (email) do nothing;
