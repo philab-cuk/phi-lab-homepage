@@ -19,15 +19,19 @@ export default function AdminUsers() {
   const [editUser, setEditUser] = useState(null)
   const [viewingUser, setViewingUser] = useState(false) // 행 클릭 → 보기(읽기 전용)
   const [originalUser, setOriginalUser] = useState(null) // 편집 취소 시 되돌릴 원본
-  const [newInvite, setNewInvite] = useState(null)
+  const [memberByEmail, setMemberByEmail] = useState({}) // 이메일 → 멤버 이름 (초대↔멤버 대응 표시)
 
   async function load() {
     setLoading(true); setError(null)
-    const [{ data: u, error: uErr }, { data: i, error: iErr }] = await Promise.all([
+    const [{ data: u, error: uErr }, { data: i, error: iErr }, { data: mem }] = await Promise.all([
       supabase.from('admin_users').select('email, role, display_name, invited_by, added_at').order('added_at'),
       supabase.from('invites').select('token, role, intended_email, created_by, created_at, expires_at, used_at, used_by_email').order('created_at', { ascending: false }),
+      supabase.from('members').select('email, name_ko, name'),
     ])
     if (uErr || iErr) setError(uErr || iErr)
+    const mmap = {}
+    for (const m of (mem || [])) { if (m.email) mmap[m.email.trim().toLowerCase()] = m.name_ko || m.name }
+    setMemberByEmail(mmap)
     // 등록순(added_at asc). 같은 시각이면 role 우선순위: professor → admin → 나머지
     const rolePriority = { professor: 0, admin: 1, researcher: 2, alumni: 3 }
     const sortedUsers = (u || []).slice().sort((a, b) => {
@@ -63,18 +67,6 @@ export default function AdminUsers() {
     load()
   }
 
-  async function handleCreateInvite() {
-    setError(null)
-    const { error } = await supabase.from('invites').insert({
-      intended_email: newInvite.intended_email.trim().toLowerCase(),
-      role: newInvite.role,
-      created_by: user.email,
-    })
-    if (error) { setError(error); return }
-    setNewInvite(null)
-    load()
-  }
-
   async function handleRevokeInvite(row) {
     if (row.used_at) return
     if (!(await confirm(`${row.intended_email} 초대를 회수하시겠습니까?`))) return
@@ -98,17 +90,19 @@ export default function AdminUsers() {
   return (
     <div>
       <PageHeader
-        title="Users / Invites"
-        subtitle="화이트리스트 + 초대 토큰 관리"
+        title="Members / Invites"
+        subtitle="계정·권한 관리 + 초대 현황 (초대 발급은 Members 화면에서)"
         actions={
           <>
             <Button onClick={() => setTab('users')} primary={tab === 'users'}>Users ({users.length})</Button>
             <Button onClick={() => setTab('invites')} primary={tab === 'invites'}>Invites ({invites.filter(i => !i.used_at && new Date(i.expires_at) > new Date()).length} 활성)</Button>
             {deleteModeToggle}
-            <Button primary onClick={() => setNewInvite({ intended_email: '', role: 'researcher' })}>멤버 초대</Button>
           </>
         }
       />
+      <div style={{ fontSize: '0.78rem', color: '#666', background: '#f7f7f7', border: '1px solid #eee', padding: '0.5rem 0.6rem', marginBottom: '0.75rem' }}>
+        초대는 <strong>Members 화면</strong>에서 멤버를 만들고 발급합니다(로그인 시 멤버에 자동 연결). 여기서는 <strong>가입한 계정의 권한(역할) 변경·삭제</strong>와 <strong>발급된 초대 현황</strong>을 관리합니다. admin·professor 권한은 여기서 올려주세요.
+      </div>
 
       <ErrorBanner error={error} />
       {loading ? <div>로딩 중…</div> : tab === 'users' ? (
@@ -136,6 +130,10 @@ export default function AdminUsers() {
           columns={[
             { key: 'token', label: 'Token', render: r => <code style={{ fontSize: '0.7rem' }}>{r.token.slice(0,8)}…</code> },
             { key: 'intended_email', label: 'Intended email' },
+            { key: 'member', label: '멤버', render: r => {
+                const nm = memberByEmail[(r.intended_email || '').trim().toLowerCase()]
+                return nm ? nm : <span style={{ color: '#c33', fontSize: '0.72rem' }}>멤버 없음</span>
+              } },
             { key: 'role', label: 'Role' },
             { key: 'created_at', label: 'Created', render: r => new Date(r.created_at).toISOString().slice(0,16).replace('T', ' ') },
             { key: 'expires_at', label: 'Expires', render: r => new Date(r.expires_at).toISOString().slice(0,16).replace('T', ' ') },
@@ -185,33 +183,6 @@ export default function AdminUsers() {
               <TextInput value={editUser.display_name || ''} onChange={e => setEditUser({ ...editUser, display_name: e.target.value })} />
             </Field>
           </fieldset>
-        )}
-      </Modal>
-
-      {/* new invite modal */}
-      <Modal
-        open={!!newInvite}
-        onClose={() => setNewInvite(null)}
-        title="멤버 초대"
-        footer={
-          <>
-            <Button onClick={() => setNewInvite(null)}>취소</Button>
-            <Button primary onClick={handleCreateInvite} disabled={!newInvite?.intended_email}>발급</Button>
-          </>
-        }
-      >
-        {newInvite && (
-          <>
-            <Field label="대상 이메일" hint="이 이메일로 로그인한 사용자만 초대를 사용할 수 있습니다.">
-              <TextInput type="email" value={newInvite.intended_email} onChange={e => setNewInvite({ ...newInvite, intended_email: e.target.value })} />
-            </Field>
-            <Field label="Role">
-              <Select value={newInvite.role} options={ROLES} onChange={e => setNewInvite({ ...newInvite, role: e.target.value })} />
-            </Field>
-            <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.5rem' }}>
-              유효기간: 발급 시점부터 7일. 같은 이메일로 새 초대를 발급하면 기존 활성 초대는 자동 만료됩니다.
-            </div>
-          </>
         )}
       </Modal>
       {confirmUI}

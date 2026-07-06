@@ -28,7 +28,7 @@ function buildMenu(role) {
     sections.push({
       title: 'Admin',
       items: [
-        { to: '/admin/users', label: 'Users / Invites' },
+        { to: '/admin/users', label: 'Members / Invites' },
         { to: '/admin/professor', label: 'Professor' },
         { to: '/admin/members', label: 'Members' },
         { to: '/admin/institutions', label: 'Institutions' },
