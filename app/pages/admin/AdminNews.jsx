@@ -144,6 +144,7 @@ export default function AdminNews() {
         width={920}
         fixedHeight
         title={editing ? (isNew ? '새 뉴스' : `Edit: ${edit?.id}`) : '미리보기'}
+        mode={editing ? (isNew ? 'new' : 'edit') : 'view'}
         headerActions={editing
           ? <><Button primary onClick={save}>저장</Button><Button onClick={cancelEdit}>취소</Button></>
           : <><Button primary onClick={() => setEditing(true)}>편집하기</Button><Button onClick={closeModal}>닫기</Button></>}

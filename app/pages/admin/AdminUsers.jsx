@@ -169,6 +169,7 @@ export default function AdminUsers() {
         width={920}
         fixedHeight
         title={editUser ? (viewingUser ? `보기: ${editUser.email}` : `Edit: ${editUser.email}`) : ''}
+        mode={viewingUser ? 'view' : 'edit'}
         headerActions={viewingUser
           ? <><Button primary onClick={() => setViewingUser(false)}>편집하기</Button><Button onClick={() => { setViewingUser(false); setEditUser(null) }}>닫기</Button></>
           : <><Button primary onClick={handleSaveUser}>저장</Button><Button onClick={() => { setEditUser(originalUser); setViewingUser(true) }}>취소</Button></>}

@@ -96,16 +96,31 @@ export function Table({ columns, rows, empty = '데이터 없음', onRowClick })
 //   헤더가 sticky 라 본문이 길어도 항상 보인다(미리보기의 편집/닫기 용).
 // fixedHeight: true 면 본문 길이와 무관하게 항상 86vh 고정(News/Posts 모달
 //   처럼 보기/편집 전환·짧은 글에서도 크기가 일관되게).
-export function Modal({ open, onClose, title, children, footer, width, headerActions, fixedHeight }) {
+// 모달 모드 뱃지 — 보기/편집/새 항목을 한눈에 구분. (admin UI 한글 기본)
+const MODE_BADGE = {
+  view: { label: '보기 · 읽기 전용', bg: '#eeeeee', color: '#555555', border: '#dcdcdc' },
+  edit: { label: '편집 중',          bg: '#e7f0ff', color: '#1a5fd0', border: '#b9d4ff' },
+  new:  { label: '새 항목',          bg: '#e8f7ec', color: '#1a7f37', border: '#bfe6c9' },
+}
+
+export function Modal({ open, onClose, title, children, footer, width, headerActions, fixedHeight, mode }) {
   if (!open) return null
+  const badge = MODE_BADGE[mode]
   return (
     <div
       onClick={onClose}
       style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 100, paddingTop: '3rem' }}
     >
       <div onClick={(e) => e.stopPropagation()} style={{ background: '#fff', width: width ? `min(${width}px, 94vw)` : undefined, minWidth: 480, maxWidth: '94vw', height: fixedHeight ? '86vh' : undefined, maxHeight: '86vh', overflow: 'auto', padding: '1.25rem', borderRadius: 4 }}>
-        <div style={{ position: 'sticky', top: '-1.25rem', background: '#fff', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', borderBottom: '1px solid #eee', margin: '-1.25rem -1.25rem 0.75rem', padding: '1.1rem 1.25rem 0.5rem' }}>
-          <h2 style={{ margin: 0, fontSize: '1.1rem' }}>{title}</h2>
+        <div style={{ position: 'sticky', top: '-1.25rem', background: '#fff', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', borderBottom: `2px solid ${badge ? badge.border : '#eee'}`, margin: '-1.25rem -1.25rem 0.75rem', padding: '1.1rem 1.25rem 0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', minWidth: 0 }}>
+            <h2 style={{ margin: 0, fontSize: '1.1rem' }}>{title}</h2>
+            {badge && (
+              <span style={{ fontSize: '0.72rem', fontWeight: 600, padding: '0.15rem 0.55rem', borderRadius: 999, background: badge.bg, color: badge.color, border: `1px solid ${badge.border}`, whiteSpace: 'nowrap', flexShrink: 0 }}>
+                {badge.label}
+              </span>
+            )}
+          </div>
           {headerActions
             ? <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>{headerActions}</div>
             : <button onClick={onClose} style={{ background: 'transparent', border: 'none', fontSize: '1.2rem', cursor: 'pointer', color: '#666' }}>×</button>}

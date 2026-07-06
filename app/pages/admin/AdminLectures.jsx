@@ -168,6 +168,7 @@ export default function AdminLectures() {
         width={920}
         fixedHeight
         title={edit ? (viewing ? `보기: ${edit.title_en || edit.id}` : (isNew ? '새 강의' : `Edit: ${edit.id}`)) : ''}
+        mode={viewing ? 'view' : (isNew ? 'new' : 'edit')}
         headerActions={viewing
           ? <><Button primary onClick={() => setViewing(false)}>편집하기</Button><Button onClick={closeEdit}>닫기</Button></>
           : <><Button primary onClick={save} disabled={uploading}>{uploading ? '저장 중…' : '저장'}</Button><Button onClick={cancelEdit} disabled={uploading}>취소</Button></>}

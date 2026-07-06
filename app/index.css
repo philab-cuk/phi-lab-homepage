@@ -99,3 +99,15 @@
 .post-body table { border-collapse: collapse; margin: 1em 0; width: 100%; }
 .post-body th, .post-body td { border: 1px solid var(--color-rule); padding: 0.4rem 0.6rem; text-align: left; }
 .post-body th { background: #f7f7f7; font-weight: 600; }
+
+/* Admin 보기(읽기 전용) 모드 — 비활성 입력칸을 확연히 muted 처리.
+   보기 모드는 <fieldset disabled> 로 하위 입력을 일괄 비활성화하므로 :disabled 로 잡는다.
+   입력 컴포넌트가 인라인 스타일(border 등)을 써서, 덮으려면 !important 필요. .admin-shell 로 admin 에만 적용. */
+.admin-shell input:disabled,
+.admin-shell textarea:disabled,
+.admin-shell select:disabled {
+  background: #f4f4f4 !important;
+  color: #6b6b6b !important;
+  border-color: #e3e3e3 !important;
+  cursor: not-allowed !important;
+}

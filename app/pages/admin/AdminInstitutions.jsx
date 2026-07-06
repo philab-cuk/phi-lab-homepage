@@ -129,6 +129,7 @@ export default function AdminInstitutions() {
         width={920}
         fixedHeight
         title={edit ? (viewing ? `보기: ${edit.name_en}` : (isNew ? '새 기관' : `Edit: ${edit.name_en}`)) : ''}
+        mode={viewing ? 'view' : (isNew ? 'new' : 'edit')}
         headerActions={viewing
           ? <><Button primary onClick={() => setViewing(false)}>편집하기</Button><Button onClick={closeEdit}>닫기</Button></>
           : <><Button primary onClick={save} disabled={saving}>{saving ? '저장 중…' : '저장'}</Button><Button onClick={cancelEdit} disabled={saving}>취소</Button></>}

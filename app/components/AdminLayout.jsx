@@ -52,7 +52,7 @@ export default function AdminLayout() {
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', minHeight: '100vh' }}>
+    <div className="admin-shell" style={{ display: 'grid', gridTemplateColumns: '220px 1fr', minHeight: '100vh' }}>
       <aside style={{ background: '#1a1a1a', color: '#eee', padding: '1rem' }}>
         <div style={{ marginBottom: '1.5rem' }}>
           <Link to="/admin" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>
