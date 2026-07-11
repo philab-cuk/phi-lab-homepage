@@ -29,8 +29,11 @@
   --color-meta:  #888888;
   --color-rule:  #e5e5e5;
 
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
-    "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-sans: "Pretendard Variable", Pretendard, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", "Apple SD Gothic Neo", "Noto Sans KR",
+    sans-serif;
+  /* 에디토리얼 세리프 — 영문 전용(Lora). 한글이 섞이면 sans 로 폴백된다. */
+  --font-serif: Lora, Georgia, "Times New Roman", serif;
 }
 
 @layer base {

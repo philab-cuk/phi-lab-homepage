@@ -211,7 +211,22 @@ export async function fetchPublications() {
   return (data ?? []).map(mapPublication)
 }
 
-// 홈 "Collaborating Institutions" — 외부 협력 기관만(내부 PHI Lab 제외), 이름순.
+// 홈 "Collaborating Institutions" — 외부 협력 기관만(내부 PHI Lab·가톨릭대 제외).
+// 표시 순서: 아래 우선순위 목록(name_en) 먼저, 나머지는 이름순 뒤에.
+// 1행: 성모병원 계열 + 가톨릭중앙의료원 / 2행: 삼성서울·카카오·서울대
+// 3행: 숙명여대·전남대·연세대.
+const INSTITUTION_DISPLAY_ORDER = [
+  "Bucheon St. Mary's Hospital",
+  "Eunpyeong St. Mary's Hospital",
+  'Catholic Medical Center',
+  'Samsung Seoul Hospital',
+  'Kakao Healthcare',
+  'Seoul National University',
+  "Sookmyung Women's University",
+  'Chonnam National University',
+  'Yonsei University',
+]
+
 export async function fetchCollaboratingInstitutions() {
   const { data, error } = await supabase
     .from('institutions')
@@ -219,7 +234,13 @@ export async function fetchCollaboratingInstitutions() {
     .eq('is_internal', false)
     .order('name_en')
   if (error) throw error
-  return (data ?? []).map((i) => ({ name: i.name_en, logo: withBase(i.logo_url) }))
+  const rank = (n) => {
+    const i = INSTITUTION_DISPLAY_ORDER.indexOf(n)
+    return i === -1 ? INSTITUTION_DISPLAY_ORDER.length : i
+  }
+  return (data ?? [])
+    .sort((a, b) => rank(a.name_en) - rank(b.name_en) || a.name_en.localeCompare(b.name_en))
+    .map((i) => ({ name: i.name_en, logo: withBase(i.logo_url) }))
 }
 
 // ── News ────────────────────────────────────────────────────────────────────

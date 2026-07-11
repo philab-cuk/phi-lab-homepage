@@ -76,7 +76,8 @@ function Header() {
       {/* 네브바 — full width. 폭이 좁으면 메뉴가 아래 줄로 내려간다(겹침 방지). */}
       <div className="px-6 py-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
         <Link to="/" onClick={close} className="flex items-center gap-3 no-underline shrink-0">
-          <img src={import.meta.env.BASE_URL + 'logo.jpg'} alt="PHI Lab" className="h-12 w-auto max-[500px]:hidden" />
+          {/* logo-mark.png = logo.jpg 에서 글자 없이 심볼만 크롭한 버전 */}
+          <img src={import.meta.env.BASE_URL + 'logo-mark.png'} alt="PHI Lab" className="h-14 w-auto max-[500px]:hidden" />
           <span className="leading-tight">
             <span className="block font-semibold text-ink text-[14px] lg:text-[16px] xl:text-[18px] tracking-tight">
               Precision &amp; Provenance Health Informatics Lab

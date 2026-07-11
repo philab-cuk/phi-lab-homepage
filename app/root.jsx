@@ -7,6 +7,18 @@ export const links = () => {
   return [
     { rel: 'icon', type: 'image/png', href: fav },
     { rel: 'apple-touch-icon', href: fav },
+    // 웹폰트 — UI 는 Pretendard(한글+영문 산세리프, 다이나믹 서브셋),
+    // 에디토리얼 문단(인용구·본문)은 Lora(영문 세리프).
+    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
+    {
+      rel: 'stylesheet',
+      href: 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css',
+    },
+    {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..600;1,400..600&display=swap',
+    },
   ]
 }
 

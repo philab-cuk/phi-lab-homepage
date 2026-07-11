@@ -103,7 +103,7 @@ export default function Home() {
           <h1 className="mt-2 max-w-[880px] text-[2.2rem] leading-[1.25] text-white">
             {HERO.headline}
           </h1>
-          <p className="italic text-white/85 text-[1.2rem]">{HERO.tagline}</p>
+          <p className="font-serif italic text-white/85 text-[1.2rem]">{HERO.tagline}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             {stats.map((s) => (
               <span
@@ -128,7 +128,7 @@ export default function Home() {
           {PILLARS.map((p) => (
             <div key={p.title} className={`border border-rule border-t-[3px] ${p.accentBorder} rounded-lg p-5`}>
               <span className={p.accentText}>{ICONS[p.icon]}</span>
-              <p className="mt-3 mb-0 font-semibold text-ink">{p.title}</p>
+              <p className="mt-3 mb-0 font-semibold text-brand-800">{p.title}</p>
               <p className="mt-2 mb-0 text-muted text-[15px] leading-relaxed">{p.body}</p>
             </div>
           ))}
@@ -137,22 +137,24 @@ export default function Home() {
         {/* ── Featured Quote ───────────────────────────────────────── */}
         {/* Author spelling corrected to 'McCandless' (LIVE shows 'Maccandless'). */}
         <blockquote className="my-10 not-italic rounded-r-lg bg-beige-50 border-l-4 border-gold-600 px-6 py-5">
-          <p className="my-0 text-[2rem] leading-tight font-semibold text-ink">
+          <p className="my-0 font-serif italic text-[2rem] leading-tight font-semibold text-ink">
             &ldquo;Data is the new soil, not oil.&rdquo;
           </p>
           <footer className="my-1 text-[15px] text-wgray-600">
             David McCandless (Author of Information is Beautiful)
           </footer>
         </blockquote>
-        <p>Oil is valuable and tradable.</p>
-        <p>
-          Data only becomes valuable with considerable effort. In the data-driven era,
-          the effectiveness of AI machines depends on the granularity and precision of the data.
-        </p>
-        <p>
-          We focus on optimal informative transformation with the right application, so that could
-          be a medium that bridges the gap between raw data and actionable knowledge.
-        </p>
+        <div className="font-serif">
+          <p>Oil is valuable and tradable.</p>
+          <p>
+            Data only becomes valuable with considerable effort. In the data-driven era,
+            the effectiveness of AI machines depends on the granularity and precision of the data.
+          </p>
+          <p>
+            We focus on optimal informative transformation with the right application, so that could
+            be a medium that bridges the gap between raw data and actionable knowledge.
+          </p>
+        </div>
 
         {/* ── Collaborating Institutions ────────────────────────────── */}
         <h2 className="flex items-center gap-3">
