@@ -25,6 +25,7 @@ const TARGETS = [
   { file: '은평성모.jpg', name_en: "Eunpyeong St. Mary's Hospital", name_ko: '은평성모병원' },
   { file: '가톨릭대중앙의료원.jpg', name_en: 'Catholic Medical Center', name_ko: '가톨릭중앙의료원' },
   { file: '삼성서울병원.jpg', name_en: 'Samsung Seoul Hospital', name_ko: '삼성서울병원' },
+  { file: '카카오헬스케어.jpg', name_en: 'Kakao Healthcare', name_ko: '카카오헬스케어' },
   { file: '서울대학교.jpg', name_en: 'Seoul National University', name_ko: '서울대학교' },
   { file: '숙명여자대학교.jpg', name_en: "Sookmyung Women's University", name_ko: '숙명여자대학교' },
   { file: '전남대학교.jpg', name_en: 'Chonnam National University', name_ko: '전남대학교' },
