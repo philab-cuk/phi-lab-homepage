@@ -26,6 +26,18 @@ export const BOOKS = [
 // status: 'registered'(등록) | 'filed'(출원)
 export const PATENTS = [
   {
+    id: 'patent-napro-reproductive-dataset',
+    inventors: ['김민정', '박인양', '김효정', '김명신'],
+    titleKo: '나프로 차트의 구조화 및 상대시간 정렬을 이용한 생식건강 데이터셋 생성 방법 및 시스템',
+    titleEn:
+      'Method and System for Generating a Reproductive Health Dataset Using Structuring and Relative-Time Alignment of NaPro Charts',
+    assignee: '가톨릭대학교 산학협력단',
+    status: 'filed',
+    number: '10-2026-0126128',
+    date: '2026.07.09',
+    year: 2026,
+  },
+  {
     id: 'patent-genome-data-model',
     inventors: ['김효정', '김주한'],
     titleKo: '정밀의료 게놈 데이터 모델 관리 장치 및 이의 관리 방법',
