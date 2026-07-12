@@ -13,7 +13,7 @@ function dateKey(d) {
 }
 
 function EventItem({ event }) {
-  const { title, fullName, role, date, venue, description, link, image, speaker, agenda, program, sponsor } = event
+  const { title, fullName, role, date, venue, description, link, image, images, speaker, agenda, program, sponsor } = event
   const meta = [role && (ROLE_LABEL[role] ?? role), date, venue].filter(Boolean)
   const header = (
     <>
@@ -72,6 +72,22 @@ function EventItem({ event }) {
             decoding="async"
             className="w-full h-auto object-cover rounded-lg border border-rule"
           />
+        </div>
+      )}
+
+      {/* 여러 장 사진 — 높이 고정 썸네일이 가로로 배열(비율 달라도 정렬). */}
+      {images && images.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {images.map((src, i) => (
+            <img
+              key={i}
+              src={import.meta.env.BASE_URL + src}
+              alt={`${title} ${i + 1}`}
+              loading="lazy"
+              decoding="async"
+              className="h-[150px] w-auto max-w-full object-cover rounded-lg border border-rule"
+            />
+          ))}
         </div>
       )}
     </article>

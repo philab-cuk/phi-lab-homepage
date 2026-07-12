@@ -14,7 +14,11 @@ export const EVENTS = [
     description:
       'An international academic event co-hosted by the PHI Lab (CUK BMSW) and the University of Cincinnati DAAP (EPIC-Co Lab), supported by the National Research Foundation of Korea — featuring conferences, healthcare-industry field visits, and student research exchange under the theme "Redefining Borders: AI, Urban Health, and Community."',
     link: '/ghmw-2026/', // 통합된 정적 microsite (public/ghmw-2026)
-    image: '',
+    images: [
+      'photos/events/ghmw-poster.jpg',
+      'photos/events/ghmw-session1.jpg',
+      'photos/events/ghmw-group.jpg',
+    ],
   },
   {
     id: 'llm-workshop',
@@ -41,6 +45,9 @@ export const EVENTS = [
     program: '2025 Winter Intensive Career-Readiness PBL Program',
     sponsor: 'Dept. of Biomedical Software Engineering (RISE Initiative)',
     link: '',
-    image: 'photos/events/llm-workshop.jpg', // BASE_URL 은 EventItem 에서 prepend
+    images: [
+      'photos/events/llm-workshop.jpg',
+      'photos/events/llm-workshop_2.jpg',
+    ],
   },
 ]
