@@ -141,6 +141,18 @@ export default function Professor() {
       {ungrouped.length > 0 && (
         <ExperienceGroup category="other" items={ungrouped} />
       )}
+
+      {PI.service && PI.service.length > 0 && (
+        <section className="mt-8">
+          <h2>Professional Service</h2>
+          <hr className="my-2" />
+          <ul className="list-disc pl-5 marker:text-meta mt-3">
+            {PI.service.map((s, i) => (
+              <li key={i} className="my-1.5">{s}</li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   )
 }
