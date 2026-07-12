@@ -1,13 +1,10 @@
 import { useLoaderData } from 'react-router'
-import { fetchHomeStats, fetchCollaboratingInstitutions } from '../lib/publicData'
+import { fetchCollaboratingInstitutions } from '../lib/publicData'
 
 // CSR: 브라우저에서 로드 — admin 저장이 재배포 없이 즉시 반영된다.
 export async function clientLoader() {
-  const [stats, collaborators] = await Promise.all([
-    fetchHomeStats(),
-    fetchCollaboratingInstitutions(),
-  ])
-  return { ...stats, collaborators }
+  const collaborators = await fetchCollaboratingInstitutions()
+  return { collaborators }
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────
@@ -76,15 +73,6 @@ const PILLARS = [
 export default function Home() {
   const data = useLoaderData() ?? {}
   const collaborators = data.collaborators ?? []
-  const collaboratorsCount = collaborators.length
-  const activeProjectsCount = data.activeResearchCount ?? 0
-  const publicationsCount = data.publicationsCount ?? 0
-
-  const stats = [
-    { value: activeProjectsCount, label: 'current research' },
-    { value: publicationsCount, label: 'publications' },
-    { value: collaboratorsCount, label: 'collaborating institutions' },
-  ]
 
   return (
     <>
@@ -104,17 +92,6 @@ export default function Home() {
             {HERO.headline}
           </h1>
           <p className="font-serif italic text-white/85 text-[1.2rem]">{HERO.tagline}</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            {stats.map((s) => (
-              <span
-                key={s.label}
-                className="inline-flex items-baseline gap-1.5 rounded-full border border-white/35 bg-white/10 px-4 py-1 text-[14px] text-white/85 backdrop-blur-sm"
-              >
-                <strong className="text-[16px] font-semibold text-white">{s.value}</strong>
-                {s.label}
-              </span>
-            ))}
-          </div>
         </div>
       </section>
 
