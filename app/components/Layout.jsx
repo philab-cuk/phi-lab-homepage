@@ -2,14 +2,14 @@ import { NavLink, Outlet, Link, useLocation } from 'react-router'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 
-// Lab 중심 순서: 소개 → 연구 → 성과 → 강의 → 구성원 → PI → 수시 업데이트.
+// PI → 연구 → 성과 → 강의 → 구성원 → 소개 → 수시 업데이트.
 const NAV_ROUTES = [
-  { to: '/about', label: 'About Lab' },
+  { to: '/professor', label: 'Professor' },
   { to: '/research', label: 'Current Research' },
   { to: '/publications', label: 'Publications' },
   { to: '/lectures', label: 'Teaching' },
   { to: '/members', label: 'Members' },
-  { to: '/professor', label: 'Professor' },
+  { to: '/about', label: 'About Lab' },
   { to: '/news', label: 'News' },
   { to: '/posts', label: 'Posts' },
 ]
