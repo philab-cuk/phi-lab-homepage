@@ -78,11 +78,12 @@ function Header() {
         <Link to="/" onClick={close} className="flex items-center gap-3 no-underline shrink-0">
           {/* logo-mark.png = logo.jpg 에서 글자 없이 심볼만 크롭한 버전 */}
           <img src={import.meta.env.BASE_URL + 'logo-mark.png'} alt="PHI Lab" className="h-14 w-auto max-[500px]:hidden" />
-          <span className="leading-tight">
-            <span className="block font-semibold text-ink text-[14px] lg:text-[16px] xl:text-[18px] tracking-tight">
+          {/* 랩 이름 = 사실상 로고 — 크게, 줄간격은 좁게 */}
+          <span className="leading-[1.15]">
+            <span className="block font-semibold text-ink text-[20px] lg:text-[24px] xl:text-[26px] tracking-tight">
               Precision &amp; Provenance Health Informatics Lab
             </span>
-            <span className="block text-meta text-[10px] lg:text-[11px] xl:text-[12px] tracking-[0.18em] uppercase mt-0.5">
+            <span className="block text-meta text-[11px] lg:text-[12px] xl:text-[13px] tracking-[0.18em] uppercase">
               The Catholic University of Korea
             </span>
           </span>
@@ -143,27 +144,30 @@ function Footer() {
       {/* 구분선을 풀폭 <footer> 가 아니라 1200 래퍼에 둬서 바디와 같은 폭으로 */}
       <div className="mx-auto max-w-[1200px] border-t border-rule">
         <div className="px-6 py-10 flex flex-col gap-8 md:flex-row md:justify-between md:gap-12 text-[15px]">
-          <div>
-            <p className="font-semibold text-ink mb-1">PHI Lab</p>
-            <p className="text-muted">{FOOTER.tagline}</p>
+          {/* 좌측 하단 © 가 우측 이메일과 같은 줄에 오도록 justify-between */}
+          <div className="flex flex-col gap-4 md:justify-between">
+            <div>
+              <p className="font-semibold text-ink my-0">PHI Lab</p>
+              <p className="text-muted my-0">Precision &amp; Provenance Health Informatics Lab</p>
+            </div>
+            <p className="text-xs text-meta my-0">
+              © {new Date().getFullYear()} PHI Lab, The Catholic University of Korea. All rights reserved.
+            </p>
           </div>
 
           <div className="md:text-right">
-            <p className="font-semibold text-ink mb-1">Contact</p>
-            <address className="not-italic text-muted">
-              <p>{FOOTER.department}</p>
-              <p>{FOOTER.institution}</p>
-              <p>{FOOTER.addressLine1}</p>
-              <p>{FOOTER.addressLine2}</p>
-              <p className="mt-2">
+            <p className="font-semibold text-ink my-0 mb-1">Contact</p>
+            {/* 주소는 붙은 줄로 — p 기본 마진(0.7em) 제거 */}
+            <address className="not-italic text-muted leading-relaxed">
+              <p className="my-0">{FOOTER.department}</p>
+              <p className="my-0">{FOOTER.institution}</p>
+              <p className="my-0">{FOOTER.addressLine1}</p>
+              <p className="my-0">{FOOTER.addressLine2}</p>
+              <p className="my-0 mt-2">
                 <a href={`mailto:${FOOTER.email}`}>{FOOTER.email}</a>
               </p>
             </address>
           </div>
-        </div>
-
-        <div className="px-6 pb-8 text-xs text-meta">
-          © {new Date().getFullYear()} PHI Lab.
         </div>
       </div>
     </footer>

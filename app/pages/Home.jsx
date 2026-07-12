@@ -128,8 +128,8 @@ export default function Home() {
           {PILLARS.map((p) => (
             <div key={p.title} className={`border border-rule border-t-[3px] ${p.accentBorder} rounded-lg p-5`}>
               <span className={p.accentText}>{ICONS[p.icon]}</span>
-              <p className="mt-3 mb-0 font-semibold text-brand-800">{p.title}</p>
-              <p className="mt-2 mb-0 text-muted text-[15px] leading-relaxed">{p.body}</p>
+              <p className="mt-3 mb-0 font-semibold text-brand-800 text-[19px]">{p.title}</p>
+              <p className="mt-2 mb-0 text-muted text-[17px] leading-relaxed">{p.body}</p>
             </div>
           ))}
         </div>
@@ -144,7 +144,7 @@ export default function Home() {
             David McCandless (Author of Information is Beautiful)
           </footer>
         </blockquote>
-        <div className="font-serif">
+        <div className="font-serif text-[19px] leading-relaxed">
           <p>Oil is valuable and tradable.</p>
           <p>
             Data only becomes valuable with considerable effort. In the data-driven era,
