@@ -31,6 +31,8 @@ const TARGETS = [
   { file: '전남대학교.jpg', name_en: 'Chonnam National University', name_ko: '전남대학교' },
   { file: '연세대학교.jpg', name_en: 'Yonsei University', name_ko: '연세대학교' },
   { file: '봄젠.jpg', name_en: 'Bhomegen', name_ko: '봄젠' },
+  { file: 'UC.jpg', name_en: 'University of Cincinnati', name_ko: '신시내티대학교' },
+  { file: '성균관대학교.jpg', name_en: 'Sungkyunkwan University', name_ko: '성균관대학교' },
 ]
 
 const { data: existing, error: listErr } = await admin
