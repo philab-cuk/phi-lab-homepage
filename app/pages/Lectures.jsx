@@ -35,6 +35,31 @@ function groupBySemester(courses) {
 
 const LEVEL_LABEL = { graduate: 'Graduate', undergraduate: 'Undergraduate' }
 
+// 상단 과목 요약 — 주제별 그룹(titleEn 기준). 한 과목이 여러 주제에 속할 수 있다.
+// 새 과목이 추가되면 여기에 없는 과목은 'Other' 그룹으로 모인다.
+const COURSE_THEMES = [
+  {
+    label: 'AI (ML/DL)',
+    titles: [
+      'Artificial Intelligence Programming Design',
+      'Digital Health AI System Design',
+      'Machine Learning',
+    ],
+  },
+  {
+    label: 'Python',
+    titles: ['Programming for AI, Graduate Course', 'Computers & Programming 1'],
+  },
+  {
+    label: 'Data Science (R)',
+    titles: ['Biomedical Big Data Analysis'],
+  },
+  {
+    label: 'Capstone / PBL',
+    titles: ['Capstone Design for BMSW 1', 'Digital Health AI System Design'],
+  },
+]
+
 function CourseImages({ images }) {
   const openLightbox = useContext(LightboxContext)
   if (!images || images.length === 0) return null
@@ -224,16 +249,59 @@ export default function Lectures() {
   const openLightbox = (images, index) => setLightbox({ images, index })
 
   const grouped = groupBySemester(lecturesData)
-  const gradCount = lecturesData.filter((c) => c.level === 'graduate').length
-  const undergradCount = lecturesData.filter((c) => c.level === 'undergraduate').length
+
+  // 여러 학기에 걸쳐 반복되는 과목은 1회만 — 상단 과목명 요약(칩)용.
+  const uniqueCourses = (() => {
+    const seen = new Set()
+    const out = []
+    for (const c of lecturesData) {
+      const key = c.titleEn || c.titleKo
+      if (key && !seen.has(key)) {
+        seen.add(key)
+        out.push(c)
+      }
+    }
+    return out
+  })()
+
+  // 과목명 → 주제 그룹 매핑. 주제에 없는 과목은 마지막 'Other' 그룹으로.
+  const nameOf = (c) => c.titleEn || c.titleKo
+  const themedGroups = COURSE_THEMES.map((t) => ({
+    label: t.label,
+    courses: t.titles.map((title) => uniqueCourses.find((c) => nameOf(c) === title)).filter(Boolean),
+  })).filter((g) => g.courses.length > 0)
+  const themedNames = new Set(COURSE_THEMES.flatMap((t) => t.titles))
+  const otherCourses = uniqueCourses.filter((c) => !themedNames.has(nameOf(c)))
+  const courseGroups =
+    otherCourses.length > 0
+      ? [...themedGroups, { label: 'Other', courses: otherCourses }]
+      : themedGroups
 
   return (
     <LightboxContext.Provider value={openLightbox}>
       <div className="mx-auto max-w-[1200px] px-6 py-12">
         <h1>Teaching</h1>
-        <p className="text-[15px] text-meta">
-          {lecturesData.length} total · {gradCount} graduate · {undergradCount} undergraduate
-        </p>
+        {courseGroups.length > 0 && (
+          <div className="mt-3 space-y-2.5">
+            {courseGroups.map((g) => (
+              <div key={g.label} className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <span className="text-[13px] font-semibold text-brand-700 min-w-[130px]">
+                  {g.label}
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {g.courses.map((c) => (
+                    <span
+                      key={`${g.label}-${c.id}`}
+                      className="rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-[13px] text-brand-800"
+                    >
+                      {c.titleEn || c.titleKo}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {grouped.length > 0 ? (
           grouped.map(([semester, courses]) => (
