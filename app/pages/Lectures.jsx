@@ -37,9 +37,12 @@ const LEVEL_LABEL = { graduate: 'Graduate', undergraduate: 'Undergraduate' }
 
 // 상단 과목 요약 — 주제별 그룹(titleEn 기준). 한 과목이 여러 주제에 속할 수 있다.
 // 새 과목이 추가되면 여기에 없는 과목은 'Other' 그룹으로 모인다.
+// bg/fg = 주제별 색(연한 배경 + 진한 글자). 라벨·칩에 함께 적용해 색상 코딩.
 const COURSE_THEMES = [
   {
     label: 'AI (ML/DL)',
+    bg: '#e6eefb',
+    fg: '#0c2e86',
     titles: [
       'Artificial Intelligence Programming Design',
       'Digital Health AI System Design',
@@ -48,17 +51,24 @@ const COURSE_THEMES = [
   },
   {
     label: 'Python',
+    bg: '#f5ead2',
+    fg: '#8a6a2f',
     titles: ['Programming for AI, Graduate Course', 'Computers & Programming 1'],
   },
   {
     label: 'Data Science (R)',
-    titles: ['Biomedical Big Data Analysis'],
+    bg: '#e0f0ea',
+    fg: '#0f6e56',
+    titles: ['Biomedical Big Data Analysis', 'Machine Learning'],
   },
   {
     label: 'Capstone / PBL',
+    bg: '#ece7f8',
+    fg: '#493d8a',
     titles: ['Capstone Design for BMSW 1', 'Digital Health AI System Design'],
   },
 ]
+const OTHER_THEME_COLOR = { bg: '#f1efe8', fg: '#5f5e5a' }
 
 function CourseImages({ images }) {
   const openLightbox = useContext(LightboxContext)
@@ -268,13 +278,15 @@ export default function Lectures() {
   const nameOf = (c) => c.titleEn || c.titleKo
   const themedGroups = COURSE_THEMES.map((t) => ({
     label: t.label,
+    bg: t.bg,
+    fg: t.fg,
     courses: t.titles.map((title) => uniqueCourses.find((c) => nameOf(c) === title)).filter(Boolean),
   })).filter((g) => g.courses.length > 0)
   const themedNames = new Set(COURSE_THEMES.flatMap((t) => t.titles))
   const otherCourses = uniqueCourses.filter((c) => !themedNames.has(nameOf(c)))
   const courseGroups =
     otherCourses.length > 0
-      ? [...themedGroups, { label: 'Other', courses: otherCourses }]
+      ? [...themedGroups, { label: 'Other', ...OTHER_THEME_COLOR, courses: otherCourses }]
       : themedGroups
 
   return (
@@ -285,14 +297,15 @@ export default function Lectures() {
           <div className="mt-3 space-y-2.5">
             {courseGroups.map((g) => (
               <div key={g.label} className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                <span className="text-[13px] font-semibold text-brand-700 min-w-[130px]">
+                <span className="text-[13px] font-semibold min-w-[130px]" style={{ color: g.fg }}>
                   {g.label}
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {g.courses.map((c) => (
                     <span
                       key={`${g.label}-${c.id}`}
-                      className="rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-[13px] text-brand-800"
+                      className="rounded-sm px-2.5 py-1 text-[13px]"
+                      style={{ backgroundColor: g.bg, color: g.fg }}
                     >
                       {c.titleEn || c.titleKo}
                     </span>
