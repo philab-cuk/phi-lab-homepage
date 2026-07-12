@@ -39,12 +39,14 @@ function CourseImages({ images }) {
   const openLightbox = useContext(LightboxContext)
   if (!images || images.length === 0) return null
   const count = images.length
+  // 이미지가 칼럼을 꽉 채우면 이미지 속 글자가 본문 대비 과도하게 커 보인다.
+  // 폭을 제한해 "본문 옆 그림(figure)"처럼 균형을 맞춘다. 확대는 라이트박스로.
   const gridCls =
     count === 1
-      ? 'grid grid-cols-1'
+      ? 'grid grid-cols-1 max-w-[560px]'
       : count === 2
-        ? 'grid grid-cols-2 gap-2'
-        : 'grid grid-cols-3 gap-2'
+        ? 'grid grid-cols-2 gap-2 max-w-[560px]'
+        : 'grid grid-cols-3 gap-2 max-w-[760px]'
   return (
     <div className={`${gridCls} mt-3`}>
       {images.map((src, i) => (
@@ -63,8 +65,8 @@ function CourseImages({ images }) {
             decoding="async"
             className={
               count === 1
-                ? 'w-full h-auto object-cover'
-                : 'w-full aspect-square object-cover'
+                ? 'w-full h-auto object-cover rounded-lg border border-rule'
+                : 'w-full aspect-square object-cover rounded-lg border border-rule'
             }
           />
         </button>
@@ -182,7 +184,7 @@ function CourseItem({ course }) {
       )}
 
       {objectives && objectives.length > 0 && (
-        <ul>
+        <ul className="mt-2 list-disc pl-5 marker:text-meta">
           {objectives.map((o, i) => (
             <li key={i}>{o}</li>
           ))}
@@ -228,7 +230,7 @@ export default function Lectures() {
   return (
     <LightboxContext.Provider value={openLightbox}>
       <div className="mx-auto max-w-[1200px] px-6 py-12">
-        <h1>Lectures &amp; Courses</h1>
+        <h1>Teaching</h1>
         <p className="text-[15px] text-meta">
           {lecturesData.length} total · {gradCount} graduate · {undergradCount} undergraduate
         </p>

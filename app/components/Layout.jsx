@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 const NAV_ROUTES = [
   { to: '/professor', label: 'Professor' },
   { to: '/publications', label: 'Publications' },
-  { to: '/lectures', label: 'Lectures' },
+  { to: '/lectures', label: 'Teaching' },
   { to: '/research', label: 'Current Research' },
   { to: '/members', label: 'Members' },
   { to: '/news', label: 'News' },
