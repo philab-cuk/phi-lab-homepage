@@ -72,6 +72,8 @@ export function Layout({ children }) {
         <title>{`${SITE_TITLE} · The Catholic University of Korea`}</title>
         <meta name="description" content={SITE_DESC} />
         <link rel="canonical" href={SITE_URL} />
+        {/* 검색엔진 소유확인 — 네이버 서치어드바이저 */}
+        <meta name="naver-site-verification" content="f8c21ed1841e316f16148376ad8ea841a6149aee" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="PHI Lab" />
         <meta property="og:title" content={SITE_TITLE} />
