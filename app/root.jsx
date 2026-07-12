@@ -2,6 +2,45 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
 import { AuthProvider } from './contexts/AuthContext'
 import './index.css'
 
+// ─── SEO / 소셜 공유 상수 ────────────────────────────────────────────────
+// 소셜 스크래퍼(FB·카카오·트위터)는 JS 미실행 → 아래 태그는 Layout <head> 에
+// 직접 넣어 정적 index.html 에 포함되게 한다.
+const SITE_URL = 'https://philabcuk.org/'
+const SITE_TITLE = 'PHI Lab — Precision & Provenance Health Informatics Lab'
+const SITE_DESC =
+  'Precision & Provenance Health Informatics Lab (PHI Lab) at The Catholic University of Korea — data-driven interdisciplinary research advancing precision medicine and digital healthcare.'
+const OG_IMAGE = 'https://philabcuk.org/og-image.jpg'
+
+const JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'ResearchOrganization',
+  name: 'Precision & Provenance Health Informatics Lab',
+  alternateName: 'PHI Lab',
+  url: SITE_URL,
+  logo: 'https://philabcuk.org/logo.jpg',
+  image: OG_IMAGE,
+  description: SITE_DESC,
+  parentOrganization: {
+    '@type': 'CollegeOrUniversity',
+    name: 'The Catholic University of Korea',
+    url: 'https://www.catholic.ac.kr',
+  },
+  founder: {
+    '@type': 'Person',
+    name: 'Hyo Jung Kim',
+    jobTitle: 'Assistant Professor',
+    email: 'hyojung.kim@catholic.ac.kr',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '43, Jibong-ro',
+    addressLocality: 'Bucheon',
+    addressRegion: 'Gyeonggi-do',
+    postalCode: '14662',
+    addressCountry: 'KR',
+  },
+}
+
 export const links = () => {
   const fav = import.meta.env.BASE_URL + 'favicon.png'
   return [
@@ -28,6 +67,29 @@ export function Layout({ children }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        {/* SEO / 소셜 공유 — 정적 index.html <head> 에 포함 */}
+        <title>{`${SITE_TITLE} · The Catholic University of Korea`}</title>
+        <meta name="description" content={SITE_DESC} />
+        <link rel="canonical" href={SITE_URL} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PHI Lab" />
+        <meta property="og:title" content={SITE_TITLE} />
+        <meta property="og:description" content={SITE_DESC} />
+        <meta property="og:url" content={SITE_URL} />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={SITE_TITLE} />
+        <meta name="twitter:description" content={SITE_DESC} />
+        <meta name="twitter:image" content={OG_IMAGE} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+        />
+
         <Meta />
         <Links />
         {/* Google Analytics 4 (GA4) — SPA 경로 이동은 Enhanced Measurement가 추적 */}
