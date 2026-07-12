@@ -30,6 +30,16 @@ export function Layout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <Meta />
         <Links />
+        {/* Google Analytics 4 (GA4) — SPA 경로 이동은 Enhanced Measurement가 추적 */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J2Z78QWDF" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-0J2Z78QWDF');`,
+          }}
+        />
       </head>
       <body>
         {children}
