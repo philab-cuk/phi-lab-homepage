@@ -11,6 +11,7 @@ export default [
     route('research', 'pages/Research.jsx'),
     route('publications', 'pages/Publications.jsx'),
     route('lectures', 'pages/Lectures.jsx'),
+    route('events', 'pages/Events.jsx'),
     route('news', 'pages/News.jsx'),
     route('news/:id', 'pages/NewsItem.jsx'),
     route('posts', 'pages/Posts.jsx'),

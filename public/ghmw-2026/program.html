@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Program — GHMW 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">GHMW 2026</a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link"
+           data-ko="홈" data-en="Home">홈</a>
+        <a href="program.html" class="nav-link active"
+           data-ko="프로그램" data-en="Program">프로그램</a>
+      </nav>
+      <button class="lang-toggle" id="langToggle" aria-label="Toggle language">EN</button>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">&#9776;</button>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <div class="container">
+      <h1 class="page-hero-title"
+          data-ko="프로그램 안내" data-en="Program Guide">프로그램 안내</h1>
+      <p class="page-hero-subtitle"
+         data-ko="3일간의 다양한 프로그램을 확인하세요"
+         data-en="Explore our 3-day program lineup">3일간의 다양한 프로그램을 확인하세요</p>
+    </div>
+  </section>
+
+  <!-- Day 1 -->
+  <section class="section program-day" id="day1">
+    <div class="container">
+      <div class="day-header">
+        <span class="day-badge">Day 1</span>
+        <div>
+          <h2 class="day-title">Academic Conference</h2>
+          <p class="day-subtitle"
+             data-ko="학술 컨퍼런스" data-en="Academic Conference">학술 컨퍼런스</p>
+        </div>
+        <span class="day-time">11:00 AM — 5:10 PM</span>
+      </div>
+      <div class="day-content">
+        <p class="day-desc"
+           data-ko="글로벌 헬스케어 분야의 최신 연구 동향과 정책 방향을 공유하는 학술 컨퍼런스입니다. 국내외 전문가들의 초청 강연으로 구성됩니다."
+           data-en="An academic conference sharing the latest research trends and policy directions in global healthcare. The program features invited talks by domestic and international experts.">글로벌 헬스케어 분야의 최신 연구 동향과 정책 방향을 공유하는 학술 컨퍼런스입니다. 국내외 전문가들의 초청 강연으로 구성됩니다.</p>
+        <div class="timeline">
+          <div class="timeline-header">
+            <span class="timeline-time">Time</span>
+            <span class="timeline-title">Title</span>
+            <span class="timeline-speaker">Speaker</span>
+            <span class="timeline-affil">Affiliation</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">11:00 – 11:15</span>
+            <span class="timeline-title"
+                  data-ko="Opening — 환영사/축사, 사진 촬영" data-en="Opening — Welcome Remarks, Group Photo">Opening — 환영사/축사, 사진 촬영</span>
+            <span class="timeline-speaker"
+                  data-ko="사회: BMSW 학과장" data-en="MC: BMSW Dept. Chair">사회: BMSW 학과장</span>
+            <span class="timeline-affil"
+                  data-ko="CUK BMSW" data-en="CUK BMSW">CUK BMSW</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">11:15 – 12:00</span>
+            <span class="timeline-title" data-ko="TBD" data-en="TBD">TBD</span>
+            <span class="timeline-speaker"
+                  data-ko="Prof. 김효정" data-en="Prof. Hyojeong Kim">Prof. 김효정</span>
+            <span class="timeline-affil"
+                  data-ko="CUK BMSW" data-en="CUK BMSW">CUK BMSW</span>
+          </div>
+          <div class="timeline-item timeline-item--break">
+            <span class="timeline-time">12:00 – 13:00</span>
+            <span class="timeline-title"
+                  data-ko="Lunch — 교내 식당" data-en="Lunch — Campus Cafeteria">Lunch — 교내 식당</span>
+            <span class="timeline-speaker">—</span>
+            <span class="timeline-affil">—</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">13:00 – 14:00</span>
+            <span class="timeline-title" data-ko="TBD (Invited)" data-en="TBD (Invited)">TBD (Invited)</span>
+            <span class="timeline-speaker">Prof. Melinda Kovacic</span>
+            <span class="timeline-affil">UC Cancer Center</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">14:10 – 14:40</span>
+            <span class="timeline-title" data-ko="TBD" data-en="TBD">TBD</span>
+            <span class="timeline-speaker">Prof. Christopher Auffrey</span>
+            <span class="timeline-affil">UC DAAP</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">14:40 – 15:10</span>
+            <span class="timeline-title" data-ko="TBD" data-en="TBD">TBD</span>
+            <span class="timeline-speaker"
+                  data-ko="Prof. 김주미" data-en="Prof. Jumi Kim">Prof. 김주미</span>
+            <span class="timeline-affil"
+                  data-ko="부천성모병원<br>국제진료센터" data-en="Bucheon St. Mary's Hospital<br>Int'l Medical Center">부천성모병원<br>국제진료센터</span>
+          </div>
+          <div class="timeline-item timeline-item--break">
+            <span class="timeline-time">15:10 – 15:30</span>
+            <span class="timeline-title"
+                  data-ko="Break — 생수 제공" data-en="Break — Water Provided">Break — 생수 제공</span>
+            <span class="timeline-speaker">—</span>
+            <span class="timeline-affil">—</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">15:30 – 16:00</span>
+            <span class="timeline-title" data-ko="TBD" data-en="TBD">TBD</span>
+            <span class="timeline-speaker"
+                  data-ko="Prof. 강진범" data-en="Prof. Jinbeom Kang">Prof. 강진범</span>
+            <span class="timeline-affil"
+                  data-ko="CUK BMSW" data-en="CUK BMSW">CUK BMSW</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">16:00 – 16:30</span>
+            <span class="timeline-title" data-ko="TBD" data-en="TBD">TBD</span>
+            <span class="timeline-speaker"
+                  data-ko="Prof. 이계화" data-en="Prof. Gyehwa Lee">Prof. 이계화</span>
+            <span class="timeline-affil"
+                  data-ko="서울아산병원<br>정보의학과" data-en="Asan Medical Center<br>Dept. of Medical Informatics">서울아산병원<br>정보의학과</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">16:30 – 17:00</span>
+            <span class="timeline-title" data-ko="TBD" data-en="TBD">TBD</span>
+            <span class="timeline-speaker">Prof. Sangyong Cho</span>
+            <span class="timeline-affil">UC DAAP</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">17:00 – 17:10</span>
+            <span class="timeline-title"
+                  data-ko="Closing — 폐회사" data-en="Closing Remark">Closing — 폐회사</span>
+            <span class="timeline-speaker"
+                  data-ko="Prof. 강진범" data-en="Prof. Jinbeom Kang">Prof. 강진범</span>
+            <span class="timeline-affil"
+                  data-ko="CUK BMSW" data-en="CUK BMSW">CUK BMSW</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Day 2 -->
+  <section class="section program-day" id="day2">
+    <div class="container">
+      <div class="day-header">
+        <span class="day-badge day-badge-accent">Day 2</span>
+        <div>
+          <h2 class="day-title">Field Trip</h2>
+          <p class="day-subtitle"
+             data-ko="현장 탐방" data-en="Field Trip">현장 탐방</p>
+        </div>
+        <span class="day-time">8:30 AM — 6:00 PM</span>
+      </div>
+      <div class="day-content">
+        <div class="day-notice">
+          <strong data-ko="&#9888;&#65039; 참가 인원 제한: 15명"
+                  data-en="&#9888;&#65039; Limited to 15 participants">&#9888;&#65039; 참가 인원 제한: 15명</strong>
+          <p data-ko="접수 마감 후 선발하여 개별 연락드립니다."
+             data-en="Selected participants will be contacted individually after the registration deadline.">접수 마감 후 선발하여 개별 연락드립니다.</p>
+        </div>
+        <p class="day-desc"
+           data-ko="서울성모병원, 압구정 미용거리, 카카오헬스케어 등 국내 주요 헬스케어 현장을 직접 방문하는 프로그램입니다."
+           data-en="A field trip visiting key healthcare sites including Seoul St. Mary's Hospital, Apgujeong Beauty Street, and Kakao Healthcare.">서울성모병원, 압구정 미용거리, 카카오헬스케어 등 국내 주요 헬스케어 현장을 직접 방문하는 프로그램입니다.</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="timeline-time">08:30 – 09:00</span>
+            <span class="timeline-label"
+                  data-ko="집합 (성심교정 김수환관 앞)" data-en="Gathering (Sungsim Campus, Kim Suhwan Hall)">집합 (성심교정 김수환관 앞)</span>
+          </div>
+          <div class="timeline-item timeline-item--break">
+            <span class="timeline-time">09:00 – 10:30</span>
+            <span class="timeline-label"
+                  data-ko="이동 (UC 숙소 경유 → 서울성모병원)" data-en="Transfer (via UC accommodation → Seoul St. Mary's Hospital)">이동 (UC 숙소 경유 → 서울성모병원)</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">10:30 – 12:30</span>
+            <span class="timeline-label"
+                  data-ko="서울성모병원 · 옴니버스파크 투어" data-en="Seoul St. Mary's Hospital · Omnibus Park Tour">서울성모병원 · 옴니버스파크 투어</span>
+          </div>
+          <div class="timeline-item timeline-item--break">
+            <span class="timeline-time">12:30 – 13:30</span>
+            <span class="timeline-label"
+                  data-ko="Lunch" data-en="Lunch">Lunch</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">14:00 – 15:00</span>
+            <span class="timeline-label"
+                  data-ko="압구정 미용거리 탐방" data-en="Apgujeong Beauty Street Tour">압구정 미용거리 탐방</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">15:30 – 17:30</span>
+            <span class="timeline-label"
+                  data-ko="카카오헬스케어 방문" data-en="Kakao Healthcare Visit">카카오헬스케어 방문</span>
+          </div>
+          <div class="timeline-item timeline-item--break">
+            <span class="timeline-time">17:30 – 18:30</span>
+            <span class="timeline-label"
+                  data-ko="Light Meal (간단한 식사)" data-en="Light Meal">Light Meal (간단한 식사)</span>
+          </div>
+          <div class="timeline-item timeline-item--break">
+            <span class="timeline-time">18:30 –</span>
+            <span class="timeline-label"
+                  data-ko="복귀 (성심교정 · UC 숙소 순차 하차)" data-en="Return (drop-off: Sungsim Campus → UC accommodation)">복귀 (성심교정 · UC 숙소 순차 하차)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Day 3 -->
+  <section class="section program-day" id="day3">
+    <div class="container">
+      <div class="day-header">
+        <span class="day-badge">Day 3</span>
+        <div>
+          <h2 class="day-title">Student Exchange Seminar</h2>
+          <p class="day-subtitle"
+             data-ko="학생 교류 세미나" data-en="Student Exchange Seminar">학생 교류 세미나</p>
+        </div>
+        <span class="day-time">9:00 AM — 6:00 PM</span>
+      </div>
+      <div class="day-content">
+        <p class="day-desc"
+           data-ko="UC와 CUK 학생들이 번갈아 연구를 발표하고 국제적인 피드백을 주고받는 교류 세미나입니다."
+           data-en="An exchange seminar where UC and CUK students take turns presenting their research and exchanging international feedback.">UC와 CUK 학생들이 번갈아 연구를 발표하고 국제적인 피드백을 주고받는 교류 세미나입니다.</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="timeline-time">09:00 – 10:00</span>
+            <span class="timeline-label"
+                  data-ko="도착 및 등록" data-en="Arrival &amp; Registration">도착 및 등록</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">10:00 – 11:00</span>
+            <span class="timeline-label"
+                  data-ko="Student Presentation Session 1 (UC)" data-en="Student Presentation Session 1 (UC)">Student Presentation Session 1 (UC)</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">11:00 – 12:00</span>
+            <span class="timeline-label"
+                  data-ko="Student Presentation Session 2 (CUK)" data-en="Student Presentation Session 2 (CUK)">Student Presentation Session 2 (CUK)</span>
+          </div>
+          <div class="timeline-item timeline-item--break">
+            <span class="timeline-time">12:00 – 13:00</span>
+            <span class="timeline-label"
+                  data-ko="Lunch" data-en="Lunch">Lunch</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">13:00 – 14:00</span>
+            <span class="timeline-label"
+                  data-ko="Student Presentation Session 3 (UC)" data-en="Student Presentation Session 3 (UC)">Student Presentation Session 3 (UC)</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">14:00 – 15:00</span>
+            <span class="timeline-label"
+                  data-ko="Student Presentation Session 4 (CUK)" data-en="Student Presentation Session 4 (CUK)">Student Presentation Session 4 (CUK)</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">15:00 – 16:00</span>
+            <span class="timeline-label"
+                  data-ko="Student Presentation Session 5 (UC)" data-en="Student Presentation Session 5 (UC)">Student Presentation Session 5 (UC)</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">16:00 – 17:00</span>
+            <span class="timeline-label"
+                  data-ko="Student Presentation Session 6 (CUK)" data-en="Student Presentation Session 6 (CUK)">Student Presentation Session 6 (CUK)</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">17:00 – 18:00</span>
+            <span class="timeline-label"
+                  data-ko="Closing &amp; 단체사진" data-en="Closing &amp; Group Photo">Closing &amp; 단체사진</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p class="footer-title">Global Healthcare Mobility Week 2026</p>
+      <div class="footer-orgs">
+        <p data-ko="주최: 가톨릭대학교 바이오메디컬소프트웨어학과 (PHI Lab) · 신시내티대학교 DAAP (EPIC-Co Lab)"
+           data-en="Hosted by: Catholic Univ. of Korea, Dept. of Biomedical SW (PHI Lab) · Univ. of Cincinnati DAAP (EPIC-Co Lab)">주최: 가톨릭대학교 바이오메디컬소프트웨어학과 (PHI Lab) · 신시내티대학교 DAAP (EPIC-Co Lab)</p>
+        <p data-ko="후원: 한국연구재단 (NRF)"
+           data-en="Supported by: National Research Foundation of Korea (NRF)">후원: 한국연구재단 (NRF)</p>
+      </div>
+      <div class="footer-logos">
+        <img src="images/가톨릭대학교-로고-가로-PNG.png" alt="가톨릭대학교" class="footer-logo">
+        <img src="images/phi-lab-logo.png" alt="PHI Lab" class="footer-logo footer-logo--phi">
+        <img src="images/University_of_Cincinnati_logo.png" alt="University of Cincinnati" class="footer-logo">
+        <img src="images/EPIC_LOGO_VECTOR_WH-01.png" alt="EPIC-Co Lab" class="footer-logo footer-logo--epic">
+        <img src="images/nrf-logo.png" alt="NRF 한국연구재단" class="footer-logo footer-logo--nrf">
+      </div>
+      <p class="footer-contact"
+         data-ko="문의: philab.cuk@gmail.com"
+         data-en="Contact: philab.cuk@gmail.com">문의: philab.cuk@gmail.com</p>
+      <p class="footer-copy">&copy; 2026 CUK PHI Lab, GHMW. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

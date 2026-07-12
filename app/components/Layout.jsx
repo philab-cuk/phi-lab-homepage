@@ -8,6 +8,15 @@ const NAV_ROUTES = [
   { to: '/research', label: 'Current Research' },
   { to: '/publications', label: 'Publications' },
   { to: '/lectures', label: 'Teaching' },
+  {
+    to: '/events',
+    label: 'Events',
+    children: [
+      // GHMW = 정적 사이트(public/ghmw-2026/) → 전체 페이지 이동(external).
+      { to: '/ghmw-2026/', label: 'GHMW 2026', external: true },
+      { to: '/events', label: 'LLM Workshop' },
+    ],
+  },
   { to: '/members', label: 'Members' },
   { to: '/about', label: 'About Lab' },
   { to: '/news', label: 'News' },
@@ -27,17 +36,70 @@ const FOOTER = {
 // 메뉴 링크 렌더링을 한 곳에서 — 데스크톱 nav 와 모바일 drawer 가 공유한다.
 // 대문자 표기(uppercase)·라벨도 여기서만 정하므로 두 번 관리할 필요가 없다.
 // linkClass: 위치별(가로/세로) 스타일만 각 nav 가 넘긴다.
-function NavLinks({ linkClass, onClick }) {
-  return NAV_ROUTES.map(({ to, label }) => (
-    <NavLink
-      key={to}
-      to={to}
-      onClick={onClick}
-      className={(state) => `uppercase ${linkClass(state)}`}
-    >
-      {label}
+// children 있는 항목: 데스크톱은 hover 드롭다운, 모바일은 하위 항목을 들여쓰기.
+// external 하위 항목(정적 사이트 등)은 NavLink 대신 <a> 로 전체 이동.
+
+function DropChild({ child, onClick }) {
+  const cls =
+    'block px-4 py-2 text-[15px] normal-case font-normal text-ink no-underline hover:bg-brand-50 whitespace-nowrap'
+  return child.external ? (
+    <a href={child.to} onClick={onClick} className={cls}>
+      {child.label}
+    </a>
+  ) : (
+    <NavLink to={child.to} onClick={onClick} className={cls}>
+      {child.label}
     </NavLink>
-  ))
+  )
+}
+
+function NavLinks({ linkClass, onClick, variant = 'desktop' }) {
+  return NAV_ROUTES.map((item) => {
+    const { to, label, children } = item
+
+    if (children && variant === 'mobile') {
+      return (
+        <div key={to}>
+          <NavLink to={to} onClick={onClick} className={(s) => `uppercase ${linkClass(s)}`}>
+            {label}
+          </NavLink>
+          {children.map((c) => (
+            <div key={c.to} className="pl-5">
+              <DropChild child={c} onClick={onClick} />
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    if (children) {
+      return (
+        <div key={to} className="relative group">
+          <NavLink
+            to={to}
+            className={(s) => `uppercase inline-flex items-center gap-1 ${linkClass(s)}`}
+          >
+            {label}
+            <span aria-hidden="true" className="text-[0.6em] translate-y-[1px]">▼</span>
+          </NavLink>
+          {/* pt-3 = 트리거와 패널 사이 hover 다리(끊김 방지) */}
+          <div className="absolute left-0 top-full pt-3 hidden group-hover:block group-focus-within:block z-50">
+            <div className="rounded-lg border border-rule bg-white py-2 shadow-lg min-w-[190px]">
+              {children.map((c) => (
+                <DropChild key={c.to} child={c} onClick={onClick} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <NavLink key={to} to={to} onClick={onClick} className={(s) => `uppercase ${linkClass(s)}`}>
+        {label}
+      </NavLink>
+    )
+  })
 }
 
 function Header() {
@@ -97,6 +159,7 @@ function Header() {
         {/* 폭이 좁아지면 글씨·간격을 줄여 한 줄을 더 오래 유지(그래도 부족하면 wrap) */}
         <nav className="hidden md:flex gap-4 lg:gap-5 xl:gap-6 text-[14px] lg:text-[16px] xl:text-[18px] font-semibold">
           <NavLinks
+            variant="desktop"
             linkClass={({ isActive }) =>
               isActive
                 ? 'text-brand-700 underline underline-offset-[6px] decoration-[1.5px]'
@@ -131,6 +194,7 @@ function Header() {
           </div>
           <nav className="flex flex-col py-2 text-[17px] font-semibold">
             <NavLinks
+              variant="mobile"
               onClick={close}
               linkClass={({ isActive }) =>
                 `px-5 py-3 no-underline ${isActive ? 'text-brand-700 bg-brand-50' : 'text-ink hover:bg-[#fafafa]'}`
