@@ -13,7 +13,7 @@ function dateKey(d) {
 }
 
 function EventItem({ event }) {
-  const { title, fullName, role, date, venue, description, link, image, images, speaker, agenda, program, sponsor } = event
+  const { title, fullName, role, date, venue, description, link, images, speaker, agenda, program, sponsor } = event
   const meta = [role && (ROLE_LABEL[role] ?? role), date, venue].filter(Boolean)
   const header = (
     <>
@@ -61,18 +61,6 @@ function EventItem({ event }) {
         <p className="mt-3 mb-0 text-[13px] text-meta">
           {[program, sponsor].filter(Boolean).join(' · ')}
         </p>
-      )}
-
-      {image && (
-        <div className="mt-3 max-w-[320px]">
-          <img
-            src={import.meta.env.BASE_URL + image}
-            alt={title}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-auto object-cover rounded-lg border border-rule"
-          />
-        </div>
       )}
 
       {/* 여러 장 사진 — 높이 고정 썸네일이 가로로 배열(비율 달라도 정렬). */}

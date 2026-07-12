@@ -335,15 +335,3 @@ export async function fetchPost(id) {
 export async function incrementPostViews(id) {
   await supabase.rpc('increment_post_views', { p_id: id })
 }
-
-// ── Home 집계 ───────────────────────────────────────────────────────────────
-export async function fetchHomeStats() {
-  const [{ count: activeResearch }, { count: publications }] = await Promise.all([
-    supabase.from('research').select('id', { count: 'exact', head: true }).eq('status', 'active'),
-    supabase.from('publications').select('id', { count: 'exact', head: true }),
-  ])
-  return {
-    activeResearchCount: activeResearch ?? 0,
-    publicationsCount: publications ?? 0,
-  }
-}
