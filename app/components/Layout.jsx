@@ -78,9 +78,13 @@ function Header() {
         <Link to="/" onClick={close} className="flex items-center gap-3 no-underline shrink-0">
           {/* logo-mark.png = logo.jpg 에서 글자 없이 심볼만 크롭한 버전 */}
           <img src={import.meta.env.BASE_URL + 'logo-mark.png'} alt="PHI Lab" className="h-14 w-auto max-[500px]:hidden" />
-          {/* 랩 이름 = 사실상 로고 — 크게, 줄간격은 좁게 */}
+          {/* 랩 이름 = 사실상 로고 — 크게, 줄간격은 좁게.
+              글자색: 로고 심볼 파랑보다 진한 남색 그라데이션(가대 블루→딥네이비). */}
           <span className="leading-[1.15]">
-            <span className="block font-semibold text-ink text-[20px] lg:text-[24px] xl:text-[26px] tracking-tight">
+            <span
+              className="block font-semibold text-[20px] lg:text-[24px] xl:text-[26px] tracking-tight bg-clip-text text-transparent"
+              style={{ backgroundImage: 'linear-gradient(90deg, #0c2e86 0%, #061a4e 100%)' }}
+            >
               Precision &amp; Provenance Health Informatics Lab
             </span>
             <span className="block text-meta text-[11px] lg:text-[12px] xl:text-[13px] tracking-[0.18em] uppercase">

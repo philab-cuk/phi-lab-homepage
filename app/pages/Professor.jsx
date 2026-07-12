@@ -97,7 +97,7 @@ export default function Professor() {
         <img
           src={PI.photo}
           alt={`Prof. ${PI.name}`}
-          className="w-40 h-40 object-cover flex-shrink-0"
+          className="w-40 sm:w-44 aspect-[3/4] object-cover flex-shrink-0"
         />
         <div className="min-w-0">
           <p className="my-0">
@@ -110,9 +110,10 @@ export default function Professor() {
               <span className="font-bold text-ink text-2xl">{PI.name}</span>
             )}
           </p>
-          <p className="my-0 text-muted">
-            {PI.title}, {PI.department}
-          </p>
+          {/* 직함 한 줄 — 굵게·한 사이즈 크게. 아래에 부서·단과대·대학을 각 줄로. */}
+          <p className="mt-1 mb-0 font-semibold text-ink text-lg">{PI.title}</p>
+          <p className="my-0 text-muted">{PI.department}</p>
+          {PI.college && <p className="my-0 text-muted">{PI.college}</p>}
           <p className="my-0 text-muted">{PI.institution}</p>
           <p className="mt-3 mb-0 text-[15px]">
             <a href={`mailto:${PI.email}`}>{PI.email}</a>
