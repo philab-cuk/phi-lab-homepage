@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://philabcuk.org/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://philabcuk.org/about</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://philabcuk.org/professor</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://philabcuk.org/research</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://philabcuk.org/publications</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://philabcuk.org/lectures</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://philabcuk.org/events</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://philabcuk.org/members</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://philabcuk.org/news</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://philabcuk.org/posts</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://philabcuk.org/ghmw-2026/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://philabcuk.org/ghmw-2026/program.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+</urlset>
