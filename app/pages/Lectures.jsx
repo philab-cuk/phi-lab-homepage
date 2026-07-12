@@ -50,7 +50,7 @@ const COURSE_THEMES = [
     ],
   },
   {
-    label: 'Python',
+    label: 'Python Programming',
     bg: '#f5ead2',
     fg: '#8a6a2f',
     titles: ['Programming for AI, Graduate Course', 'Computers & Programming 1'],
@@ -62,6 +62,12 @@ const COURSE_THEMES = [
     titles: ['Biomedical Big Data Analysis', 'Machine Learning'],
   },
   {
+    label: 'Database (RDB/SQL)',
+    bg: '#f5e7e0',
+    fg: '#9a4422',
+    titles: ['Healthcare Database'],
+  },
+  {
     label: 'Capstone / PBL',
     bg: '#ece7f8',
     fg: '#493d8a',
@@ -69,6 +75,9 @@ const COURSE_THEMES = [
   },
 ]
 const OTHER_THEME_COLOR = { bg: '#f1efe8', fg: '#5f5e5a' }
+
+// 아직 개설 전(예정) 과목 — 요약 칩에 'new' 표시.
+const UPCOMING_COURSES = new Set(['Healthcare Database'])
 
 function CourseImages({ images }) {
   const openLightbox = useContext(LightboxContext)
@@ -274,20 +283,18 @@ export default function Lectures() {
     return out
   })()
 
-  // 과목명 → 주제 그룹 매핑. 주제에 없는 과목은 마지막 'Other' 그룹으로.
+  // 주제 요약은 큐레이션(COURSE_THEMES) 기준으로 과목명을 그대로 표시 —
+  // 아직 개설 전인 예정 과목도 노출된다. DB에는 있으나 주제에 없는 과목은
+  // 누락 방지를 위해 'Other' 그룹으로 모은다.
   const nameOf = (c) => c.titleEn || c.titleKo
-  const themedGroups = COURSE_THEMES.map((t) => ({
-    label: t.label,
-    bg: t.bg,
-    fg: t.fg,
-    courses: t.titles.map((title) => uniqueCourses.find((c) => nameOf(c) === title)).filter(Boolean),
-  })).filter((g) => g.courses.length > 0)
   const themedNames = new Set(COURSE_THEMES.flatMap((t) => t.titles))
-  const otherCourses = uniqueCourses.filter((c) => !themedNames.has(nameOf(c)))
-  const courseGroups =
-    otherCourses.length > 0
-      ? [...themedGroups, { label: 'Other', ...OTHER_THEME_COLOR, courses: otherCourses }]
-      : themedGroups
+  const otherNames = uniqueCourses.map(nameOf).filter((n) => !themedNames.has(n))
+  const courseGroups = [
+    ...COURSE_THEMES.map((t) => ({ label: t.label, bg: t.bg, fg: t.fg, titles: t.titles })),
+    ...(otherNames.length > 0
+      ? [{ label: 'Other', ...OTHER_THEME_COLOR, titles: otherNames }]
+      : []),
+  ]
 
   return (
     <LightboxContext.Provider value={openLightbox}>
@@ -301,13 +308,16 @@ export default function Lectures() {
                   {g.label}
                 </span>
                 <div className="flex flex-wrap gap-2">
-                  {g.courses.map((c) => (
+                  {g.titles.map((title) => (
                     <span
-                      key={`${g.label}-${c.id}`}
+                      key={`${g.label}-${title}`}
                       className="rounded-sm px-2.5 py-1 text-[13px]"
                       style={{ backgroundColor: g.bg, color: g.fg }}
                     >
-                      {c.titleEn || c.titleKo}
+                      {title}
+                      {UPCOMING_COURSES.has(title) && (
+                        <span className="ml-1 text-[11px] opacity-60">· new</span>
+                      )}
                     </span>
                   ))}
                 </div>
