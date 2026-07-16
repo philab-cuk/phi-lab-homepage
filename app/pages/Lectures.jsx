@@ -198,7 +198,7 @@ function CourseItem({ course }) {
   const { code, titleEn, titleKo, level, description, objectives, images, tags } = course
   const paragraphs = description ? description.split('\n\n').filter(Boolean) : []
   return (
-    <article className="py-6 border-b border-rule last:border-b-0">
+    <article id={course.id} className="scroll-mt-24 py-6 border-b border-rule last:border-b-0">
       <p className="my-0 text-[15px] text-meta">
         {code && <span className="font-mono">{code}</span>}
         {code && level && ' · '}
@@ -277,6 +277,24 @@ export default function Lectures() {
   // 아직 개설 전인 예정 과목도 노출된다. DB에는 있으나 주제에 없는 과목은
   // 누락 방지를 위해 'Other' 그룹으로 모은다.
   const nameOf = (c) => c.titleEn || c.titleKo
+
+  // 과목명 → 가장 최신 학기 강의의 id. 요약 칩 클릭 시 그 강의로 스크롤.
+  const latestLectureId = (() => {
+    const best = {}
+    for (const c of lecturesData) {
+      const key = nameOf(c)
+      const ord = semesterOrder(c.semester)
+      if (key && (!(key in best) || ord > best[key].ord)) best[key] = { id: c.id, ord }
+    }
+    const out = {}
+    Object.keys(best).forEach((k) => (out[k] = best[k].id))
+    return out
+  })()
+  const scrollToCourse = (id) => {
+    const el = document.getElementById(id)
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   const themedNames = new Set(COURSE_THEMES.flatMap((t) => t.titles))
   const otherNames = uniqueCourses.map(nameOf).filter((n) => !themedNames.has(n))
   const courseGroups = [
@@ -298,18 +316,35 @@ export default function Lectures() {
                   {g.label}
                 </span>
                 <div className="flex flex-wrap gap-2">
-                  {g.titles.map((title) => (
-                    <span
-                      key={`${g.label}-${title}`}
-                      className="rounded-sm px-2.5 py-1 text-[13px]"
-                      style={{ backgroundColor: g.bg, color: g.fg }}
-                    >
-                      {title}
-                      {UPCOMING_COURSES.has(title) && (
-                        <span className="ml-1 text-[11px] opacity-60">· new</span>
-                      )}
-                    </span>
-                  ))}
+                  {g.titles.map((title) => {
+                    const targetId = latestLectureId[title]
+                    const inner = (
+                      <>
+                        {title}
+                        {UPCOMING_COURSES.has(title) && (
+                          <span className="ml-1 text-[11px] opacity-60">· new</span>
+                        )}
+                      </>
+                    )
+                    const cls = 'rounded-sm px-2.5 py-1 text-[13px]'
+                    const style = { backgroundColor: g.bg, color: g.fg }
+                    return targetId ? (
+                      <button
+                        key={`${g.label}-${title}`}
+                        type="button"
+                        onClick={() => scrollToCourse(targetId)}
+                        className={`${cls} cursor-pointer transition-opacity hover:opacity-75`}
+                        style={style}
+                        title="최신 강의로 이동"
+                      >
+                        {inner}
+                      </button>
+                    ) : (
+                      <span key={`${g.label}-${title}`} className={cls} style={style}>
+                        {inner}
+                      </span>
+                    )
+                  })}
                 </div>
               </div>
             ))}

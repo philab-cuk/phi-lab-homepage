@@ -105,7 +105,10 @@ function StudentRow({ member }) {
         className="w-40 sm:w-44 aspect-[3/4] object-cover flex-shrink-0"
       />
       <div className="min-w-0">
-        <p className="my-0"><MemberName member={member} korClass="text-xl" engClass="text-base" /></p>
+        <p className="my-0 flex items-center gap-2.5">
+          <span className="inline-block h-[18px] w-[4px] rounded-full shrink-0" style={{ background: '#5b9bd5' }} aria-hidden="true" />
+          <MemberName member={member} korClass="text-xl" engClass="text-base" />
+        </p>
         <p className="my-0 text-muted">{member.degree}</p>
         <ResearchInterests tags={member.researchInterests} />
         <SocialLine member={member} />

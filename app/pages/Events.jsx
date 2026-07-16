@@ -23,15 +23,23 @@ function EventItem({ event }) {
   )
   return (
     <article className="py-6 border-b border-rule last:border-b-0">
-      <p className="my-0">
-        {link ? (
-          <a href={link} target="_blank" rel="noopener noreferrer" className="no-underline hover:underline">
-            {header}
-          </a>
-        ) : (
-          header
-        )}
-      </p>
+      <div className="flex items-center gap-3">
+        <span className="inline-block h-[18px] w-[4px] rounded-full bg-gold-600 shrink-0" aria-hidden="true" />
+        <p className="my-0">
+          {link ? (
+            <a href={link} target="_blank" rel="noopener noreferrer" className="no-underline hover:underline">
+              {header}
+            </a>
+          ) : (
+            header
+          )}
+        </p>
+      </div>
+      <div
+        className="mt-1.5 h-[2px] max-w-[380px]"
+        style={{ background: 'linear-gradient(90deg, #e7d6a6, transparent)' }}
+        aria-hidden="true"
+      />
       {meta.length > 0 && (
         <p className="my-1 text-[15px] text-meta">{meta.join(' · ')}</p>
       )}

@@ -74,7 +74,10 @@ function FeaturedInitiative({ project }) {
   const hashtags = (project.tagsFeaturedLive ?? []).map((t) => `#${t}`).join(' ')
   return (
     <div className="my-4">
-      <p className="my-0 font-semibold text-ink">{heading}</p>
+      <div className="flex gap-2.5">
+        <span className="mt-[5px] inline-block h-[16px] w-[3px] rounded-full bg-gold-600 shrink-0" aria-hidden="true" />
+        <p className="my-0 font-semibold text-ink">{heading}</p>
+      </div>
       {(hashtags || project.notes) && (
         <p className="my-1 text-[15px] text-muted">
           {hashtags}
