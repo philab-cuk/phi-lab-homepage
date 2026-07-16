@@ -82,24 +82,16 @@ const UPCOMING_COURSES = new Set(['Healthcare Database'])
 function CourseImages({ images }) {
   const openLightbox = useContext(LightboxContext)
   if (!images || images.length === 0) return null
-  const count = images.length
-  // 이미지가 칼럼을 꽉 채우면 이미지 속 글자가 본문 대비 과도하게 커 보인다.
-  // 폭을 제한해 "본문 옆 그림(figure)"처럼 균형을 맞춘다. 확대는 라이트박스로.
-  const gridCls =
-    count === 1
-      ? 'grid grid-cols-1 max-w-[560px]'
-      : count === 2
-        ? 'grid grid-cols-2 gap-2 max-w-[560px]'
-        : 'grid grid-cols-3 gap-2 max-w-[760px]'
+  // Events 페이지처럼 높이 고정 썸네일을 가로로 배열 — 1장이든 3장이든 균일한 크기.
   return (
-    <div className={`${gridCls} mt-3`}>
+    <div className="mt-3 flex flex-wrap gap-2">
       {images.map((src, i) => (
         <button
           key={src}
           type="button"
           onClick={() => openLightbox(images, i)}
           aria-label="Enlarge image"
-          className="block w-full p-0 m-0 cursor-zoom-in focus:outline-none focus:ring-1 focus:ring-ink"
+          className="block p-0 m-0 cursor-zoom-in focus:outline-none focus:ring-1 focus:ring-ink"
         >
           <img
             src={src}
@@ -107,11 +99,7 @@ function CourseImages({ images }) {
             role="presentation"
             loading="lazy"
             decoding="async"
-            className={
-              count === 1
-                ? 'w-full h-auto object-cover rounded-lg border border-rule'
-                : 'w-full aspect-square object-cover rounded-lg border border-rule'
-            }
+            className="h-[150px] w-auto max-w-full object-cover rounded-lg border border-rule"
           />
         </button>
       ))}
@@ -216,8 +204,10 @@ function CourseItem({ course }) {
         {code && level && ' · '}
         {level && LEVEL_LABEL[level]}
       </p>
-      <p className="mt-1 mb-0 text-lg font-semibold text-ink">{titleKo}</p>
-      <p className="my-0 text-muted text-[15px]">{titleEn}</p>
+      <p className="mt-1 mb-0">
+        <span className="text-lg font-semibold text-ink">{titleKo}</span>
+        {titleEn && <span className="ml-2 text-muted text-[15px]">{titleEn}</span>}
+      </p>
 
       {paragraphs.length > 0 && (
         <div className="mt-2">
@@ -248,13 +238,13 @@ function SemesterSection({ semester, courses }) {
   const ko = SEMESTER_KO[semester]
   return (
     <section className="mt-10">
-      <h2 className="my-1">
-        {semester}
-        {ko && (
-          <span className="text-muted text-[15px] font-normal"> · {ko}</span>
-        )}
+      <h2 className="mt-1 mb-3 flex items-center gap-3">
+        <span className="inline-block h-[20px] w-[4px] rounded-full bg-gold-600" aria-hidden="true" />
+        <span>
+          <span className="text-brand-900">{semester}</span>
+          {ko && <span className="text-muted text-[15px] font-normal"> · {ko}</span>}
+        </span>
       </h2>
-      <hr className="my-2" />
       {courses.map((c) => (
         <CourseItem key={c.id} course={c} />
       ))}
@@ -304,7 +294,7 @@ export default function Lectures() {
           <div className="mt-3 space-y-2.5">
             {courseGroups.map((g) => (
               <div key={g.label} className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                <span className="text-[13px] font-semibold min-w-[130px]" style={{ color: g.fg }}>
+                <span className="text-[16px] font-semibold min-w-[165px]" style={{ color: g.fg }}>
                   {g.label}
                 </span>
                 <div className="flex flex-wrap gap-2">
