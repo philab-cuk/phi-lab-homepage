@@ -841,6 +841,21 @@ img {
   font-style: italic;
 }
 
+/* Day 3: program column (time / program / key content / presenters) */
+.timeline-program {
+  min-width: 160px;
+  max-width: 160px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.timeline-item--break .timeline-program {
+  color: var(--color-text-light);
+  font-style: italic;
+}
+
 /* Timeline header row */
 .timeline-header {
   display: flex;
@@ -1319,6 +1334,11 @@ img {
   .timeline-affil {
     min-width: auto;
     text-align: left;
+  }
+
+  .timeline-program {
+    min-width: auto;
+    max-width: none;
   }
 
   .reg-form {
