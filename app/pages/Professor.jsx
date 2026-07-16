@@ -50,11 +50,34 @@ function ExperienceItem({ item }) {
   )
 }
 
+// 대제목(h2) — 딥네이비 + 골드 세로바 액센트(홈 'Research' 모티프와 통일).
+function SectionH2({ children }) {
+  return (
+    <h2 className="flex items-center gap-3">
+      <span className="inline-block h-[20px] w-[4px] rounded-full bg-gold-600" aria-hidden="true" />
+      <span className="text-brand-900">{children}</span>
+    </h2>
+  )
+}
+
+// 소제목(h3) — 네이비 + 은은한 골드 그라데이션 밑줄.
+function SubHeading({ children }) {
+  return (
+    <>
+      <h3 className="my-0 text-brand-700">{children}</h3>
+      <div
+        className="mt-1 mb-3 h-[2px] max-w-[340px]"
+        style={{ background: 'linear-gradient(90deg, #e7d6a6, transparent)' }}
+        aria-hidden="true"
+      />
+    </>
+  )
+}
+
 function ExperienceGroup({ category, items }) {
   return (
     <section className="mt-8">
-      <h3>{CATEGORY_LABELS[category] ?? 'Experience'}</h3>
-      <hr className="my-2" />
+      <SubHeading>{CATEGORY_LABELS[category] ?? 'Experience'}</SubHeading>
       <ul className="list-none pl-0 m-0">
         {items.map((item, i) => (
           <ExperienceItem key={i} item={item} />
@@ -129,12 +152,12 @@ export default function Professor() {
         </div>
       </div>
 
-      <h2>Bio and Accomplishments</h2>
+      <SectionH2>Bio and Accomplishments</SectionH2>
       {bioParagraphs.map((p, i) => (
         <p key={i}>{p}</p>
       ))}
 
-      <h2>Work Experience</h2>
+      <SectionH2>Work Experience</SectionH2>
       {grouped.map((g) => (
         <ExperienceGroup key={g.category} category={g.category} items={g.items} />
       ))}
@@ -144,8 +167,7 @@ export default function Professor() {
 
       {PI.service && PI.service.length > 0 && (
         <section className="mt-8">
-          <h2>Professional Service</h2>
-          <hr className="my-2" />
+          <SectionH2>Professional Service</SectionH2>
           <ul className="list-disc pl-5 marker:text-meta mt-3">
             {PI.service.map((s, i) => (
               <li key={i} className="my-1.5">{s}</li>
