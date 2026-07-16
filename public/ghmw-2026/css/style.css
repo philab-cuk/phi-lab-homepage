@@ -1339,3 +1339,20 @@ img {
     font-size: 1.2rem;
   }
 }
+
+/* Visual Highlights — 신규 index.html 섹션 (program_at_a_glance / Organization_Team) */
+.highlights .container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.day-image { text-align: center; }
+.day-image img {
+  display: block;
+  width: 100%;
+  max-width: 960px;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+}
