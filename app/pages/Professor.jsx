@@ -74,9 +74,10 @@ function SubHeading({ children }) {
   )
 }
 
-function ExperienceGroup({ category, items }) {
+function ExperienceGroup({ category, items, first }) {
+  // 첫 그룹은 대제목(h2)에 가깝게(mt-4), 이후 그룹은 서로 분리(mt-8).
   return (
-    <section className="mt-8">
+    <section className={first ? 'mt-4' : 'mt-8'}>
       <SubHeading>{CATEGORY_LABELS[category] ?? 'Experience'}</SubHeading>
       <ul className="list-none pl-0 m-0">
         {items.map((item, i) => (
@@ -158,8 +159,8 @@ export default function Professor() {
       ))}
 
       <SectionH2>Work Experience</SectionH2>
-      {grouped.map((g) => (
-        <ExperienceGroup key={g.category} category={g.category} items={g.items} />
+      {grouped.map((g, idx) => (
+        <ExperienceGroup key={g.category} category={g.category} items={g.items} first={idx === 0} />
       ))}
       {ungrouped.length > 0 && (
         <ExperienceGroup category="other" items={ungrouped} />
