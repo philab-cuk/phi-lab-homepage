@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { EVENTS } from '../data/events'
 
 // 행사 페이지 — 연구실이 주최한 학술 행사 목록. 정적 데이터(app/data/events.js).
@@ -12,9 +13,106 @@ function dateKey(d) {
   return Number((d || '').replace(/\D/g, '').padEnd(8, '0'))
 }
 
-function EventItem({ event }) {
+// images 항목은 'path' 문자열 또는 { src, caption } 객체 둘 다 허용.
+function normalizeImage(img) {
+  return typeof img === 'string' ? { src: img, caption: '' } : img
+}
+
+// 콜라주는 디테일이 많아 클릭 확대. 화살표/ESC 로 넘기기.
+function Lightbox({ state, setState, onClose }) {
+  useEffect(() => {
+    if (!state) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      else if (e.key === 'ArrowLeft')
+        setState((s) => s && { ...s, index: (s.index - 1 + s.images.length) % s.images.length })
+      else if (e.key === 'ArrowRight')
+        setState((s) => s && { ...s, index: (s.index + 1) % s.images.length })
+    }
+    document.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [state, setState, onClose])
+
+  if (!state) return null
+  const { images, index } = state
+  const total = images.length
+  const hasMultiple = total > 1
+  const goPrev = () =>
+    setState((s) => s && { ...s, index: (s.index - 1 + s.images.length) % s.images.length })
+  const goNext = () =>
+    setState((s) => s && { ...s, index: (s.index + 1) % s.images.length })
+  const current = images[index]
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={onClose}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 sm:p-8 cursor-zoom-out"
+    >
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close"
+        className="absolute top-3 right-4 text-white text-3xl leading-none px-2 py-1 hover:opacity-80"
+      >
+        ×
+      </button>
+
+      {hasMultiple && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            goPrev()
+          }}
+          aria-label="Previous image"
+          className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 text-white text-4xl leading-none px-2 py-1 hover:opacity-80"
+        >
+          ‹
+        </button>
+      )}
+      {hasMultiple && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            goNext()
+          }}
+          aria-label="Next image"
+          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 text-white text-4xl leading-none px-2 py-1 hover:opacity-80"
+        >
+          ›
+        </button>
+      )}
+
+      <figure className="max-w-full max-h-full m-0 flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
+        <img
+          src={current.src}
+          alt={current.caption || ''}
+          className="max-w-full max-h-[85vh] object-contain cursor-default"
+        />
+        {(current.caption || hasMultiple) && (
+          <figcaption className="mt-3 text-white/85 text-sm select-none text-center">
+            {current.caption}
+            {current.caption && hasMultiple && '  ·  '}
+            {hasMultiple && `${index + 1} / ${total}`}
+          </figcaption>
+        )}
+      </figure>
+    </div>
+  )
+}
+
+function EventItem({ event, onOpenImage }) {
   const { title, fullName, role, date, venue, description, link, images, speaker, agenda, program, sponsor } = event
   const meta = [role && (ROLE_LABEL[role] ?? role), date, venue].filter(Boolean)
+  const imgs = (images || []).map(normalizeImage)
   const header = (
     <>
       <span className="font-semibold text-ink text-lg">{title}</span>
@@ -71,18 +169,34 @@ function EventItem({ event }) {
         </p>
       )}
 
-      {/* 여러 장 사진 — 높이 고정 썸네일이 가로로 배열(비율 달라도 정렬). */}
-      {images && images.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-2">
-          {images.map((src, i) => (
-            <img
-              key={i}
-              src={import.meta.env.BASE_URL + src}
-              alt={`${title} ${i + 1}`}
-              loading="lazy"
-              decoding="async"
-              className="h-[150px] w-auto max-w-full object-cover rounded-lg border border-rule"
-            />
+      {/* 여러 장 사진 — 높이 고정 썸네일이 가로로 배열, 클릭 시 확대. caption 있으면 아래 표시. */}
+      {imgs.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-3">
+          {imgs.map((img, i) => (
+            <figure key={i} className="m-0">
+              <button
+                type="button"
+                onClick={() =>
+                  onOpenImage(
+                    imgs.map((m) => ({ src: import.meta.env.BASE_URL + m.src, caption: m.caption })),
+                    i,
+                  )
+                }
+                aria-label={img.caption ? `Enlarge: ${img.caption}` : `Enlarge image ${i + 1}`}
+                className="block p-0 m-0 cursor-zoom-in focus:outline-none focus:ring-1 focus:ring-ink"
+              >
+                <img
+                  src={import.meta.env.BASE_URL + img.src}
+                  alt={img.caption || `${title} ${i + 1}`}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-[150px] w-auto max-w-full object-cover rounded-lg border border-rule"
+                />
+              </button>
+              {img.caption && (
+                <figcaption className="mt-1.5 text-[13px] text-meta">{img.caption}</figcaption>
+              )}
+            </figure>
           ))}
         </div>
       )}
@@ -92,6 +206,8 @@ function EventItem({ event }) {
 
 export default function Events() {
   const events = [...EVENTS].sort((a, b) => dateKey(b.date) - dateKey(a.date))
+  const [lightbox, setLightbox] = useState(null)
+  const openImage = (images, index) => setLightbox({ images, index })
 
   return (
     <div className="mx-auto max-w-[1200px] px-6 py-12">
@@ -104,12 +220,14 @@ export default function Events() {
       {events.length > 0 ? (
         <div className="mt-6">
           {events.map((e) => (
-            <EventItem key={e.id} event={e} />
+            <EventItem key={e.id} event={e} onOpenImage={openImage} />
           ))}
         </div>
       ) : (
         <p className="text-muted py-10">No events to display yet.</p>
       )}
+
+      <Lightbox state={lightbox} setState={setLightbox} onClose={() => setLightbox(null)} />
     </div>
   )
 }

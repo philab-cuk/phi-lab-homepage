@@ -14,10 +14,11 @@ export const EVENTS = [
     description:
       'An international academic event co-hosted by the PHI Lab (CUK BMSW) and the University of Cincinnati DAAP (EPIC-Co Lab), supported by the National Research Foundation of Korea — featuring conferences, healthcare-industry field visits, and student research exchange under the theme "Redefining Borders: AI, Urban Health, and Community."',
     link: '/ghmw-2026/', // 통합된 정적 microsite (public/ghmw-2026)
+    // 행사 3일 스냅샷 콜라주 — 클릭 시 확대(라이트박스). caption 으로 Day 표시.
     images: [
-      'photos/events/ghmw-poster.jpg',
-      'photos/events/ghmw-session1.jpg',
-      'photos/events/ghmw-group.jpg',
+      { src: 'photos/events/ghmw-day1-conference.jpg', caption: 'Day 1 · Academic Conference' },
+      { src: 'photos/events/ghmw-day2-fieldtrip.jpg', caption: 'Day 2 · Field Trip' },
+      { src: 'photos/events/ghmw-day3-seminar.jpg', caption: 'Day 3 · Student Exchange' },
     ],
   },
   {
