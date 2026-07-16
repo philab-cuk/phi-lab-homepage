@@ -6,8 +6,12 @@ import './index.css'
 // 소셜 스크래퍼(FB·카카오·트위터)는 JS 미실행 → 아래 태그는 Layout <head> 에
 // 직접 넣어 정적 index.html 에 포함되게 한다.
 const SITE_URL = 'https://philabcuk.org/'
-const SITE_TITLE = 'PHI Lab — Precision & Provenance Health Informatics Lab'
+// 네이버 서치어드바이저 권고: 제목·OG제목 ≤40자, 설명·OG설명 ≤80자.
+const SITE_TITLE = 'PHI Lab — Health Informatics Lab, CUK' // 37자
 const SITE_DESC =
+  'Data-driven precision medicine & digital healthcare research at PHI Lab, CUK.' // 77자
+// JSON-LD 등 긴 서술이 필요한 곳에는 전체 명칭을 별도로 둔다.
+const SITE_DESC_LONG =
   'Precision & Provenance Health Informatics Lab (PHI Lab) at The Catholic University of Korea — data-driven interdisciplinary research advancing precision medicine and digital healthcare.'
 const OG_IMAGE = 'https://philabcuk.org/og-image.jpg'
 
@@ -19,7 +23,7 @@ const JSON_LD = {
   url: SITE_URL,
   logo: 'https://philabcuk.org/logo.jpg',
   image: OG_IMAGE,
-  description: SITE_DESC,
+  description: SITE_DESC_LONG,
   parentOrganization: {
     '@type': 'CollegeOrUniversity',
     name: 'The Catholic University of Korea',
@@ -69,7 +73,7 @@ export function Layout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         {/* SEO / 소셜 공유 — 정적 index.html <head> 에 포함 */}
-        <title>{`${SITE_TITLE} · The Catholic University of Korea`}</title>
+        <title>{SITE_TITLE}</title>
         <meta name="description" content={SITE_DESC} />
         <link rel="canonical" href={SITE_URL} />
         {/* 검색엔진 소유확인 — 네이버 서치어드바이저 */}
