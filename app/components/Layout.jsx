@@ -105,7 +105,10 @@ function NavLinks({ linkClass, onClick, variant = 'desktop' }) {
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const close = () => setMobileOpen(false)
-  const { isAuthenticated, signOut } = useAuth()
+  // 세션만으로 '로그인됨' 을 판단하면, 인증은 됐지만 화이트리스트에 없어
+  // 접근이 막힌(Forbidden) 사용자에게도 마이페이지/로그아웃이 뜬다.
+  // 실제 admin 권한이 있는 화이트리스트 사용자에게만 관리 메뉴를 노출한다.
+  const { isWhitelisted, signOut } = useAuth()
 
   return (
     <header className="border-b border-rule">
@@ -115,7 +118,7 @@ function Header() {
           <a href="https://www.catholic.ac.kr" target="_blank" rel="noopener noreferrer" className="text-white/90 hover:text-white no-underline">
             가톨릭대학교
           </a>
-          {isAuthenticated ? (
+          {isWhitelisted ? (
             <span className="flex items-center gap-4">
               <Link to="/admin" className="text-white/90 hover:text-white no-underline">
                 마이페이지

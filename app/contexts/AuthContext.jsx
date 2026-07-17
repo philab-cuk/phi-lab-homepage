@@ -34,8 +34,14 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
+  // 프로필(권한) 조회는 "누구인지"가 바뀔 때만 트리거한다.
+  // 탭 재포커스 시 Supabase 가 토큰을 자동 갱신하며 onAuthStateChange 를 쏘는데,
+  // 그때 session 객체 '참조'만 바뀌는 것으로 재조회+setLoading(true) 를 돌리면
+  // ProtectedRoute 가 loading 중 admin 트리를 통째로 언마운트해(작성 중이던
+  // 뉴스/포스트 모달이 닫힘) 초기화된다. 그래서 안정적인 email 문자열에만 의존.
+  const userEmail = session?.user?.email ?? null
   useEffect(() => {
-    if (!session) return
+    if (!userEmail) return
 
     let cancelled = false
     setLoading(true)
@@ -44,7 +50,7 @@ export function AuthProvider({ children }) {
     supabase
       .from('admin_users')
       .select('email, role, display_name')
-      .eq('email', session.user.email)
+      .eq('email', userEmail)
       .maybeSingle()
       .then(({ data, error }) => {
         if (cancelled) return
@@ -54,7 +60,7 @@ export function AuthProvider({ children }) {
       })
 
     return () => { cancelled = true }
-  }, [session])
+  }, [userEmail])
 
   const signIn = (email, password) =>
     supabase.auth.signInWithPassword({ email, password })

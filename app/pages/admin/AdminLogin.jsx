@@ -3,7 +3,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router'
 import { useAuth } from '../../contexts/AuthContext'
 
 export default function AdminLogin() {
-  const { isAuthenticated, signIn, signInWithGoogle, loading } = useAuth()
+  const { isWhitelisted, signIn, signInWithGoogle, loading } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/admin'
@@ -13,7 +13,10 @@ export default function AdminLogin() {
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
 
-  if (!loading && isAuthenticated) {
+  // 이미 로그인 + 화이트리스트인 경우에만 admin 으로 보낸다.
+  // (인증만 되고 권한 없는 limbo 계정은 여기서 다른 계정으로 재로그인할 수 있어야
+  //  하므로 로그인 폼을 그대로 보여준다 — Forbidden 으로 튕기는 루프 방지.)
+  if (!loading && isWhitelisted) {
     return <Navigate to={from} replace />
   }
 
