@@ -9,6 +9,32 @@ function emptyItem(email) {
 }
 function dateToInput(v) { return v ? String(v).slice(0, 10) : '' }
 
+// 업로드 전 클라이언트 리사이즈 — 가로/세로 최대 1600px, JPEG 품질 0.85.
+// 초고해상도 사진의 용량·업로드 시간을 크게 줄인다. createImageBitmap 으로
+// EXIF 회전을 반영하고, 다운스케일이 없고 결과가 더 크면 원본을 그대로 쓴다.
+const MAX_DIM = 1600
+async function resizeImage(file) {
+  if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return file
+  let bmp
+  try {
+    bmp = await createImageBitmap(file, { imageOrientation: 'from-image' })
+  } catch {
+    return file  // 미지원 브라우저면 원본 업로드
+  }
+  const scale = Math.min(1, MAX_DIM / Math.max(bmp.width, bmp.height))
+  const cw = Math.round(bmp.width * scale)
+  const ch = Math.round(bmp.height * scale)
+  const canvas = document.createElement('canvas')
+  canvas.width = cw
+  canvas.height = ch
+  canvas.getContext('2d').drawImage(bmp, 0, 0, cw, ch)
+  bmp.close?.()
+  const blob = await new Promise((res) => canvas.toBlob(res, 'image/jpeg', 0.85))
+  if (!blob) return file
+  if (scale === 1 && blob.size >= file.size) return file
+  return new File([blob], file.name.replace(/\.\w+$/, '.jpg'), { type: 'image/jpeg' })
+}
+
 export default function AdminGallery() {
   const { user } = useAuth()
   const [rows, setRows] = useState([])
@@ -63,12 +89,14 @@ export default function AdminGallery() {
     : rows.filter((r) => r.album === albumFilter)
 
   async function uploadOne(file) {
-    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase()
-    if (!['jpg', 'jpeg', 'png', 'webp'].includes(ext)) throw new Error(`${file.name}: jpg/png/webp 만 허용`)
-    if (file.size > 10 * 1024 * 1024) throw new Error(`${file.name}: 10MB 초과`)
+    const ext0 = (file.name.split('.').pop() || 'jpg').toLowerCase()
+    if (!['jpg', 'jpeg', 'png', 'webp'].includes(ext0)) throw new Error(`${file.name}: jpg/png/webp 만 허용`)
+    const f = await resizeImage(file)   // 업로드 전 리사이즈(대개 원본보다 훨씬 작아짐)
+    if (f.size > 10 * 1024 * 1024) throw new Error(`${file.name}: 10MB 초과`)
+    const ext = f.type === 'image/jpeg' ? 'jpg' : ext0
     const path = `${crypto.randomUUID()}.${ext}`
     const { error: upErr } = await supabase.storage.from('gallery-images')
-      .upload(path, file, { contentType: file.type })
+      .upload(path, f, { contentType: f.type })
     if (upErr) throw new Error('업로드 실패: ' + upErr.message)
     return supabase.storage.from('gallery-images').getPublicUrl(path).data.publicUrl
   }

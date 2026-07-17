@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import { useLoaderData } from 'react-router'
 import { fetchLectures } from '../lib/publicData'
+import Lightbox from '../components/Lightbox'
 
 // CSR: 브라우저에서 로드 — admin 저장이 재배포 없이 즉시 반영된다.
 export async function clientLoader() {
@@ -107,93 +108,6 @@ function CourseImages({ images }) {
   )
 }
 
-function Lightbox({ state, setState, onClose }) {
-  useEffect(() => {
-    if (!state) return
-    const onKey = (e) => {
-      if (e.key === 'Escape') onClose()
-      else if (e.key === 'ArrowLeft')
-        setState((s) => s && { ...s, index: (s.index - 1 + s.images.length) % s.images.length })
-      else if (e.key === 'ArrowRight')
-        setState((s) => s && { ...s, index: (s.index + 1) % s.images.length })
-    }
-    document.addEventListener('keydown', onKey)
-    const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prevOverflow
-    }
-  }, [state, setState, onClose])
-
-  if (!state) return null
-  const { images, index } = state
-  const total = images.length
-  const hasMultiple = total > 1
-  const goPrev = () =>
-    setState((s) => s && { ...s, index: (s.index - 1 + s.images.length) % s.images.length })
-  const goNext = () =>
-    setState((s) => s && { ...s, index: (s.index + 1) % s.images.length })
-
-  return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      onClick={onClose}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 sm:p-8 cursor-zoom-out"
-    >
-      <button
-        type="button"
-        onClick={onClose}
-        aria-label="Close"
-        className="absolute top-3 right-4 text-white text-3xl leading-none px-2 py-1 hover:opacity-80"
-      >
-        ×
-      </button>
-
-      {hasMultiple && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation()
-            goPrev()
-          }}
-          aria-label="Previous image"
-          className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 text-white text-4xl leading-none px-2 py-1 hover:opacity-80"
-        >
-          ‹
-        </button>
-      )}
-      {hasMultiple && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation()
-            goNext()
-          }}
-          aria-label="Next image"
-          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 text-white text-4xl leading-none px-2 py-1 hover:opacity-80"
-        >
-          ›
-        </button>
-      )}
-
-      {hasMultiple && (
-        <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-sm select-none">
-          {index + 1} / {total}
-        </p>
-      )}
-
-      <img
-        src={images[index]}
-        alt=""
-        onClick={(e) => e.stopPropagation()}
-        className="max-w-full max-h-full object-contain cursor-default"
-      />
-    </div>
-  )
-}
-
 function CourseItem({ course }) {
   const { code, titleEn, titleKo, level, description, objectives, images, tags } = course
   const paragraphs = description ? description.split('\n\n').filter(Boolean) : []
@@ -255,7 +169,9 @@ function SemesterSection({ semester, courses }) {
 export default function Lectures() {
   const lecturesData = useLoaderData() ?? []
   const [lightbox, setLightbox] = useState(null)
-  const openLightbox = (images, index) => setLightbox({ images, index })
+  // 공용 Lightbox 는 { src, caption } 배열을 받는다 — 강의 이미지(문자열)를 매핑.
+  const openLightbox = (images, index) =>
+    setLightbox({ images: images.map((src) => ({ src })), index })
 
   const grouped = groupBySemester(lecturesData)
 

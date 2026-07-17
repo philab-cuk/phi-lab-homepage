@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchGallery } from '../lib/publicData'
+import Lightbox from '../components/Lightbox'
 
 // Gallery — 연구실 문화·사람(Lab Life) 사진. 앨범별 묶음 + 클릭 확대(라이트박스).
 // CSR: admin 업로드가 재배포 없이 즉시 반영되도록 공개 loader 대신 클라이언트 fetch.
@@ -9,63 +10,6 @@ function albumDate(items) {
   if (!dates.length) return ''
   const d = new Date(dates[dates.length - 1])
   return `${d.getFullYear()}. ${d.getMonth() + 1}.`
-}
-
-function Lightbox({ state, setState, onClose }) {
-  useEffect(() => {
-    if (!state) return
-    const onKey = (e) => {
-      if (e.key === 'Escape') onClose()
-      else if (e.key === 'ArrowLeft')
-        setState((s) => s && { ...s, index: (s.index - 1 + s.images.length) % s.images.length })
-      else if (e.key === 'ArrowRight')
-        setState((s) => s && { ...s, index: (s.index + 1) % s.images.length })
-    }
-    document.addEventListener('keydown', onKey)
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prev
-    }
-  }, [state, setState, onClose])
-
-  if (!state) return null
-  const { images, index } = state
-  const total = images.length
-  const many = total > 1
-  const cur = images[index]
-  const go = (d) => setState((s) => s && { ...s, index: (s.index + d + s.images.length) % s.images.length })
-
-  return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      onClick={onClose}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 sm:p-8 cursor-zoom-out"
-    >
-      <button type="button" onClick={onClose} aria-label="Close"
-        className="absolute top-3 right-4 text-white text-3xl leading-none px-2 py-1 hover:opacity-80">×</button>
-      {many && (
-        <button type="button" onClick={(e) => { e.stopPropagation(); go(-1) }} aria-label="Previous"
-          className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 text-white text-4xl leading-none px-2 py-1 hover:opacity-80">‹</button>
-      )}
-      {many && (
-        <button type="button" onClick={(e) => { e.stopPropagation(); go(1) }} aria-label="Next"
-          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 text-white text-4xl leading-none px-2 py-1 hover:opacity-80">›</button>
-      )}
-      <figure className="m-0 flex max-h-full max-w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <img src={cur.src} alt={cur.caption || ''} className="max-h-[85vh] max-w-full object-contain" />
-        {(cur.caption || many) && (
-          <figcaption className="mt-3 select-none text-center text-sm text-white/85">
-            {cur.caption}
-            {cur.caption && many && '  ·  '}
-            {many && `${index + 1} / ${total}`}
-          </figcaption>
-        )}
-      </figure>
-    </div>
-  )
 }
 
 export default function Gallery() {
@@ -82,9 +26,9 @@ export default function Gallery() {
   }, [])
 
   // 앨범별 묶음. album 없으면 'Lab Life'.
-  // 앨범 간 순서 = 입력(업로드)의 역순 → 최신 앨범이 위로.
-  // 대표 시각 = 그 앨범에서 가장 최근 업로드된 사진의 created_at(ISO 문자열, 사전순=시간순).
-  // 앨범 안의 사진 순서는 fetch 순서(촬영일 최신순) 유지.
+  // 앨범 '간' 순서 = 업로드(created_at) 역순 → 최신 앨범이 위로.
+  //   대표 시각 = 그 앨범에서 가장 최근 업로드된 사진의 created_at(ISO 문자열, 사전순=시간순).
+  // 앨범 '안'의 사진은 fetch 순서(촬영일 과거→현재) 유지.
   const groups = (() => {
     if (!items) return []
     const map = new Map()
