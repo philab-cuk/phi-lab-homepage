@@ -81,7 +81,10 @@ export default function Gallery() {
     return () => { alive = false }
   }, [])
 
-  // 앨범별 묶음 — fetch 순서(최신 촬영일 우선) 유지. album 없으면 'Lab Life'.
+  // 앨범별 묶음. album 없으면 'Lab Life'.
+  // 앨범 간 순서 = 입력(업로드)의 역순 → 최신 앨범이 위로.
+  // 대표 시각 = 그 앨범에서 가장 최근 업로드된 사진의 created_at(ISO 문자열, 사전순=시간순).
+  // 앨범 안의 사진 순서는 fetch 순서(촬영일 최신순) 유지.
   const groups = (() => {
     if (!items) return []
     const map = new Map()
@@ -90,7 +93,8 @@ export default function Gallery() {
       if (!map.has(key)) map.set(key, [])
       map.get(key).push(it)
     }
-    return [...map.entries()]
+    const latest = (arr) => arr.reduce((m, it) => (it.createdAt > m ? it.createdAt : m), '')
+    return [...map.entries()].sort(([, a], [, b]) => (latest(a) < latest(b) ? 1 : latest(a) > latest(b) ? -1 : 0))
   })()
 
   return (

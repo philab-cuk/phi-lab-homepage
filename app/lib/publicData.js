@@ -301,6 +301,7 @@ export async function fetchGallery() {
     caption: g.caption,
     album: g.album,
     takenOn: g.taken_on,
+    createdAt: g.created_at,
   }))
 }
 
