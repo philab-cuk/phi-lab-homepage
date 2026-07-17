@@ -289,10 +289,12 @@ export async function fetchNewsItem(id) {
 
 // ── Gallery (Lab Life) ──────────────────────────────────────────────────────
 export async function fetchGallery() {
+  // 앨범 '안'의 사진은 과거→현재(taken_on 오름차순, 없으면 뒤로). 앨범 '간' 순서는
+  // Gallery 컴포넌트에서 created_at 역순으로 따로 정렬하므로 이 정렬과 무관하다.
   const { data, error } = await supabase
     .from('gallery')
     .select('*')
-    .order('taken_on', { ascending: false, nullsFirst: false })
+    .order('taken_on', { ascending: true, nullsFirst: false })
     .order('display_order', { ascending: true })
   if (error) throw error
   return (data ?? []).map((g) => ({
