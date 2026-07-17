@@ -95,19 +95,19 @@ export default function Gallery() {
 
   return (
     <div className="mx-auto max-w-[1200px] px-6 py-12">
-      <h1 className="text-center">Gallery</h1>
-      <p className="mx-auto max-w-[640px] text-center text-muted">
-        Life in the PHI Lab — moments from our research journey, gatherings, and milestones.
-      </p>
+      <header className="mb-8 text-center">
+        <h1 className="mb-1">Gallery</h1>
+        <p className="my-0 text-muted">Life in the PHI Lab</p>
+      </header>
 
-      {error && <p className="mt-8 text-muted">Failed to load gallery. Please try again later.</p>}
-      {!error && items === null && <p className="mt-8 text-muted">Loading…</p>}
-      {!error && items?.length === 0 && <p className="mt-8 text-muted">No photos yet.</p>}
+      {error && <p className="text-muted">Failed to load gallery. Please try again later.</p>}
+      {!error && items === null && <p className="text-muted">Loading…</p>}
+      {!error && items?.length === 0 && <p className="text-muted">No photos yet.</p>}
 
-      {groups.map(([album, arr]) => {
+      {groups.map(([album, arr], gi) => {
         const images = arr.map((it) => ({ src: it.imageUrl, caption: it.caption }))
         return (
-          <section key={album} className="mt-12">
+          <section key={album} className={gi === 0 ? '' : 'mt-12'}>
             <h2 className="mb-4 flex items-center gap-3">
               <span className="inline-block h-[20px] w-[4px] rounded-full bg-gold-600" aria-hidden="true" />
               <span className="text-brand-900">{album}</span>
