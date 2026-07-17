@@ -85,7 +85,11 @@ export default function AdminPosts() {
         if (error) throw error
       }
       closeModal(); load()
-    } catch (e) { setError(e) } finally { savingRef.current = false; setSaving(false) }
+    } catch (e) {
+      // DB 중복 방지 인덱스(같은 날·제목·작성자)에 걸린 경우 친절한 안내로 치환.
+      const dup = e?.code === '23505' && /no_same_day_dup/.test(String(e.message || ''))
+      setError(dup ? new Error('같은 날 같은 제목·작성자의 글이 이미 있습니다. 중복 저장이 차단되었어요 — 기존 글을 편집하세요.') : e)
+    } finally { savingRef.current = false; setSaving(false) }
   }
 
   async function del(row) {
