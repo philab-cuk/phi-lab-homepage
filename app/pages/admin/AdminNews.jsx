@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
@@ -41,6 +41,8 @@ export default function AdminNews() {
   const [isNew, setIsNew] = useState(false)
   const [editing, setEditing] = useState(false) // 한 모달 안에서 보기(false)/편집(true) 전환
   const [original, setOriginal] = useState(null) // 편집 취소 시 되돌릴 원본 스냅샷
+  const [saving, setSaving] = useState(false)    // 저장 진행 중 — 버튼 비활성/라벨용
+  const savingRef = useRef(false)                // 동기 재진입 가드(초고속 더블클릭까지 차단)
   const [confirm, confirmUI] = useConfirm()
 
   // 행 클릭 → 보기 모드 / "편집"·"새 뉴스" → 편집 모드
@@ -65,23 +67,30 @@ export default function AdminNews() {
   useEffect(() => { load() }, [filter, statusFilter, user?.email])
 
   async function save() {
-    setError(null)
+    if (savingRef.current) return   // 재진입 금지(중복 클릭 → 중복 insert 방지)
+    const payload = {
+      title: edit.title,
+      body_json: edit.body_json || null,
+      status: edit.status,
+      author_email: edit.author_email,
+      published_at: edit.status === 'published' && !edit.published_at ? new Date().toISOString() : edit.published_at,
+    }
+    if (!payload.title) { setError(new Error('title 필수')); return }
+    savingRef.current = true
+    setSaving(true); setError(null)
     try {
-      const payload = {
-        title: edit.title,
-        body_json: edit.body_json || null,
-        status: edit.status,
-        author_email: edit.author_email,
-        published_at: edit.status === 'published' && !edit.published_at ? new Date().toISOString() : edit.published_at,
+      if (isNew) {
+        // 새 글은 insert 후 생성된 id 를 반영하고 isNew=false 로 전환한다.
+        // (이후 어떤 이유로 save 가 다시 불려도 반드시 update — 중복 insert 원천 차단)
+        const { data, error } = await supabase.from('news').insert(payload).select().maybeSingle()
+        if (error) throw error
+        if (data?.id) { setEdit((p) => (p ? { ...p, id: data.id } : p)); setIsNew(false) }
+      } else {
+        const { error } = await supabase.from('news').update(payload).eq('id', edit.id)
+        if (error) throw error
       }
-      if (!payload.title) throw new Error('title 필수')
-      const op = isNew
-        ? supabase.from('news').insert(payload)
-        : supabase.from('news').update(payload).eq('id', edit.id)
-      const { error } = await op
-      if (error) throw error
       closeModal(); load()
-    } catch (e) { setError(e) }
+    } catch (e) { setError(e) } finally { savingRef.current = false; setSaving(false) }
   }
 
   async function del(row) {
@@ -99,14 +108,18 @@ export default function AdminNews() {
         actions={
           <>
             {isEditor && (
-              <>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <span style={{ fontSize: '0.72rem', color: '#888' }}>작성자</span>
                 <Button onClick={() => setFilter('mine')} primary={filter==='mine'}>내 글</Button>
                 <Button onClick={() => setFilter('all')} primary={filter==='all'}>전체</Button>
-              </>
+              </span>
             )}
-            <Button onClick={() => setStatusFilter('all')} primary={statusFilter==='all'}>전체</Button>
-            <Button onClick={() => setStatusFilter('published')} primary={statusFilter==='published'}>발행</Button>
-            <Button onClick={() => setStatusFilter('draft')} primary={statusFilter==='draft'}>초안</Button>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <span style={{ fontSize: '0.72rem', color: '#888' }}>상태</span>
+              <Button onClick={() => setStatusFilter('all')} primary={statusFilter==='all'}>전체</Button>
+              <Button onClick={() => setStatusFilter('published')} primary={statusFilter==='published'}>발행</Button>
+              <Button onClick={() => setStatusFilter('draft')} primary={statusFilter==='draft'}>초안</Button>
+            </span>
             {deleteModeToggle}
             <Button primary onClick={openNew}>+ 새 뉴스</Button>
           </>
@@ -146,7 +159,7 @@ export default function AdminNews() {
         title={editing ? (isNew ? '새 뉴스' : `Edit: ${edit?.id}`) : '미리보기'}
         mode={editing ? (isNew ? 'new' : 'edit') : 'view'}
         headerActions={editing
-          ? <><Button primary onClick={save}>저장</Button><Button onClick={cancelEdit}>취소</Button></>
+          ? <><Button primary onClick={save} disabled={saving}>{saving ? '저장 중…' : '저장'}</Button><Button onClick={cancelEdit} disabled={saving}>취소</Button></>
           : <><Button primary onClick={() => setEditing(true)}>편집하기</Button><Button onClick={closeModal}>닫기</Button></>}
       >
         {edit && (editing ? (
