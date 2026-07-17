@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
-import { PageHeader, Button, Table, Modal, Field, TextInput, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
+import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
 
 // Gallery(Lab Life) 관리 — 사진 업로드 + 캡션·앨범·촬영일·순서. News 패턴 기반.
 function emptyItem(email) {
@@ -40,21 +40,26 @@ export default function AdminGallery() {
     setPreviewUrl(URL.createObjectURL(file))
   }
 
+  // 전체를 한 번만 불러오고 필터는 클라이언트에서 — 앨범 목록이 필터에 따라
+  // 줄어드는 문제를 피하고, 소량 데이터라 성능 부담도 없다.
   async function load() {
     setLoading(true); setError(null)
-    let q = supabase.from('gallery').select('*')
+    const { data, error } = await supabase.from('gallery').select('*')
       .order('taken_on', { ascending: false, nullsFirst: false })
       .order('display_order', { ascending: true })
-    if (albumFilter !== 'all') q = q.eq('album', albumFilter === '(none)' ? null : albumFilter)
-    const { data, error } = await q
     if (error) setError(error)
     setRows(data || [])
     setLoading(false)
   }
-  useEffect(() => { load() }, [albumFilter])  // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { load() }, [])
 
-  // 앨범 필터 옵션(현재 데이터 기준)
+  // 앨범 목록·필터는 전체 rows 기준. 앨범이 많아져도 드롭다운이라 공간 일정.
   const albums = [...new Set(rows.map((r) => r.album).filter(Boolean))].sort()
+  const hasUnfiled = rows.some((r) => !r.album)
+  const visibleRows =
+    albumFilter === 'all' ? rows
+    : albumFilter === '(none)' ? rows.filter((r) => !r.album)
+    : rows.filter((r) => r.album === albumFilter)
 
   async function uploadImage() {
     const ext = (pendingFile.name.split('.').pop() || 'jpg').toLowerCase()
@@ -106,15 +111,21 @@ export default function AdminGallery() {
     <div>
       <PageHeader
         title="Gallery"
-        subtitle={`${rows.length}장`}
+        subtitle={albumFilter === 'all' ? `${rows.length}장` : `${visibleRows.length}장 / 전체 ${rows.length}`}
         actions={
           <>
             <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
               <span style={{ fontSize: '0.72rem', color: '#888' }}>앨범</span>
-              <Button onClick={() => setAlbumFilter('all')} primary={albumFilter === 'all'}>전체</Button>
-              {albums.map((a) => (
-                <Button key={a} onClick={() => setAlbumFilter(a)} primary={albumFilter === a}>{a}</Button>
-              ))}
+              <Select
+                value={albumFilter}
+                onChange={(e) => setAlbumFilter(e.target.value)}
+                options={[
+                  { value: 'all', label: `전체 (${rows.length})` },
+                  ...(hasUnfiled ? [{ value: '(none)', label: '(미분류)' }] : []),
+                  ...albums.map((a) => ({ value: a, label: a })),
+                ]}
+                style={{ width: 'auto', minWidth: 150 }}
+              />
             </span>
             {deleteModeToggle}
             <Button primary onClick={openNew}>+ 새 사진</Button>
@@ -139,7 +150,7 @@ export default function AdminGallery() {
               </div>
             ) },
           ]}
-          rows={rows}
+          rows={visibleRows}
           onRowClick={openEdit}
         />
       )}
