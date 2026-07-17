@@ -3,14 +3,11 @@ import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
 
-// Gallery(Lab Life) 관리 — 사진 업로드 + 캡션·앨범·촬영일·순서. News 패턴 기반.
+// Gallery(Lab Life) 관리 — 신규는 여러 장 한 번에 업로드(같은 앨범·촬영일), 편집은 단일.
 function emptyItem(email) {
   return { image_url: '', caption: '', album: '', taken_on: '', display_order: 0, created_by: email }
 }
-
-function dateToInput(v) {
-  return v ? String(v).slice(0, 10) : ''
-}
+function dateToInput(v) { return v ? String(v).slice(0, 10) : '' }
 
 export default function AdminGallery() {
   const { user } = useAuth()
@@ -20,28 +17,33 @@ export default function AdminGallery() {
   const [error, setError] = useState(null)
   const [edit, setEdit] = useState(null)
   const [isNew, setIsNew] = useState(false)
-  const [pendingFile, setPendingFile] = useState(null)   // 저장 시 업로드할 파일
-  const [previewUrl, setPreviewUrl] = useState(null)     // 로컬 미리보기(objectURL)
+  const [pending, setPending] = useState([])   // [{file, url}] — 신규는 다중, 편집은 1장 교체
   const [saving, setSaving] = useState(false)
+  const [progress, setProgress] = useState('')
   const savingRef = useRef(false)
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
 
-  function openNew() { setIsNew(true); setPendingFile(null); setPreviewUrl(null); setEdit(emptyItem(user.email)) }
-  function openEdit(row) { setIsNew(false); setPendingFile(null); setPreviewUrl(null); setEdit({ ...row }) }
-  function closeModal() {
-    if (previewUrl) URL.revokeObjectURL(previewUrl)
-    setEdit(null); setPendingFile(null); setPreviewUrl(null)
+  function clearPending() {
+    setPending((prev) => { prev.forEach((p) => URL.revokeObjectURL(p.url)); return [] })
   }
-  function onSelectFile(file) {
-    if (!file) return
-    if (previewUrl) URL.revokeObjectURL(previewUrl)
-    setPendingFile(file)
-    setPreviewUrl(URL.createObjectURL(file))
+  function openNew() { clearPending(); setIsNew(true); setEdit(emptyItem(user.email)) }
+  function openEdit(row) { clearPending(); setIsNew(false); setEdit({ ...row }) }
+  function closeModal() { clearPending(); setEdit(null); setProgress('') }
+
+  function onSelectFiles(fileList, forNew) {
+    const files = [...(fileList || [])]
+    if (!files.length) return
+    const added = files.map((file) => ({ file, url: URL.createObjectURL(file) }))
+    setPending((prev) => {
+      if (!forNew) { prev.forEach((p) => URL.revokeObjectURL(p.url)); return added.slice(0, 1) }
+      return [...prev, ...added]   // 신규: 계속 추가
+    })
+  }
+  function removePending(i) {
+    setPending((prev) => { const p = prev[i]; if (p) URL.revokeObjectURL(p.url); return prev.filter((_, k) => k !== i) })
   }
 
-  // 전체를 한 번만 불러오고 필터는 클라이언트에서 — 앨범 목록이 필터에 따라
-  // 줄어드는 문제를 피하고, 소량 데이터라 성능 부담도 없다.
   async function load() {
     setLoading(true); setError(null)
     const { data, error } = await supabase.from('gallery').select('*')
@@ -53,7 +55,6 @@ export default function AdminGallery() {
   }
   useEffect(() => { load() }, [])
 
-  // 앨범 목록·필터는 전체 rows 기준. 앨범이 많아져도 드롭다운이라 공간 일정.
   const albums = [...new Set(rows.map((r) => r.album).filter(Boolean))].sort()
   const hasUnfiled = rows.some((r) => !r.album)
   const visibleRows =
@@ -61,43 +62,57 @@ export default function AdminGallery() {
     : albumFilter === '(none)' ? rows.filter((r) => !r.album)
     : rows.filter((r) => r.album === albumFilter)
 
-  async function uploadImage() {
-    const ext = (pendingFile.name.split('.').pop() || 'jpg').toLowerCase()
-    if (!['jpg', 'jpeg', 'png', 'webp'].includes(ext)) throw new Error('jpg/png/webp 만 허용')
-    if (pendingFile.size > 10 * 1024 * 1024) throw new Error('10MB 초과')
+  async function uploadOne(file) {
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase()
+    if (!['jpg', 'jpeg', 'png', 'webp'].includes(ext)) throw new Error(`${file.name}: jpg/png/webp 만 허용`)
+    if (file.size > 10 * 1024 * 1024) throw new Error(`${file.name}: 10MB 초과`)
     const path = `${crypto.randomUUID()}.${ext}`
     const { error: upErr } = await supabase.storage.from('gallery-images')
-      .upload(path, pendingFile, { contentType: pendingFile.type })
+      .upload(path, file, { contentType: file.type })
     if (upErr) throw new Error('업로드 실패: ' + upErr.message)
-    const { data } = supabase.storage.from('gallery-images').getPublicUrl(path)
-    return data.publicUrl
+    return supabase.storage.from('gallery-images').getPublicUrl(path).data.publicUrl
   }
 
   async function save() {
     if (savingRef.current) return
-    if (isNew && !pendingFile) { setError(new Error('사진을 선택하세요')); return }
+    if (isNew && pending.length === 0) { setError(new Error('사진을 선택하세요')); return }
     savingRef.current = true
     setSaving(true); setError(null)
     try {
-      let image_url = edit.image_url
-      if (pendingFile) image_url = await uploadImage()
+      const album = edit.album?.trim() || null
+      const taken_on = edit.taken_on || null
+      const baseOrder = Number(edit.display_order) || 0
 
-      const payload = {
-        image_url,
-        caption: edit.caption || null,
-        album: edit.album?.trim() || null,
-        taken_on: edit.taken_on || null,
-        display_order: Number(edit.display_order) || 0,
-      }
       if (isNew) {
-        const { error } = await supabase.from('gallery').insert({ ...payload, created_by: user.email })
+        // 선택한 파일들을 차례로 업로드 → 한 번에 insert (같은 앨범·촬영일)
+        const inserts = []
+        for (let i = 0; i < pending.length; i++) {
+          setProgress(`업로드 중 ${i + 1}/${pending.length}`)
+          const image_url = await uploadOne(pending[i].file)
+          inserts.push({
+            image_url,
+            caption: pending.length === 1 ? (edit.caption?.trim() || null) : null,
+            album, taken_on,
+            display_order: baseOrder + i,
+            created_by: user.email,
+          })
+        }
+        setProgress('저장 중…')
+        const { error } = await supabase.from('gallery').insert(inserts)
         if (error) throw error
       } else {
-        const { error } = await supabase.from('gallery').update(payload).eq('id', edit.id)
+        let image_url = edit.image_url
+        if (pending[0]) { setProgress('업로드 중…'); image_url = await uploadOne(pending[0].file) }
+        const { error } = await supabase.from('gallery').update({
+          image_url,
+          caption: edit.caption?.trim() || null,
+          album, taken_on,
+          display_order: baseOrder,
+        }).eq('id', edit.id)
         if (error) throw error
       }
       closeModal(); load()
-    } catch (e) { setError(e) } finally { savingRef.current = false; setSaving(false) }
+    } catch (e) { setError(e) } finally { savingRef.current = false; setSaving(false); setProgress('') }
   }
 
   async function del(row) {
@@ -106,6 +121,9 @@ export default function AdminGallery() {
     if (error) { setError(error); return }
     load()
   }
+
+  const multi = isNew && pending.length > 1
+  const fileBtnLabel = isNew ? (pending.length ? '＋ 사진 추가' : '＋ 사진 선택') : (pending.length || edit?.image_url ? '사진 변경' : '＋ 사진 선택')
 
   return (
     <div>
@@ -159,34 +177,53 @@ export default function AdminGallery() {
         open={!!edit}
         onClose={closeModal}
         width={620}
-        title={isNew ? '새 사진' : '사진 편집'}
+        title={isNew ? (multi ? `새 사진 (${pending.length}장)` : '새 사진') : '사진 편집'}
         mode={isNew ? 'new' : 'edit'}
         headerActions={
           <>
-            <Button primary onClick={save} disabled={saving}>{saving ? '저장 중…' : '저장'}</Button>
+            <Button primary onClick={save} disabled={saving}>
+              {saving ? (progress || '저장 중…') : (multi ? `${pending.length}장 저장` : '저장')}
+            </Button>
             <Button onClick={closeModal} disabled={saving}>취소</Button>
           </>
         }
       >
         {edit && (
           <div>
-            <Field label="사진" hint="jpg/png/webp, 최대 10MB">
-              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                {(previewUrl || edit.image_url) && (
-                  <img src={previewUrl || edit.image_url} alt="" style={{ width: 96, height: 72, objectFit: 'cover', border: '1px solid #ccc', borderRadius: 3, flexShrink: 0 }} />
-                )}
+            <Field label="사진" hint={isNew ? 'jpg/png/webp, 최대 10MB · 여러 장 선택 가능' : 'jpg/png/webp, 최대 10MB'}>
+              {(pending.length > 0 || (!isNew && edit.image_url)) && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  {pending.length > 0
+                    ? pending.map((p, i) => (
+                        <div key={i} style={{ position: 'relative' }}>
+                          <img src={p.url} alt="" style={{ width: 84, height: 63, objectFit: 'cover', border: '1px solid #ccc', borderRadius: 3, display: 'block' }} />
+                          <button type="button" onClick={() => removePending(i)} aria-label="제거"
+                            style={{ position: 'absolute', top: -7, right: -7, width: 20, height: 20, borderRadius: '50%', border: 'none', background: '#c33', color: '#fff', cursor: 'pointer', fontSize: 12, lineHeight: '20px', padding: 0 }}>×</button>
+                        </div>
+                      ))
+                    : <img src={edit.image_url} alt="" style={{ width: 84, height: 63, objectFit: 'cover', border: '1px solid #ccc', borderRadius: 3 }} />}
+                </div>
+              )}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                 <label style={{ display: 'inline-block', fontSize: '0.85rem', cursor: 'pointer', color: '#fff', background: '#222', border: '1px solid #000', padding: '0.4rem 0.8rem', borderRadius: 3 }}>
-                  {(previewUrl || edit.image_url) ? '사진 변경' : '＋ 사진 선택'}
-                  <input type="file" accept="image/jpeg,image/png,image/webp" style={{ display: 'none' }}
-                    onChange={(e) => { onSelectFile(e.target.files?.[0]); e.target.value = '' }} />
+                  {fileBtnLabel}
+                  <input type="file" accept="image/jpeg,image/png,image/webp" multiple={isNew} style={{ display: 'none' }}
+                    onChange={(e) => { onSelectFiles(e.target.files, isNew); e.target.value = '' }} />
                 </label>
-                {pendingFile && <span style={{ fontSize: '0.75rem', color: '#888' }}>저장 시 업로드 예정</span>}
+                {isNew && pending.length > 0 && <span style={{ fontSize: '0.78rem', color: '#666' }}>{pending.length}장 선택됨 · 저장 시 업로드</span>}
+                {!isNew && pending.length > 0 && <span style={{ fontSize: '0.78rem', color: '#666' }}>저장 시 교체 업로드</span>}
               </div>
             </Field>
 
-            <Field label="Caption" hint="사진 아래 표시(선택)">
-              <TextInput value={edit.caption || ''} onChange={e => setEdit({ ...edit, caption: e.target.value })} />
-            </Field>
+            {!multi ? (
+              <Field label="Caption" hint="사진 아래 표시(선택)">
+                <TextInput value={edit.caption || ''} onChange={e => setEdit({ ...edit, caption: e.target.value })} />
+              </Field>
+            ) : (
+              <div style={{ fontSize: '0.78rem', color: '#888', margin: '0 0 0.6rem' }}>
+                여러 장은 캡션 없이 업로드됩니다. 캡션은 목록에서 사진별로 편집하세요.
+              </div>
+            )}
 
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '0.75rem' }}>
               <Field label="Album" hint="예: 2026 MT (비우면 'Lab Life')">
@@ -195,7 +232,7 @@ export default function AdminGallery() {
               <Field label="촬영일">
                 <TextInput type="date" value={dateToInput(edit.taken_on)} onChange={e => setEdit({ ...edit, taken_on: e.target.value || null })} />
               </Field>
-              <Field label="순서" hint="작을수록 앞">
+              <Field label={multi ? '시작 순서' : '순서'} hint="작을수록 앞">
                 <TextInput type="number" value={edit.display_order ?? 0} onChange={e => setEdit({ ...edit, display_order: e.target.value })} />
               </Field>
             </div>
