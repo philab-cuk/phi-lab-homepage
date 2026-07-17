@@ -15,6 +15,7 @@ const NAV_ROUTES = [
       // GHMW = 정적 사이트(public/ghmw-2026/) → 전체 페이지 이동(external).
       { to: '/ghmw-2026/', label: 'GHMW 2026', external: true },
       { to: '/events', label: 'LLM Workshop' },
+      { to: '/gallery', label: 'Gallery' },
     ],
   },
   { to: '/members', label: 'Members' },

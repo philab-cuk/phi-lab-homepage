@@ -287,6 +287,23 @@ export async function fetchNewsItem(id) {
   return data ? mapNews(data) : null
 }
 
+// ── Gallery (Lab Life) ──────────────────────────────────────────────────────
+export async function fetchGallery() {
+  const { data, error } = await supabase
+    .from('gallery')
+    .select('*')
+    .order('taken_on', { ascending: false, nullsFirst: false })
+    .order('display_order', { ascending: true })
+  if (error) throw error
+  return (data ?? []).map((g) => ({
+    id: g.id,
+    imageUrl: g.image_url,
+    caption: g.caption,
+    album: g.album,
+    takenOn: g.taken_on,
+  }))
+}
+
 // ── Posts (게시판) ───────────────────────────────────────────────────────────
 // 공개 Posts — published 만. News 와 같은 이중 방어(쿼리에도 필터).
 // 작성자는 이메일이 아니라 display_name(예: 관리자)만 노출한다.

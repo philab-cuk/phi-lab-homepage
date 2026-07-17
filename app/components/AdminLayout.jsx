@@ -19,6 +19,7 @@ function buildMenu(role) {
         { to: '/admin', label: 'Dashboard', end: true },
         { to: '/admin/my-profile', label: 'My Profile' },
         { to: '/admin/news', label: 'News' },
+        { to: '/admin/gallery', label: 'Gallery' },
         { to: '/admin/posts', label: 'Posts' },
       ],
     },

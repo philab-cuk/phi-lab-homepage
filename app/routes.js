@@ -14,6 +14,7 @@ export default [
     route('events', 'pages/Events.jsx'),
     route('news', 'pages/News.jsx'),
     route('news/:id', 'pages/NewsItem.jsx'),
+    route('gallery', 'pages/Gallery.jsx'),
     route('posts', 'pages/Posts.jsx'),
     route('posts/:id', 'pages/Post.jsx'),
   ]),
@@ -29,6 +30,7 @@ export default [
       // whitelist 전원 (researcher/alumni 포함)
       route('my-profile', 'pages/admin/AdminMyProfile.jsx'),
       route('news', 'pages/admin/AdminNews.jsx'),
+      route('gallery', 'pages/admin/AdminGallery.jsx'),
       route('posts', 'pages/admin/AdminPosts.jsx'),
       // editor(admin/professor) 전용
       layout('components/EditorProtectedRoute.jsx', [
