@@ -20,10 +20,13 @@ create index if not exists gallery_order_idx
 
 alter table public.gallery enable row level security;
 
+-- 정책은 CREATE POLICY IF NOT EXISTS 가 없으므로, 재실행 안전하게 먼저 drop.
+drop policy if exists "gallery: public read" on public.gallery;
 create policy "gallery: public read"
   on public.gallery for select to anon, authenticated
   using (true);
 
+drop policy if exists "gallery: whitelist insert (creator=self)" on public.gallery;
 create policy "gallery: whitelist insert (creator=self)"
   on public.gallery for insert to authenticated
   with check (
@@ -31,11 +34,13 @@ create policy "gallery: whitelist insert (creator=self)"
     and created_by = (auth.jwt()->>'email')
   );
 
+drop policy if exists "gallery: editors or creator update" on public.gallery;
 create policy "gallery: editors or creator update"
   on public.gallery for update to authenticated
   using      (public.is_site_editor() or created_by = (auth.jwt()->>'email'))
   with check (public.is_site_editor() or created_by = (auth.jwt()->>'email'));
 
+drop policy if exists "gallery: editors or creator delete" on public.gallery;
 create policy "gallery: editors or creator delete"
   on public.gallery for delete to authenticated
   using (public.is_site_editor() or created_by = (auth.jwt()->>'email'));
@@ -46,18 +51,22 @@ insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_typ
    array['image/jpeg','image/png','image/webp'])
 on conflict (id) do nothing;
 
+drop policy if exists "storage: public read gallery" on storage.objects;
 create policy "storage: public read gallery"
   on storage.objects for select to anon, authenticated
   using (bucket_id = 'gallery-images');
 
+drop policy if exists "storage: whitelist write gallery" on storage.objects;
 create policy "storage: whitelist write gallery"
   on storage.objects for insert to authenticated
   with check (bucket_id = 'gallery-images' and public.is_whitelist_member());
 
+drop policy if exists "storage: whitelist update gallery" on storage.objects;
 create policy "storage: whitelist update gallery"
   on storage.objects for update to authenticated
   using (bucket_id = 'gallery-images' and public.is_whitelist_member());
 
+drop policy if exists "storage: whitelist delete gallery" on storage.objects;
 create policy "storage: whitelist delete gallery"
   on storage.objects for delete to authenticated
   using (bucket_id = 'gallery-images' and public.is_whitelist_member());
