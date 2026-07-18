@@ -1,0 +1,49 @@
+name: CI
+
+# 라이브 깨짐 예방용 최소 CI — 푸시/PR 시 빌드 + 렌더 스모크(홈·뉴스, 콘솔 에러 0).
+# Render 배포를 '차단'하지는 않고 조기 경보를 준다. (게이팅은 Render 쪽 설정)
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-smoke:
+    runs-on: ubuntu-latest
+    env:
+      # 공개(anon) 키라 시크릿에 넣어도 안전. 미설정이면 stub 클라이언트로
+      # 렌더 스모크만 수행(그래도 런타임/컴파일 깨짐은 전부 잡힌다).
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Build (컴파일/임포트 깨짐 검출)
+        run: pnpm build
+
+      - name: Install Playwright (chromium)
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Smoke — 홈·뉴스 렌더 + 콘솔 에러 0 (런타임 깨짐 검출)
+        run: pnpm exec playwright test --project=chromium tests/e2e/public-home.spec.js tests/e2e/public-news.spec.js tests/e2e/smoke.spec.js
+
+      - name: Upload Playwright report (실패 시)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
