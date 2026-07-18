@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchGallery } from '../lib/publicData'
+import { usePageMeta } from '../lib/usePageMeta'
 import Lightbox from '../components/Lightbox'
 
 // Gallery — 연구실 문화·사람(Lab Life) 사진. 앨범별 묶음 + 클릭 확대(라이트박스).
@@ -17,6 +18,10 @@ export default function Gallery() {
   const [items, setItems] = useState(null) // null=로딩, []=없음
   const [error, setError] = useState(null)
   const [lightbox, setLightbox] = useState(null)
+  usePageMeta({
+    title: 'Gallery',
+    description: 'Life in the PHI Lab — moments from our research journey, gatherings, and milestones.',
+  })
 
   useEffect(() => {
     let alive = true

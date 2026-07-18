@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router'
 import { fetchPosts } from '../lib/publicData'
+import { usePageMeta } from '../lib/usePageMeta'
 
 // Posts 게시판 — 공지/소통 글 목록(표). News(행사 격자)와 역할이 다르다.
 // CSR: 글 올리면 재배포 없이 즉시 반영(prerender 제외).
@@ -16,6 +17,7 @@ function boardDate(iso) {
 export default function Posts() {
   const [items, setItems] = useState(null) // null=로딩, []=없음
   const [error, setError] = useState(null)
+  usePageMeta({ title: 'Posts' })
   const [query, setQuery] = useState('')
   const [search, setSearch] = useState('') // 실제 적용된 검색어
   const [page, setPage] = useState(1)

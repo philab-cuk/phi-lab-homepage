@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { EVENTS } from '../data/events'
+import { usePageMeta } from '../lib/usePageMeta'
 import Lightbox from '../components/Lightbox'
 
 // 행사 페이지 — 연구실이 주최한 학술 행사 목록. 정적 데이터(app/data/events.js).
@@ -117,6 +118,7 @@ function EventItem({ event, onOpenImage }) {
 export default function Events() {
   const events = [...EVENTS].sort((a, b) => dateKey(b.date) - dateKey(a.date))
   const [lightbox, setLightbox] = useState(null)
+  usePageMeta({ title: 'Events' })
   const openImage = (images, index) => setLightbox({ images, index })
 
   return (

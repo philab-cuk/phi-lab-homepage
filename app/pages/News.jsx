@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { fetchNews } from '../lib/publicData'
+import { usePageMeta } from '../lib/usePageMeta'
 import { formatNewsDate } from '../components/NewsCard'
 
 // News 목록 — 3열 격자(사진·제목·날짜). 칸 클릭 → 상세(/news/:id).
@@ -59,6 +60,7 @@ function NewsGridCard({ item }) {
 export default function News() {
   const [items, setItems] = useState(null) // null=로딩, []=없음
   const [error, setError] = useState(null)
+  usePageMeta({ title: 'News' })
 
   useEffect(() => {
     let alive = true

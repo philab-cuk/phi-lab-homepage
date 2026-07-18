@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { fetchPost, incrementPostViews } from '../lib/publicData'
+import { usePageMeta } from '../lib/usePageMeta'
 import { formatNewsDate } from '../components/NewsCard'
 import PostBody from '../components/PostBody'
 
@@ -25,6 +26,8 @@ export default function Post() {
     }
     return () => { alive = false }
   }, [id])
+
+  usePageMeta({ title: post?.title })
 
   if (error) {
     return (

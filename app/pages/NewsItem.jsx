@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { fetchNewsItem } from '../lib/publicData'
+import { usePageMeta } from '../lib/usePageMeta'
 import NewsCard from '../components/NewsCard'
 
 // News 상세 — CSR(목록과 같은 사유). 전체 내용은 NewsCard(목록 격자가 아닌
@@ -19,6 +20,8 @@ export default function NewsItem() {
       .catch((e) => { if (alive) setError(e) })
     return () => { alive = false }
   }, [id])
+
+  usePageMeta({ title: item?.title })
 
   if (error) {
     return (
