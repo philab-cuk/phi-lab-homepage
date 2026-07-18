@@ -5,10 +5,11 @@ import Lightbox from '../components/Lightbox'
 // Gallery — 연구실 문화·사람(Lab Life) 사진. 앨범별 묶음 + 클릭 확대(라이트박스).
 // CSR: admin 업로드가 재배포 없이 즉시 반영되도록 공개 loader 대신 클라이언트 fetch.
 
+// 앨범 헤딩에 표시할 대표날짜 = 앨범 내 '가장 빠른' 촬영일(정렬 기준과 동일).
 function albumDate(items) {
   const dates = items.map((i) => i.takenOn).filter(Boolean).sort()
   if (!dates.length) return ''
-  const d = new Date(dates[dates.length - 1])
+  const d = new Date(dates[0])
   return `${d.getFullYear()}. ${d.getMonth() + 1}.`
 }
 
@@ -26,8 +27,10 @@ export default function Gallery() {
   }, [])
 
   // 앨범별 묶음. album 없으면 'Lab Life'.
-  // 앨범 '간' 순서 = 업로드(created_at) 역순 → 최신 앨범이 위로.
-  //   대표 시각 = 그 앨범에서 가장 최근 업로드된 사진의 created_at(ISO 문자열, 사전순=시간순).
+  // 앨범 '간' 순서 = 각 앨범의 '대표날짜' 역순(최신 이벤트가 위로).
+  //   대표날짜 = 앨범 내 사진의 가장 빠른 날짜(촬영일 우선, 없으면 생성일).
+  //   → admin 에서 촬영일만 바꿔도 앨범 순서를 조정할 수 있다.
+  //   (taken_on='YYYY-MM-DD' / created_at=ISO 타임스탬프 모두 사전순=시간순 비교 가능)
   // 앨범 '안'의 사진은 fetch 순서(촬영일 과거→현재) 유지.
   const groups = (() => {
     if (!items) return []
@@ -37,8 +40,14 @@ export default function Gallery() {
       if (!map.has(key)) map.set(key, [])
       map.get(key).push(it)
     }
-    const latest = (arr) => arr.reduce((m, it) => (it.createdAt > m ? it.createdAt : m), '')
-    return [...map.entries()].sort(([, a], [, b]) => (latest(a) < latest(b) ? 1 : latest(a) > latest(b) ? -1 : 0))
+    const repDate = (arr) => arr.reduce((min, it) => {
+      const d = it.takenOn || it.createdAt
+      return min === '' || d < min ? d : min
+    }, '')
+    return [...map.entries()].sort(([, a], [, b]) => {
+      const ra = repDate(a), rb = repDate(b)
+      return ra < rb ? 1 : ra > rb ? -1 : 0
+    })
   })()
 
   return (
