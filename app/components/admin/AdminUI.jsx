@@ -186,6 +186,57 @@ export function ErrorBanner({ error }) {
   )
 }
 
+// 권한(RLS) 때문에 막힌 요청인지 판별.
+// - 42501 / 'row-level security': DB가 거부한 경우
+// - 0행 갱신: PostgREST 는 RLS 로 걸러진 update/delete 를 에러 없이 0행으로 돌려준다
+//   (호출부에서 .select() 결과 길이로 판단해 이 안내를 띄운다)
+export function isPermissionError(e) {
+  const msg = String(e?.message || '')
+  return e?.code === '42501' || /row-level security|permission denied/i.test(msg)
+}
+
+// 권한 안내 문구 — 왜 막혔는지 + 무엇을 하면 되는지.
+export function permissionLines({ email, role, subject = '이 항목', action = '수정' }) {
+  return [
+    `현재 로그인: ${email || '(알 수 없음)'}${role ? `   ·   역할: ${role}` : ''}`,
+    `${subject}을(를) ${action}할 권한이 없어 요청이 적용되지 않았습니다.`,
+    '다른 구성원이 등록한 항목이거나, 권한(RLS) 설정이 아직 반영되지 않았을 수 있습니다.',
+    '해결 방법 — ① 관리자(admin · professor)에게 권한을 요청하거나  ② 해당 항목을 등록한 계정으로 로그인해 다시 시도하세요.  (문의: philab.cuk@gmail.com)',
+  ]
+}
+
+// 정보성 안내 모달 hook — 조용히 실패하지 않고 이유와 다음 행동을 알려준다.
+export function useNotice() {
+  const [state, setState] = useState(null) // { title, lines }
+  const notify = (title, lines) =>
+    setState({ title, lines: Array.isArray(lines) ? lines : [lines] })
+  const ui = state ? (
+    <Modal
+      open
+      width={560}
+      onClose={() => setState(null)}
+      title={state.title}
+      footer={<Button primary onClick={() => setState(null)}>확인</Button>}
+    >
+      <div style={{ fontSize: '0.9rem', lineHeight: 1.75, color: '#222' }}>
+        {state.lines.map((l, i) => (
+          <p
+            key={i}
+            style={{
+              margin: i ? '0.55rem 0 0' : 0,
+              color: i === 0 ? '#555' : '#222',
+              fontWeight: i === 1 ? 600 : 400,
+            }}
+          >
+            {l}
+          </p>
+        ))}
+      </div>
+    </Modal>
+  ) : null
+  return [notify, ui]
+}
+
 // "yes/no" 컨펌 모달용 hook
 export function useConfirm() {
   const [state, setState] = useState(null)

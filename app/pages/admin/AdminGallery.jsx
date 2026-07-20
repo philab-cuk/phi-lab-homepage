@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
-import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
+import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm, useDeleteMode, useNotice, isPermissionError, permissionLines } from '../../components/admin/AdminUI'
 
 // Gallery(Lab Life) 관리 — 신규는 여러 장 한 번에 업로드(같은 앨범·촬영일), 편집은 단일.
 function emptyItem(email) {
@@ -36,7 +36,7 @@ async function resizeImage(file) {
 }
 
 export default function AdminGallery() {
-  const { user } = useAuth()
+  const { user, role } = useAuth()
   const [rows, setRows] = useState([])
   const [albumFilter, setAlbumFilter] = useState('all')
   const [loading, setLoading] = useState(true)
@@ -47,6 +47,7 @@ export default function AdminGallery() {
   const [saving, setSaving] = useState(false)
   const [progress, setProgress] = useState('')
   const savingRef = useRef(false)
+  const [notify, noticeUI] = useNotice()
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
 
@@ -141,19 +142,34 @@ export default function AdminGallery() {
         }).eq('id', edit.id).select('id')
         if (error) throw error
         if (!data || data.length === 0) {
-          throw new Error('저장되지 않았습니다 — 이 항목을 수정할 권한이 없습니다(작성자 본인 또는 에디터만 가능). 로그인 계정을 확인하세요.')
+          // 조용히 넘어가지 않고 이유를 안내한다. 모달은 닫지 않아 입력값이 보존된다.
+          notify('저장되지 않았습니다 — 수정 권한 없음',
+            permissionLines({ email: user?.email, role, subject: '이 사진', action: '수정' }))
+          return
         }
       }
       closeModal(); load()
-    } catch (e) { setError(e) } finally { savingRef.current = false; setSaving(false); setProgress('') }
+    } catch (e) {
+      if (isPermissionError(e)) {
+        notify('저장되지 않았습니다 — 권한 없음',
+          permissionLines({ email: user?.email, role, subject: '이 사진', action: isNew ? '등록' : '수정' }))
+      } else setError(e)
+    } finally { savingRef.current = false; setSaving(false); setProgress('') }
   }
 
   async function del(row) {
     if (!(await confirm('이 사진을 삭제하시겠습니까?'))) return
     const { data, error } = await supabase.from('gallery').delete().eq('id', row.id).select('id')
-    if (error) { setError(error); return }
+    if (error) {
+      if (isPermissionError(error)) {
+        notify('삭제되지 않았습니다 — 권한 없음',
+          permissionLines({ email: user?.email, role, subject: '이 사진', action: '삭제' }))
+      } else setError(error)
+      return
+    }
     if (!data || data.length === 0) {
-      setError(new Error('삭제되지 않았습니다 — 삭제 권한이 없습니다(작성자 본인 또는 에디터만 가능).'))
+      notify('삭제되지 않았습니다 — 삭제 권한 없음',
+        permissionLines({ email: user?.email, role, subject: '이 사진', action: '삭제' }))
       return
     }
     load()
@@ -277,6 +293,7 @@ export default function AdminGallery() {
         )}
       </Modal>
       {confirmUI}
+      {noticeUI}
     </div>
   )
 }

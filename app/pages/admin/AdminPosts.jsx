@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
-import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm, useDeleteMode } from '../../components/admin/AdminUI'
+import { PageHeader, Button, Table, Modal, Field, TextInput, Select, ErrorBanner, useConfirm, useDeleteMode, useNotice, isPermissionError, permissionLines } from '../../components/admin/AdminUI'
 import BlockNoteEditor from '../../components/admin/BlockNoteEditor'
 import PostBody from '../../components/PostBody'
 import { formatNewsDate } from '../../components/NewsCard'
@@ -18,7 +18,7 @@ function emptyPost(email) {
 }
 
 export default function AdminPosts() {
-  const { user, isEditor, profile } = useAuth()
+  const { user, isEditor, profile, role } = useAuth()
   const [rows, setRows] = useState([])
   const [filter, setFilter] = useState(isEditor ? 'all' : 'mine')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -30,6 +30,7 @@ export default function AdminPosts() {
   const [original, setOriginal] = useState(null) // 편집 취소 시 되돌릴 원본 스냅샷
   const [saving, setSaving] = useState(false)    // 저장 진행 중 — 버튼 비활성/라벨용
   const savingRef = useRef(false)                // 동기 재진입 가드(초고속 더블클릭까지 차단)
+  const [notify, noticeUI] = useNotice()
   const [confirm, confirmUI] = useConfirm()
   const [deleteMode, deleteModeToggle] = useDeleteMode()
 
@@ -85,21 +86,39 @@ export default function AdminPosts() {
         const { data, error } = await supabase.from('posts').update(payload).eq('id', edit.id).select('id')
         if (error) throw error
         if (!data || data.length === 0) {
-          throw new Error('저장되지 않았습니다 — 이 글을 수정할 권한이 없습니다(작성자 본인 또는 에디터만 가능).')
+          notify('저장되지 않았습니다 — 수정 권한 없음',
+            permissionLines({ email: user?.email, role, subject: '이 글', action: '수정' }))
+          return
         }
       }
       closeModal(); load()
     } catch (e) {
       // DB 중복 방지 인덱스(같은 날·제목·작성자)에 걸린 경우 친절한 안내로 치환.
       const dup = e?.code === '23505' && /no_same_day_dup/.test(String(e.message || ''))
-      setError(dup ? new Error('같은 날 같은 제목·작성자의 글이 이미 있습니다. 중복 저장이 차단되었어요 — 기존 글을 편집하세요.') : e)
+      if (isPermissionError(e)) {
+        notify('저장되지 않았습니다 — 권한 없음',
+          permissionLines({ email: user?.email, role, subject: '이 글', action: isNew ? '등록' : '수정' }))
+      } else {
+        setError(dup ? new Error('같은 날 같은 제목·작성자의 글이 이미 있습니다. 중복 저장이 차단되었어요 — 기존 글을 편집하세요.') : e)
+      }
     } finally { savingRef.current = false; setSaving(false) }
   }
 
   async function del(row) {
     if (!(await confirm(`게시글 "${row.title}" 을 삭제하시겠습니까?`))) return
-    const { error } = await supabase.from('posts').delete().eq('id', row.id)
-    if (error) { setError(error); return }
+    const { data, error } = await supabase.from('posts').delete().eq('id', row.id).select('id')
+    if (error) {
+      if (isPermissionError(error)) {
+        notify('삭제되지 않았습니다 — 권한 없음',
+          permissionLines({ email: user?.email, role, subject: '이 글', action: '삭제' }))
+      } else setError(error)
+      return
+    }
+    if (!data || data.length === 0) {
+      notify('삭제되지 않았습니다 — 삭제 권한 없음',
+        permissionLines({ email: user?.email, role, subject: '이 글', action: '삭제' }))
+      return
+    }
     load()
   }
 
@@ -219,6 +238,7 @@ export default function AdminPosts() {
         ))}
       </Modal>
       {confirmUI}
+      {noticeUI}
     </div>
   )
 }
