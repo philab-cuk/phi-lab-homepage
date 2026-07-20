@@ -131,13 +131,18 @@ export default function AdminGallery() {
       } else {
         let image_url = edit.image_url
         if (pending[0]) { setProgress('업로드 중…'); image_url = await uploadOne(pending[0].file) }
-        const { error } = await supabase.from('gallery').update({
+        // .select() 로 '실제로 갱신된 행'을 확인한다 — RLS 로 걸러지면 PostgREST 는
+        // 에러 없이 0행을 돌려주기 때문에, 그냥 두면 저장된 것처럼 보이고 값은 그대로다.
+        const { data, error } = await supabase.from('gallery').update({
           image_url,
           caption: edit.caption?.trim() || null,
           album, taken_on,
           display_order: baseOrder,
-        }).eq('id', edit.id)
+        }).eq('id', edit.id).select('id')
         if (error) throw error
+        if (!data || data.length === 0) {
+          throw new Error('저장되지 않았습니다 — 이 항목을 수정할 권한이 없습니다(작성자 본인 또는 에디터만 가능). 로그인 계정을 확인하세요.')
+        }
       }
       closeModal(); load()
     } catch (e) { setError(e) } finally { savingRef.current = false; setSaving(false); setProgress('') }
@@ -145,8 +150,12 @@ export default function AdminGallery() {
 
   async function del(row) {
     if (!(await confirm('이 사진을 삭제하시겠습니까?'))) return
-    const { error } = await supabase.from('gallery').delete().eq('id', row.id)
+    const { data, error } = await supabase.from('gallery').delete().eq('id', row.id).select('id')
     if (error) { setError(error); return }
+    if (!data || data.length === 0) {
+      setError(new Error('삭제되지 않았습니다 — 삭제 권한이 없습니다(작성자 본인 또는 에디터만 가능).'))
+      return
+    }
     load()
   }
 

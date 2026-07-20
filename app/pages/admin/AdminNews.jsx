@@ -86,8 +86,12 @@ export default function AdminNews() {
         if (error) throw error
         if (data?.id) { setEdit((p) => (p ? { ...p, id: data.id } : p)); setIsNew(false) }
       } else {
-        const { error } = await supabase.from('news').update(payload).eq('id', edit.id)
+        // RLS 로 걸러지면 에러 없이 0행이 갱신된다 → .select() 로 실제 반영을 확인.
+        const { data, error } = await supabase.from('news').update(payload).eq('id', edit.id).select('id')
         if (error) throw error
+        if (!data || data.length === 0) {
+          throw new Error('저장되지 않았습니다 — 이 글을 수정할 권한이 없습니다(작성자 본인 또는 에디터만 가능).')
+        }
       }
       closeModal(); load()
     } catch (e) {
