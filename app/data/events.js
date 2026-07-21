@@ -46,9 +46,11 @@ export const EVENTS = [
     program: '2025 Winter Intensive Career-Readiness PBL Program',
     sponsor: 'Dept. of Biomedical Software Engineering (RISE Initiative)',
     link: '',
+    // Day 순서대로 — 캡션은 사진 아래 표시(라이트박스에도 함께 노출).
     images: [
-      'photos/events/llm-workshop.jpg',
-      'photos/events/llm-workshop_2.jpg',
+      { src: 'photos/events/llm-workshop.jpg', caption: 'Day 1 · Python 프로그래밍 실습' },
+      { src: 'photos/events/llm-workshop_3.jpg', caption: 'Day 1 · 개발 환경 설정' },
+      { src: 'photos/events/llm-workshop_2.jpg', caption: 'Day 2 · LLM 특강' },
     ],
   },
 ]
