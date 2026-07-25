@@ -12,6 +12,7 @@ export const CATEGORIES = [
   { value: 'project', label: '프로젝트', color: '#1d9e75' },
   { value: 'external', label: '외부미팅', color: '#d85a30' },
   { value: 'lab_meeting', label: '랩미팅', color: '#5b9bd5' },
+  { value: 'education', label: '교육/행사', color: '#d4537e' },
   { value: 'personal', label: '개인일정(부재중)', color: '#7f77dd' },
 ]
 export const CATEGORY_MAP = Object.fromEntries(CATEGORIES.map((c) => [c.value, c]))

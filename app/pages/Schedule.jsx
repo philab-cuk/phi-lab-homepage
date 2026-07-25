@@ -88,6 +88,21 @@ export default function Schedule() {
 
   const canEdit = (ev) => isEditor || (ev?.ownerEmail && ev.ownerEmail === user?.email)
 
+  // 개인일정(부재중)은 제목이 늘 같은 형태라 자동으로 채운다.
+  // 다른 구분으로 바꾸면 그 자동 제목을 지운다(개인일정 → 다른 구분일 때만).
+  const myName = profile?.display_name || user?.email || ''
+  const personalTitle = (ev) => `개인일정(부재중-${ev?.ownerName || myName})`
+
+  function changeCategory(category) {
+    setEdit((prev) => {
+      if (!prev) return prev
+      let title = prev.title
+      if (category === 'personal') title = personalTitle(prev)
+      else if (prev.category === 'personal') title = ''
+      return { ...prev, category, title }
+    })
+  }
+
   function move(delta) {
     setCursor(({ y, m }) => {
       const d = new Date(y, m + delta, 1)
@@ -358,7 +373,7 @@ export default function Schedule() {
                 <Select
                   value={edit.category}
                   options={CATEGORIES.map((c) => ({ value: c.value, label: c.label }))}
-                  onChange={(e) => setEdit({ ...edit, category: e.target.value })}
+                  onChange={(e) => changeCategory(e.target.value)}
                 />
               </Field>
               <Field label="시작일" required>

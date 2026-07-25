@@ -64,13 +64,18 @@ describe('formatRange', () => {
 })
 
 describe('카테고리', () => {
-  it('6종이며 값이 중복되지 않는다', () => {
-    expect(CATEGORIES).toHaveLength(6)
-    expect(new Set(CATEGORIES.map((c) => c.value)).size).toBe(6)
+  it('7종이며 값이 중복되지 않는다', () => {
+    expect(CATEGORIES).toHaveLength(7)
+    expect(new Set(CATEGORIES.map((c) => c.value)).size).toBe(7)
   })
 
-  it('개인일정(부재중)이 포함된다', () => {
+  it('개인일정(부재중)·교육/행사가 포함된다', () => {
     expect(CATEGORY_MAP.personal?.label).toBe('개인일정(부재중)')
+    expect(CATEGORY_MAP.education?.label).toBe('교육/행사')
+  })
+
+  it('색이 서로 중복되지 않는다', () => {
+    expect(new Set(CATEGORIES.map((c) => c.color)).size).toBe(CATEGORIES.length)
   })
 
   it('모든 카테고리에 색이 있다', () => {

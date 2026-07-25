@@ -1,11 +1,11 @@
 import { CATEGORY_MAP, datesInRange, todayYmd, ymd } from '../lib/schedules'
 import { holidayName } from '../lib/holidays'
 
-// 붉은 날(공휴일·일요일) / 토요일 칸 배경 — 아주 옅은 투명 톤.
-const BG_HOLIDAY = 'rgba(199, 58, 58, 0.055)'
-const BG_SATURDAY = 'rgba(47, 95, 208, 0.05)'
-const FG_HOLIDAY = '#c73a3a'
-const FG_SATURDAY = '#2f5fd0'
+// 붉은 날(공휴일·일요일) / 토요일 칸 배경 — 지정된 파스텔 톤.
+const BG_HOLIDAY = '#f8dee0'
+const BG_SATURDAY = '#e0eefb'
+const FG_HOLIDAY = '#d92d2d'
+const FG_SATURDAY = '#2f6fe0'
 
 // 월간 캘린더 그리드 — 외부 라이브러리 없이 Date 계산만 사용.
 // 여러 날 일정은 기간 내 각 날짜에 반복 표시한다(막대 렌더링은 하지 않음).
@@ -81,12 +81,12 @@ export default function Calendar({
             >
               <div className="mb-1 flex items-baseline gap-1.5">
                 {isToday ? (
-                  <span className="flex h-[21px] w-[21px] shrink-0 items-center justify-center rounded-full bg-ink text-[12px] text-white">
+                  <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full bg-ink text-[13.5px] font-semibold text-white">
                     {day}
                   </span>
                 ) : (
                   <span
-                    className={`px-0.5 text-[12px] ${isRed || isSat ? '' : 'text-muted'}`}
+                    className={`px-0.5 text-[14px] font-semibold ${isRed || isSat ? '' : 'text-ink'}`}
                     style={{ color: isRed ? FG_HOLIDAY : isSat ? FG_SATURDAY : undefined }}
                   >
                     {day}

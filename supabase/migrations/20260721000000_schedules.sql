@@ -25,7 +25,7 @@ create table if not exists public.schedules (
   description text,
   -- 달력 색상 구분. 앱의 카테고리 목록과 반드시 함께 바뀌어야 한다.
   category    text not null default 'lab_meeting'
-              check (category in ('conference', 'paper', 'project', 'external', 'lab_meeting', 'personal')),
+              check (category in ('conference', 'paper', 'project', 'external', 'lab_meeting', 'education', 'personal')),
   starts_on   date not null,
   ends_on     date,                    -- null 이면 하루짜리
   owner_email text references public.admin_users(email) on delete set null,
