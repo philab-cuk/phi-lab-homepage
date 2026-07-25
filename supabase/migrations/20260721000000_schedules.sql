@@ -25,7 +25,7 @@ create table if not exists public.schedules (
   description text,
   -- 달력 색상 구분. 앱의 카테고리 목록과 반드시 함께 바뀌어야 한다.
   category    text not null default 'lab_meeting'
-              check (category in ('conference', 'paper', 'project', 'external', 'lab_meeting')),
+              check (category in ('conference', 'paper', 'project', 'external', 'lab_meeting', 'personal')),
   starts_on   date not null,
   ends_on     date,                    -- null 이면 하루짜리
   owner_email text references public.admin_users(email) on delete set null,
@@ -40,7 +40,7 @@ create index if not exists schedules_range_idx on public.schedules (starts_on, e
 create index if not exists schedules_owner_idx on public.schedules (owner_email);
 
 comment on table  public.schedules            is '연구실 공유 일정 — 로그인 구성원 전용';
-comment on column public.schedules.category   is 'conference(학회) · paper(논문) · project(프로젝트) · external(외부미팅) · lab_meeting(랩미팅)';
+comment on column public.schedules.category   is 'conference(학회) · paper(논문) · project(프로젝트) · external(외부미팅) · lab_meeting(랩미팅) · personal(개인일정/부재중)';
 comment on column public.schedules.ends_on    is '여러 날 일정의 종료일. null 이면 starts_on 하루짜리';
 comment on column public.schedules.owner_name is '작성자 표시이름(저장 시 복사)';
 

@@ -15,6 +15,8 @@ export default [
     route('news', 'pages/News.jsx'),
     route('news/:id', 'pages/NewsItem.jsx'),
     route('gallery', 'pages/Gallery.jsx'),
+    // 로그인 구성원 전용(페이지 안에서 게이트). 라우트 자체는 살려둬야 새로고침·북마크가 안 깨진다.
+    route('schedule', 'pages/Schedule.jsx'),
     route('posts', 'pages/Posts.jsx'),
     route('posts/:id', 'pages/Post.jsx'),
   ]),

@@ -37,8 +37,11 @@ jobs:
       - name: Install Playwright (chromium)
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Smoke — 홈·뉴스 렌더 + 콘솔 에러 0 (런타임 깨짐 검출)
-        run: pnpm exec playwright test --project=chromium tests/e2e/public-home.spec.js tests/e2e/public-news.spec.js tests/e2e/smoke.spec.js
+      - name: Unit — 일정 날짜 계산(KST 회귀 방지)
+        run: pnpm exec vitest run tests/unit/schedules-dates.test.js
+
+      - name: Smoke — 홈·뉴스·스케줄 렌더 + 콘솔 에러 0 (런타임 깨짐 검출)
+        run: pnpm exec playwright test --project=chromium tests/e2e/public-home.spec.js tests/e2e/public-news.spec.js tests/e2e/public-schedule.spec.js tests/e2e/smoke.spec.js
 
       - name: Upload Playwright report (실패 시)
         if: failure()

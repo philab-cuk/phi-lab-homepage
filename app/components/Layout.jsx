@@ -54,8 +54,11 @@ function DropChild({ child, onClick }) {
   )
 }
 
-function NavLinks({ linkClass, onClick, variant = 'desktop' }) {
-  return NAV_ROUTES.map((item) => {
+// 로그인(화이트리스트) 구성원에게만 보이는 메뉴 — 외부 방문자에겐 공개 메뉴만 노출.
+const MEMBER_ROUTES = [{ to: '/schedule', label: 'Schedule' }]
+
+function NavLinks({ linkClass, onClick, variant = 'desktop', routes = NAV_ROUTES }) {
+  return routes.map((item) => {
     const { to, label, children } = item
 
     if (children && variant === 'mobile') {
@@ -110,6 +113,7 @@ function Header() {
   // 접근이 막힌(Forbidden) 사용자에게도 마이페이지/로그아웃이 뜬다.
   // 실제 admin 권한이 있는 화이트리스트 사용자에게만 관리 메뉴를 노출한다.
   const { isWhitelisted, signOut } = useAuth()
+  const navRoutes = isWhitelisted ? [...NAV_ROUTES, ...MEMBER_ROUTES] : NAV_ROUTES
 
   return (
     <header className="border-b border-rule">
@@ -164,6 +168,7 @@ function Header() {
         <nav className="hidden md:flex gap-4 lg:gap-5 xl:gap-6 text-[14px] lg:text-[16px] xl:text-[18px] font-semibold">
           <NavLinks
             variant="desktop"
+            routes={navRoutes}
             linkClass={({ isActive }) =>
               isActive
                 ? 'text-brand-700 underline underline-offset-[6px] decoration-[1.5px]'
@@ -199,6 +204,7 @@ function Header() {
           <nav className="flex flex-col py-2 text-[17px] font-semibold">
             <NavLinks
               variant="mobile"
+              routes={navRoutes}
               onClick={close}
               linkClass={({ isActive }) =>
                 `px-5 py-3 no-underline ${isActive ? 'text-brand-700 bg-brand-50' : 'text-ink hover:bg-[#fafafa]'}`
