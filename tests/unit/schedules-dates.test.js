@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   CATEGORIES, CATEGORY_MAP, ymd, parseYmd, addDays, datesInRange, formatRange,
 } from '../../app/lib/schedules'
+import { HOLIDAYS, holidayName } from '../../app/lib/holidays'
 
 // 날짜 계산은 캘린더의 유일한 '조용히 틀릴 수 있는' 부분이라 고정 테스트를 둔다.
 // 특히 KST(UTC+9)에서 toISOString() 을 쓰면 하루가 밀리는데, 그 회귀를 막는 게 목적.
@@ -74,5 +75,25 @@ describe('카테고리', () => {
 
   it('모든 카테고리에 색이 있다', () => {
     for (const c of CATEGORIES) expect(c.color).toMatch(/^#[0-9a-f]{6}$/i)
+  })
+})
+
+describe('공휴일', () => {
+  it('키가 모두 YYYY-MM-DD 형식이고 실제 날짜다', () => {
+    for (const key of Object.keys(HOLIDAYS)) {
+      expect(key).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+      expect(ymd(parseYmd(key))).toBe(key)  // 2/30 같은 없는 날짜면 어긋난다
+    }
+  })
+
+  it('양력 고정 공휴일이 빠져 있지 않다 (2026)', () => {
+    for (const d of ['2026-01-01', '2026-03-01', '2026-05-05', '2026-06-06',
+                     '2026-08-15', '2026-10-03', '2026-10-09', '2026-12-25']) {
+      expect(holidayName(d), `${d} 누락`).toBeTruthy()
+    }
+  })
+
+  it('공휴일이 아닌 날은 null', () => {
+    expect(holidayName('2026-07-21')).toBeNull()
   })
 })
