@@ -82,29 +82,47 @@ const btnStyle = (color) => ({
   borderColor: `${color}3d`,       // 24% 테두리
 })
 
+// 마우스를 올리면 뜨는 말풍선. title 속성(느리고 스타일 불가) 대신 CSS 로 처리하고,
+// 키보드 포커스에서도 보이게 한다.
+function Tooltip({ children }) {
+  return (
+    <span
+      role="tooltip"
+      className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2 whitespace-nowrap
+                 rounded-md bg-ink px-2.5 py-1 text-[12px] leading-tight text-white opacity-0 shadow-sm
+                 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
+    >
+      {children}
+      <span className="absolute left-1/2 top-full -ml-[4px] h-0 w-0 border-x-[4px] border-t-[4px] border-x-transparent border-t-ink" />
+    </span>
+  )
+}
+
 // 이메일은 mailto: 링크를 HTML 에 남기지 않는다 — 스팸 수집기는 대부분 mailto 와
 // 'a@b' 패턴을 긁어간다. 클릭한 순간에만 주소를 조립해 메일 앱을 연다.
 function EmailButton({ email }) {
   return (
-    <button
-      type="button"
-      title="Email"
-      aria-label="Email"
-      onClick={() => {
-        const [user, domain] = String(email).split('@')
-        if (user && domain) window.location.href = `mailto:${user}@${domain}`
-      }}
-      className={`${BTN} cursor-pointer`}
-      style={btnStyle(C_MAIL)}
-    >
-      <MailIcon />
-    </button>
+    <span className="group relative inline-flex">
+      <button
+        type="button"
+        aria-label="Email"
+        onClick={() => {
+          const [user, domain] = String(email).split('@')
+          if (user && domain) window.location.href = `mailto:${user}@${domain}`
+        }}
+        className={`${BTN} cursor-pointer`}
+        style={btnStyle(C_MAIL)}
+      >
+        <MailIcon />
+      </button>
+      <Tooltip>Email</Tooltip>
+    </span>
   )
 }
 
 export default function SocialLinks({ member, showEmail = true, className = '' }) {
   const links = [
-    member.personalSite && { key: 'site', label: 'Personal site', Icon: HomeIcon, color: C_HOME, href: normalizeUrl(member.personalSite) },
+    member.personalSite && { key: 'site', label: 'Homepage', Icon: HomeIcon, color: C_HOME, href: normalizeUrl(member.personalSite) },
     member.googleScholar && { key: 'gs', label: 'Google Scholar', Icon: ScholarIcon, color: C_SCHOLAR, href: normalizeUrl(member.googleScholar) },
     member.linkedin && { key: 'li', label: 'LinkedIn', Icon: LinkedInIcon, color: C_LINKEDIN, href: normalizeUrl(member.linkedin) },
   ].filter((l) => l && l.href)
@@ -116,18 +134,19 @@ export default function SocialLinks({ member, showEmail = true, className = '' }
     <p className={`my-2.5 flex flex-wrap items-center gap-2 ${className}`}>
       {email && <EmailButton email={email} />}
       {links.map(({ key, label, href, color, Icon }) => (
-        <a
-          key={key}
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          title={label}
-          aria-label={label}
-          className={BTN}
-          style={btnStyle(color)}
-        >
-          <Icon />
-        </a>
+        <span key={key} className="group relative inline-flex">
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={label}
+            className={BTN}
+            style={btnStyle(color)}
+          >
+            <Icon />
+          </a>
+          <Tooltip>{label}</Tooltip>
+        </span>
       ))}
     </p>
   )
