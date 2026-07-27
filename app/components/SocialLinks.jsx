@@ -1,16 +1,7 @@
+import { normalizeUrl } from '../lib/url'
+
 // 구성원 외부 링크 — 값이 있는 항목만 버튼으로 표시한다.
 // (이메일 · 개인 홈페이지 · Google Scholar · LinkedIn)
-
-// admin 에 프로토콜 없이 저장된 값이 실제로 있다(예: 'www.example.com').
-// 그대로 href 에 넣으면 상대경로로 해석돼 사이트 안쪽(/members/www.example.com)으로
-// 잘못 이동하므로 https:// 를 붙여준다.
-export function normalizeUrl(value) {
-  const s = String(value ?? '').trim()
-  if (!s) return null
-  if (/^https?:\/\//i.test(s)) return s
-  if (s.startsWith('//')) return `https:${s}`
-  return `https://${s}`
-}
 
 const SVG = {
   className: 'block',

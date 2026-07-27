@@ -1,5 +1,6 @@
 import { useLoaderData } from 'react-router'
 import { fetchProfessor } from '../lib/publicData'
+import { normalizeUrl } from '../lib/url'
 
 // CSR: 브라우저에서 로드 — admin 저장이 재배포 없이 즉시 반영된다.
 export async function clientLoader() {
@@ -141,11 +142,19 @@ export default function Professor() {
           <p className="my-0 text-muted">{PI.institution}</p>
           <p className="mt-3 mb-0 text-[15px]">
             <a href={`mailto:${PI.email}`}>{PI.email}</a>
-            {PI.personalSite && (
+            {normalizeUrl(PI.personalSite) && (
               <>
                 {' · '}
-                <a href={PI.personalSite} target="_blank" rel="noopener noreferrer">
-                  Personal site
+                <a href={normalizeUrl(PI.personalSite)} target="_blank" rel="noopener noreferrer">
+                  Homepage
+                </a>
+              </>
+            )}
+            {normalizeUrl(PI.googleScholar) && (
+              <>
+                {' · '}
+                <a href={normalizeUrl(PI.googleScholar)} target="_blank" rel="noopener noreferrer">
+                  Google Scholar
                 </a>
               </>
             )}
