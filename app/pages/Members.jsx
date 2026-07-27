@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useLoaderData } from 'react-router'
 import { fetchMembers } from '../lib/publicData'
+import SocialLinks, { normalizeUrl } from '../components/SocialLinks'
 
 // CSR: 브라우저에서 로드 — admin 저장이 재배포 없이 즉시 반영된다.
 export async function clientLoader() {
@@ -9,39 +10,29 @@ export async function clientLoader() {
 
 const TABS = ['Current Members', 'Alumni']
 
-function SocialLine({ member }) {
-  const items = []
-  if (member.email) {
-    items.push(
-      <a key="email" href={`mailto:${member.email}`}>
-        {member.email}
-      </a>,
-    )
-  }
-  if (member.googleScholar) {
-    items.push(
-      <a key="gs" href={member.googleScholar} target="_blank" rel="noopener noreferrer">
-        Google Scholar
-      </a>,
-    )
-  }
-  if (member.linkedin) {
-    items.push(
-      <a key="li" href={member.linkedin} target="_blank" rel="noopener noreferrer">
-        LinkedIn
-      </a>,
-    )
-  }
-  if (items.length === 0) return null
+// 개인 홈페이지가 등록돼 있으면 사진 자체가 링크가 된다(없으면 그냥 이미지).
+function MemberPhoto({ member, live = false }) {
+  const img = (
+    <img
+      src={live ? (member.photoLive ?? member.photo) : member.photo}
+      alt={member.name}
+      loading={live ? undefined : 'lazy'}
+      decoding={live ? undefined : 'async'}
+      className="w-40 sm:w-44 aspect-[3/4] object-cover flex-shrink-0"
+    />
+  )
+  const href = normalizeUrl(member.personalSite)
+  if (!href) return img
   return (
-    <p className="my-2 text-[15px]">
-      {items.map((el, i) => (
-        <span key={i}>
-          {i > 0 && ' · '}
-          {el}
-        </span>
-      ))}
-    </p>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      title={`${member.name} — Personal site`}
+      className="block flex-shrink-0 transition-opacity hover:opacity-85"
+    >
+      {img}
+    </a>
   )
 }
 
@@ -74,18 +65,14 @@ function ProfessorRow({ member }) {
       id={member.id}
       className="flex flex-col sm:flex-row gap-6 items-start scroll-mt-24 mt-6"
     >
-      <img
-        src={member.photoLive ?? member.photo}
-        alt={member.name}
-        className="w-40 sm:w-44 aspect-[3/4] object-cover flex-shrink-0"
-      />
+      <MemberPhoto member={member} live />
       <div className="min-w-0">
         <p className="my-0"><MemberName member={member} korClass="text-2xl" engClass="text-lg" /></p>
         <p className="my-0 text-muted">{member.title}</p>
         <p className="my-0 text-muted">{member.degree}</p>
         {member.bioShort && <p className="text-muted">{member.bioShort}</p>}
         <ResearchInterests tags={member.researchInterests} />
-        <SocialLine member={member} />
+        <SocialLinks member={member} />
       </div>
     </div>
   )
@@ -97,13 +84,7 @@ function StudentRow({ member }) {
       id={member.id}
       className="flex flex-col sm:flex-row gap-6 items-start scroll-mt-24 py-6 border-b border-rule last:border-b-0"
     >
-      <img
-        src={member.photo}
-        alt={member.name}
-        loading="lazy"
-        decoding="async"
-        className="w-40 sm:w-44 aspect-[3/4] object-cover flex-shrink-0"
-      />
+      <MemberPhoto member={member} />
       <div className="min-w-0">
         <p className="my-0 flex items-center gap-2.5">
           <span className="inline-block h-[18px] w-[4px] rounded-full shrink-0" style={{ background: '#5b9bd5' }} aria-hidden="true" />
@@ -111,7 +92,7 @@ function StudentRow({ member }) {
         </p>
         <p className="my-0 text-muted">{member.degree}</p>
         <ResearchInterests tags={member.researchInterests} />
-        <SocialLine member={member} />
+        <SocialLinks member={member} />
       </div>
     </div>
   )
@@ -133,21 +114,7 @@ function AlumnusItem({ member }) {
       {member.currentAffiliation && (
         <p className="my-0 text-muted text-[15px]">Now: {member.currentAffiliation}</p>
       )}
-      {(member.googleScholar || member.linkedin) && (
-        <p className="my-1 text-[15px]">
-          {member.googleScholar && (
-            <a href={member.googleScholar} target="_blank" rel="noopener noreferrer">
-              Google Scholar
-            </a>
-          )}
-          {member.googleScholar && member.linkedin && ' · '}
-          {member.linkedin && (
-            <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
-              LinkedIn
-            </a>
-          )}
-        </p>
-      )}
+      <SocialLinks member={member} showEmail={false} className="my-1" />
     </div>
   )
 }
