@@ -1,6 +1,7 @@
 import { NavLink, Outlet, Link, useLocation } from 'react-router'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import { SITE_ORIGIN } from '../lib/site'
 
 // PI → 연구 → 성과 → 강의 → 구성원 → 소개 → 수시 업데이트.
 const NAV_ROUTES = [
@@ -261,10 +262,27 @@ function ScrollToTop() {
   return null
 }
 
+// 정규 URL(canonical)을 현재 경로로 맞춘다.
+// root.jsx 는 정적 HTML 에 홈 주소를 canonical 로 구워 넣는다(홈에는 맞다). 그런데
+// SPA 라 모든 하위 페이지가 같은 HTML 을 받아, 그대로 두면 /events·/members 등이
+// 전부 "나는 홈의 사본"이라고 선언해 검색엔진이 색인에서 제외한다.
+// 라우트가 바뀔 때마다 실제 주소로 갱신해 각 페이지가 독립적으로 색인되게 한다.
+function Canonical() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    const el = document.head.querySelector('link[rel="canonical"]')
+    if (!el) return
+    const path = pathname === '/' ? '/' : pathname.replace(/\/+$/, '')
+    el.setAttribute('href', SITE_ORIGIN + path)
+  }, [pathname])
+  return null
+}
+
 export default function Layout() {
   return (
     <div className="min-h-screen flex flex-col">
       <ScrollToTop />
+      <Canonical />
       <Header />
       <main className="flex-1">
         <Outlet />

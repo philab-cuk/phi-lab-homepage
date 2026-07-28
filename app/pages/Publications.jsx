@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useLoaderData } from 'react-router'
 import { fetchPublications } from '../lib/publicData'
 import { BOOKS, PATENTS, PI_NAMES } from '../data/scholarly-works'
+import { usePageMeta } from '../lib/usePageMeta'
 
 // CSR: 브라우저에서 로드 — admin 저장이 재배포 없이 즉시 반영된다.
 export async function clientLoader() {
@@ -251,6 +252,7 @@ function TabButton({ label, count, active, onClick }) {
 const TABS = ['Papers', 'Books', 'Patents']
 
 export default function Publications() {
+  usePageMeta({ title: 'Publications', description: 'PHI Lab 연구 성과 — 논문, 저서, 특허 목록.' })
   const publicationsData = useLoaderData()
   const [activeTab, setActiveTab] = useState('Papers')
 

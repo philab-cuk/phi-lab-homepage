@@ -1,6 +1,7 @@
 import { useLoaderData } from 'react-router'
 import { fetchProfessor } from '../lib/publicData'
 import { normalizeUrl } from '../lib/url'
+import { usePageMeta } from '../lib/usePageMeta'
 
 // CSR: 브라우저에서 로드 — admin 저장이 재배포 없이 즉시 반영된다.
 export async function clientLoader() {
@@ -90,6 +91,7 @@ function ExperienceGroup({ category, items, first }) {
 }
 
 export default function Professor() {
+  usePageMeta({ title: 'Professor', description: '김효정 교수 소개 — 학력, 경력, 연구 분야, 대외 활동.' })
   const PI = useLoaderData()
 
   // PI 미등록(또는 역할 매칭 실패) 시 크래시 대신 안내.

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLoaderData } from 'react-router'
 import { fetchResearch } from '../lib/publicData'
+import { usePageMeta } from '../lib/usePageMeta'
 
 // CSR: 브라우저에서 로드 — admin 저장이 재배포 없이 즉시 반영된다.
 export async function clientLoader() {
@@ -120,6 +121,7 @@ function FilterBar({ activeFilter, onChange }) {
 }
 
 export default function Research() {
+  usePageMeta({ title: 'Current Research', description: '진행 중인 연구 과제 — 정밀의료, 리얼월드 데이터, 헬스케어 AI.' })
   const [activeFilter, setActiveFilter] = useState('all')
   const researchData = useLoaderData() ?? []
 

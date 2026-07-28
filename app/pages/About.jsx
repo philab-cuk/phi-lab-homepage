@@ -1,3 +1,5 @@
+import { usePageMeta } from '../lib/usePageMeta'
+
 // LIVE /about/ verbatim — see docs/phi-lab-content/06_about.md for the
 // authoritative snapshot. Three paragraphs only; no Values, no Contact.
 
@@ -5,6 +7,7 @@
 const HERO_TAGS = ['의료정보학', '데이터 기반 정밀의료', '디지털 헬스케어', '다학제적 접근']
 
 export default function About() {
+  usePageMeta({ title: 'About Lab', description: 'PHI Lab 소개 — 연구 방향과 다학제적 접근.' })
   return (
     <>
       {/* ── Hero — Home 과 동일 톤(은하수 배경 + 어두운 오버레이 + 밝은 글씨) ── */}

@@ -3,6 +3,7 @@ import { useLocation, useLoaderData } from 'react-router'
 import { fetchMembers } from '../lib/publicData'
 import SocialLinks from '../components/SocialLinks'
 import { normalizeUrl } from '../lib/url'
+import { usePageMeta } from '../lib/usePageMeta'
 
 // CSR: 브라우저에서 로드 — admin 저장이 재배포 없이 즉시 반영된다.
 export async function clientLoader() {
@@ -136,6 +137,7 @@ function TabLink({ label, active, count, onClick }) {
 }
 
 export default function Members() {
+  usePageMeta({ title: 'Members', description: 'PHI Lab 구성원과 졸업생 소개.' })
   const [activeTab, setActiveTab] = useState(TABS[0])
   const data = useLoaderData() ?? {}
   const location = useLocation()

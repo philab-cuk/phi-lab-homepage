@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from 'react'
 import { useLoaderData } from 'react-router'
 import { fetchLectures } from '../lib/publicData'
 import Lightbox from '../components/Lightbox'
+import { usePageMeta } from '../lib/usePageMeta'
 
 // CSR: 브라우저에서 로드 — admin 저장이 재배포 없이 즉시 반영된다.
 export async function clientLoader() {
@@ -167,6 +168,7 @@ function SemesterSection({ semester, courses }) {
 }
 
 export default function Lectures() {
+  usePageMeta({ title: 'Teaching', description: '가톨릭대학교 바이오메디컬소프트웨어학과 학부·대학원 강의.' })
   const lecturesData = useLoaderData() ?? []
   const [lightbox, setLightbox] = useState(null)
   // 공용 Lightbox 는 { src, caption } 배열을 받는다 — 강의 이미지(문자열)를 매핑.
