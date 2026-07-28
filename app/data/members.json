@@ -11,7 +11,7 @@
       "department": "Department of Biomedical Software Engineering",
       "institution": "The Catholic University of Korea",
       "photo": "/photos/hkim.jpg",
-      "photoLive": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/09/generated-image-september-09-2025-1_03pm.png?resize=750%2C964&ssl=1",
+      "photoLive": "/photos/hkim.jpg",
       "email": "hyojung.kim@catholic.ac.kr",
       "personalSite": "https://sites.google.com/view/hyojungkim/",
       "linkedin": null,
@@ -30,10 +30,27 @@
       "bioShort": "Clinical informaticist with over 20 years of professional experience across clinical practice, EHR architecture, and academic research. PhD in Biomedical Informatics, Seoul National University. Former ML/LLM Senior Data Engineer at Kakao Healthcare; postdoctoral researcher at Samsung Medical Center and Sungkyunkwan University SAIHST. Member, 2nd Data Disclosure and Utilization Committee, CODA, Korea National Institute of Health.",
       "bioFull": "Hyo Jung Kim is an associate professor in the Department of Biomedical Software Engineering at The Catholic University of Korea, South Korea. She earned her BSc and MSc in Nursing, and Management & Education from Yonsei University in Seoul, South Korea, and her Ph.D. in Biomedical Informatics from Seoul National University. She is a seasoned clinical informaticist with over 20 years of professional experience across clinical practice, EHR software architecture, and academic research.\n\nShe focuses on integrative approaches to enhancing continuity and quality of care enabled by the digital landscape from knowledge representation to artificial intelligence system. She has achieved outstanding performance in workflow analysis, process innovation applying IT technology, and data management of tens of terabytes within hospital information systems.\n\nDr. Kim is passionate about conducting data-driven multidisciplinary research and innovative activities that advance healthcare information circulation. Her research bridges data science and implementation science, integrating genomic research into clinical practice and constructing meaningful representations of real-world data. Her areas of expertise include healthcare big data management, developing algorithms such as CDSS, and representing the cancer care continuum from therapeutic effectiveness research to social determinants of health. She has been actively involved in both international and national research collaborations with major hospitals in South Korea. Additionally, she serves as a Member of the 2nd Data Disclosure and Utilization Committee, Clinical & Omics Data Archive (CODA), The Korea National Institute of Health.",
       "education": [
-        { "degree": "BSc", "field": "Nursing", "institution": "Yonsei University, Seoul" },
-        { "degree": "MSc", "field": "Nursing", "institution": "Yonsei University, Seoul" },
-        { "degree": "MSc", "field": "Management & Education", "institution": "Yonsei University, Seoul" },
-        { "degree": "Ph.D.", "field": "Biomedical Informatics", "institution": "Seoul National University", "period": "2015.3 – 2020.8" }
+        {
+          "degree": "BSc",
+          "field": "Nursing",
+          "institution": "Yonsei University, Seoul"
+        },
+        {
+          "degree": "MSc",
+          "field": "Nursing",
+          "institution": "Yonsei University, Seoul"
+        },
+        {
+          "degree": "MSc",
+          "field": "Management & Education",
+          "institution": "Yonsei University, Seoul"
+        },
+        {
+          "degree": "Ph.D.",
+          "field": "Biomedical Informatics",
+          "institution": "Seoul National University",
+          "period": "2015.3 – 2020.8"
+        }
       ],
       "experience": [
         {
@@ -72,7 +89,10 @@
             "Multi-institutional research projects using clinical research data platforms"
           ],
           "externalLinks": [
-            { "label": "google technical blog", "url": "https://cloud.google.com/customers/kakao-healthcare-federated-learning" }
+            {
+              "label": "google technical blog",
+              "url": "https://cloud.google.com/customers/kakao-healthcare-federated-learning"
+            }
           ]
         },
         {
@@ -107,11 +127,15 @@
       "role": "Undergraduate Researcher",
       "degree": "Undergraduate",
       "year": null,
-      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/09/jsh.jpg?resize=413%2C516&ssl=1",
+      "photo": "https://eukfhgiuytxxbikmhkoi.supabase.co/storage/v1/object/public/profile-photos/jsher/profile.webp?v=1785246628",
       "email": null,
       "linkedin": null,
       "googleScholar": null,
-      "researchInterests": ["Biomedical Data Science", "Pharmacovigilance", "Healthcare Data Engineering (Deduplication)"],
+      "researchInterests": [
+        "Biomedical Data Science",
+        "Pharmacovigilance",
+        "Healthcare Data Engineering (Deduplication)"
+      ],
       "status": "current"
     },
     {
@@ -120,11 +144,14 @@
       "role": "Undergraduate Researcher",
       "degree": "Undergraduate",
       "year": null,
-      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/09/eca69debaa85ec82aceca784.jpg?resize=689%2C886&ssl=1",
+      "photo": "https://eukfhgiuytxxbikmhkoi.supabase.co/storage/v1/object/public/profile-photos/jwyoo/profile.webp?v=1785246628",
       "email": null,
       "linkedin": null,
       "googleScholar": null,
-      "researchInterests": ["Health Data Analytics", "Claims and Public Health Data Experience"],
+      "researchInterests": [
+        "Health Data Analytics",
+        "Claims and Public Health Data Experience"
+      ],
       "status": "current"
     },
     {
@@ -133,11 +160,15 @@
       "role": "Undergraduate Researcher",
       "degree": "Undergraduate",
       "year": null,
-      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/09/ejj.jpg?resize=551%2C709&ssl=1",
+      "photo": "https://eukfhgiuytxxbikmhkoi.supabase.co/storage/v1/object/public/profile-photos/ejjeong/profile.webp?v=1785246628",
       "email": null,
       "linkedin": null,
       "googleScholar": null,
-      "researchInterests": ["Biomedical Data Science", "Clinical Informatics", "Data Pipelining"],
+      "researchInterests": [
+        "Biomedical Data Science",
+        "Clinical Informatics",
+        "Data Pipelining"
+      ],
       "status": "current"
     },
     {
@@ -146,11 +177,14 @@
       "role": "Undergraduate Researcher",
       "degree": "Undergraduate",
       "year": null,
-      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/09/ysl.jpg?resize=750%2C961&ssl=1",
+      "photo": "https://eukfhgiuytxxbikmhkoi.supabase.co/storage/v1/object/public/profile-photos/yslee/profile.jpg?v=1785246644589",
       "email": null,
       "linkedin": null,
       "googleScholar": null,
-      "researchInterests": ["Data Harmonization and Reuse in Public Health", "Enhancing Utility of Linked Health Data"],
+      "researchInterests": [
+        "Data Harmonization and Reuse in Public Health",
+        "Enhancing Utility of Linked Health Data"
+      ],
       "status": "current"
     },
     {
@@ -159,11 +193,14 @@
       "role": "Undergraduate Researcher",
       "degree": "Undergraduate",
       "year": null,
-      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/09/ejk.jpeg?resize=750%2C964&ssl=1",
+      "photo": "https://eukfhgiuytxxbikmhkoi.supabase.co/storage/v1/object/public/profile-photos/ejkim/profile.webp?v=1785246628",
       "email": null,
       "linkedin": null,
       "googleScholar": null,
-      "researchInterests": ["Biomedical Data Science", "Pharmacovigilance & Drug Safety"],
+      "researchInterests": [
+        "Biomedical Data Science",
+        "Pharmacovigilance & Drug Safety"
+      ],
       "status": "current"
     },
     {
@@ -172,11 +209,14 @@
       "role": "Undergraduate Researcher",
       "degree": "Undergraduate",
       "year": null,
-      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/12/ec9e84ec8381ebafbc_eca69debaa85ec82aceca784.jpg?resize=750%2C964&ssl=1",
+      "photo": "https://eukfhgiuytxxbikmhkoi.supabase.co/storage/v1/object/public/profile-photos/smlim/profile.webp?v=1785246628",
       "email": null,
       "linkedin": null,
       "googleScholar": null,
-      "researchInterests": ["Clinical Informatics", "Health Services Research"],
+      "researchInterests": [
+        "Clinical Informatics",
+        "Health Services Research"
+      ],
       "status": "current"
     },
     {
@@ -185,11 +225,14 @@
       "role": "Undergraduate Researcher",
       "degree": "Undergraduate",
       "year": null,
-      "photo": "https://i0.wp.com/philabcuk.org/wp-content/uploads/2025/12/ed959cec9eaced9881_eca69debaa85ec82aceca784.jpg?resize=354%2C472&ssl=1",
+      "photo": "https://eukfhgiuytxxbikmhkoi.supabase.co/storage/v1/object/public/profile-photos/jhhan/profile.webp?v=1785246628",
       "email": null,
       "linkedin": null,
       "googleScholar": null,
-      "researchInterests": ["Biomedical Data Science", "Clinical data management system"],
+      "researchInterests": [
+        "Biomedical Data Science",
+        "Clinical data management system"
+      ],
       "status": "current"
     }
   ],
