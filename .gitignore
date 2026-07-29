@@ -40,3 +40,6 @@ build/
 supabase/.branches/
 supabase/.temp/
 test-results/
+
+# 미사용 원본 소스 이미지(최적화본만 배포)
+public/배경이미지_은하수.png
