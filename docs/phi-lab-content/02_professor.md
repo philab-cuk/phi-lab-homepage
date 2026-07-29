@@ -1,5 +1,7 @@
 # Professor – PHI Lab @ CUK
 
+> **참고 (2026-07-28)** — 이 문서에 남아 있는 `i0.wp.com` / `wp-content` 주소는 워드프레스 사이트 이전으로 모두 죽은 링크다. 기록 보존을 위해 본문은 그대로 두며, 실제 이미지는 Supabase Storage(`profile-photos`, `lecture-images`)에 있다.
+
 **Source URL:** https://philabcuk.org/people/
 **Extracted:** 2026-05-04
 

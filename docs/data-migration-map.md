@@ -1,5 +1,7 @@
 # PHI Lab — 데이터 이전 매핑표
 
+> **참고 (2026-07-28)** — 이 문서에 남아 있는 `i0.wp.com` / `wp-content` 주소는 워드프레스 사이트 이전으로 모두 죽은 링크다. 기록 보존을 위해 본문은 그대로 두며, 실제 이미지는 Supabase Storage(`profile-photos`, `lecture-images`)에 있다.
+
 작성: 2026-05-14
 목적: `docs/phi-lab-content/` (1차 소스) + `prototypes/round-03/index.html` (2차 참고) 의 실제 데이터를 `src/data/*.json` 으로 옮기기 위한 인벤토리·매핑표.
 

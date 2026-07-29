@@ -1,5 +1,7 @@
 # PHI Lab — JSON 데이터 스키마 v2
 
+> **참고 (2026-07-28)** — 이 문서에 남아 있는 `i0.wp.com` / `wp-content` 주소는 워드프레스 사이트 이전으로 모두 죽은 링크다. 기록 보존을 위해 본문은 그대로 두며, 실제 이미지는 Supabase Storage(`profile-photos`, `lecture-images`)에 있다.
+
 작성: 2026-05-14
 배경: 가짜 placeholder를 실제 PHI Lab 데이터로 교체하면서, round-03 본문 표시(영/한 병기, 저자 강조, 기관 kicker 등)를 지원하기 위해 스키마를 확장.
 
