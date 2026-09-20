@@ -223,13 +223,13 @@ const INSTITUTION_DISPLAY_ORDER = [
   'Yonsei University Health System',
   // 학교
   'Seoul National University',
+  'SNUBI',
   'Yonsei University',
   'KAIST',
   'University of Cincinnati',
   'Sungkyunkwan University',
   "Sookmyung Women's University",
   'Chonnam National University',
-  'SNUBI',
   // 회사
   'Kakao Healthcare',
   'Bhomegen',
