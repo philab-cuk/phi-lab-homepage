@@ -213,18 +213,26 @@ export async function fetchPublications() {
 
 // 홈 "Collaborating Institutions" — 외부 협력 기관만(내부 PHI Lab·가톨릭대 제외).
 // 표시 순서: 아래 우선순위 목록(name_en) 먼저, 나머지는 이름순 뒤에.
-// 1행: 성모병원 계열 + 가톨릭중앙의료원 / 2행: 삼성서울·카카오·서울대
-// 3행: 숙명여대·전남대·연세대.
+// 병원 → 학교 → 회사.
 const INSTITUTION_DISPLAY_ORDER = [
+  // 병원
   "Bucheon St. Mary's Hospital",
   "Eunpyeong St. Mary's Hospital",
   'Catholic Medical Center',
   'Samsung Seoul Hospital',
-  'Kakao Healthcare',
+  'Yonsei University Health System',
+  // 학교
   'Seoul National University',
+  'Yonsei University',
+  'KAIST',
+  'University of Cincinnati',
+  'Sungkyunkwan University',
   "Sookmyung Women's University",
   'Chonnam National University',
-  'Yonsei University',
+  'SNUBI',
+  // 회사
+  'Kakao Healthcare',
+  'Bhomegen',
 ]
 
 export async function fetchCollaboratingInstitutions() {
