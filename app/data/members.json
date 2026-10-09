@@ -204,22 +204,6 @@
       "status": "current"
     },
     {
-      "id": "smlim",
-      "name": "Sang Min Lim",
-      "role": "Undergraduate Researcher",
-      "degree": "Undergraduate",
-      "year": null,
-      "photo": "https://eukfhgiuytxxbikmhkoi.supabase.co/storage/v1/object/public/profile-photos/smlim/profile.webp?v=1785246628",
-      "email": null,
-      "linkedin": null,
-      "googleScholar": null,
-      "researchInterests": [
-        "Clinical Informatics",
-        "Health Services Research"
-      ],
-      "status": "current"
-    },
-    {
       "id": "jhhan",
       "name": "Jae Hyeok Han",
       "role": "Undergraduate Researcher",
@@ -236,5 +220,22 @@
       "status": "current"
     }
   ],
-  "alumni": []
+  "alumni": [
+    {
+      "id": "smlim",
+      "name": "Sang Min Lim",
+      "role": "Undergraduate Researcher",
+      "degree": "Undergraduate",
+      "year": null,
+      "photo": "https://eukfhgiuytxxbikmhkoi.supabase.co/storage/v1/object/public/profile-photos/smlim/profile.webp?v=1785246628",
+      "email": null,
+      "linkedin": null,
+      "googleScholar": null,
+      "researchInterests": [
+        "Clinical Informatics",
+        "Health Services Research"
+      ],
+      "status": "alumni"
+    }
+  ]
 }
