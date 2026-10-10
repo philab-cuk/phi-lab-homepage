@@ -101,6 +101,21 @@ function StudentRow({ member }) {
   )
 }
 
+// 상위 구분(PI·역할·Alumni) 제목 — Professor 페이지 소제목의 골드 그라데이션 밑줄을
+// 멤버 사이 회색 구분선과 같은 폭(콘텐츠 전체 폭)으로.
+function SectionHeading({ children }) {
+  return (
+    <>
+      <h2 className="mb-0">{children}</h2>
+      <div
+        className="mt-2 mb-2 h-[2px]"
+        style={{ background: 'linear-gradient(90deg, #e7d6a6, transparent)' }}
+        aria-hidden="true"
+      />
+    </>
+  )
+}
+
 export default function Members() {
   usePageMeta({ title: 'Members', description: 'PHI Lab 구성원과 Alumni 소개.' })
   const data = useLoaderData() ?? {}
@@ -139,13 +154,13 @@ export default function Members() {
 
       {professor && (
         <>
-          <h2>{professor.role || piRole || 'Principal Investigator'}</h2>
+          <SectionHeading>{professor.role || piRole || 'Principal Investigator'}</SectionHeading>
           <ProfessorRow member={professor} />
         </>
       )}
       {groups.map((g) => (
         <section key={g.role}>
-          <h2>{g.role}</h2>
+          <SectionHeading>{g.role}</SectionHeading>
           <div>
             {g.members.map((member) => (
               <StudentRow key={member.id} member={member} />
@@ -155,7 +170,7 @@ export default function Members() {
       ))}
       {noRole.length > 0 && (
         <section>
-          <h2>Members</h2>
+          <SectionHeading>Members</SectionHeading>
           <div>
             {noRole.map((member) => (
               <StudentRow key={member.id} member={member} />
@@ -167,7 +182,7 @@ export default function Members() {
       {/* Alumni — 졸업뿐 아니라 졸업 전 연구를 마친 학부연구생도 포함. 현재 멤버와 같은 카드 디자인 */}
       {alumni.length > 0 && (
         <section>
-          <h2>Alumni</h2>
+          <SectionHeading>Alumni</SectionHeading>
           <div>
             {alumni.map((member) => (
               <StudentRow key={member.id} member={member} />
