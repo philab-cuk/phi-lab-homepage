@@ -91,6 +91,9 @@ function StudentRow({ member }) {
           <MemberName member={member} korClass="text-xl" engClass="text-base" />
         </p>
         <p className="my-0 text-muted">{member.degree}</p>
+        {member.currentAffiliation && (
+          <p className="my-0 text-muted">Now: {member.currentAffiliation}</p>
+        )}
         <ResearchInterests tags={member.researchInterests} />
         <SocialLinks member={member} />
       </div>
@@ -98,29 +101,8 @@ function StudentRow({ member }) {
   )
 }
 
-function AlumnusItem({ member }) {
-  return (
-    <div
-      id={member.id}
-      className="scroll-mt-24 py-4 border-b border-rule last:border-b-0"
-    >
-      <p className="my-0">
-        <MemberName member={member} korClass="text-lg" engClass="text-[15px]" />
-        {[member.degree, member.graduatedYear].filter(Boolean).map((v) => (
-          <span key={v} className="text-muted">{' '}· {v}</span>
-        ))}
-      </p>
-      {member.role && <p className="my-0 text-muted text-[15px]">{member.role}</p>}
-      {member.currentAffiliation && (
-        <p className="my-0 text-muted text-[15px]">Now: {member.currentAffiliation}</p>
-      )}
-      <SocialLinks member={member} showEmail={false} className="my-1" />
-    </div>
-  )
-}
-
 export default function Members() {
-  usePageMeta({ title: 'Members', description: 'PHI Lab 구성원과 졸업생 소개.' })
+  usePageMeta({ title: 'Members', description: 'PHI Lab 구성원과 Alumni 소개.' })
   const data = useLoaderData() ?? {}
   const location = useLocation()
 
@@ -182,13 +164,13 @@ export default function Members() {
         </section>
       )}
 
-      {/* 졸업·수료 멤버 — 현재 멤버 목록 맨 아래 별도 구분 */}
+      {/* Alumni — 졸업뿐 아니라 졸업 전 연구를 마친 학부연구생도 포함. 현재 멤버와 같은 카드 디자인 */}
       {alumni.length > 0 && (
         <section>
           <h2>Alumni</h2>
           <div>
             {alumni.map((member) => (
-              <AlumnusItem key={member.id} member={member} />
+              <StudentRow key={member.id} member={member} />
             ))}
           </div>
         </section>
