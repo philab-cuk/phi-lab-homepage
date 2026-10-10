@@ -79,8 +79,12 @@ function FeaturedInitiative({ project }) {
         <span className="mt-[5px] inline-block h-[16px] w-[3px] rounded-full bg-gold-600 shrink-0" aria-hidden="true" />
         <p className="my-0 font-semibold text-ink">{heading}</p>
       </div>
+      {/* 설명·해시태그는 제목 글자 시작에 맞춰 들여쓰기 (바 3px + 간격 10px) */}
+      {project.descriptionKo && (
+        <p className="my-1 pl-[13px] text-muted">{project.descriptionKo}</p>
+      )}
       {(hashtags || project.notes) && (
-        <p className="my-1 text-[15px] text-muted">
+        <p className="my-1 pl-[13px] text-[15px] text-muted">
           {hashtags}
           {project.notes && (
             <>
