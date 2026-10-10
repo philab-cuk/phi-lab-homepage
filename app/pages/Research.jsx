@@ -79,6 +79,9 @@ function FeaturedInitiative({ project }) {
         <span className="mt-[5px] inline-block h-[16px] w-[3px] rounded-full bg-gold-600 shrink-0" aria-hidden="true" />
         <p className="my-0 font-semibold text-ink">{heading}</p>
       </div>
+      {project.descriptionKo && (
+        <p className="my-1 text-muted">{project.descriptionKo}</p>
+      )}
       {(hashtags || project.notes) && (
         <p className="my-1 text-[15px] text-muted">
           {hashtags}
