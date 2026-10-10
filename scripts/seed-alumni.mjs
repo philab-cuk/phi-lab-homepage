@@ -1,4 +1,4 @@
-// 졸업/수료 멤버를 Alumni(status='alumni')로 전환하는 데이터 시드.
+// 졸업·연구 종료 멤버를 Alumni(status='alumni')로 전환하는 데이터 시드.
 // 멱등(여러 번 실행해도 동일). 스키마 변경 없음 — members.status 는 이미 current/alumni.
 // 실행: node scripts/seed-alumni.mjs  (.env.local 의 service role 키 사용)
 import { createClient } from '@supabase/supabase-js'

@@ -346,11 +346,11 @@ export default function AdminMembers() {
       {viewTabs}
       <PageHeader
         title="Members"
-        subtitle={`재학 ${rows.filter(r=>r.status==='current').length} · 졸업 ${rows.filter(r=>r.status==='alumni').length}`}
+        subtitle={`현재 ${rows.filter(r=>r.status==='current').length} · Alumni ${rows.filter(r=>r.status==='alumni').length}`}
         actions={
           <>
-            <Button onClick={() => setTab('current')} primary={tab==='current'}>재학</Button>
-            <Button onClick={() => setTab('alumni')} primary={tab==='alumni'}>졸업</Button>
+            <Button onClick={() => setTab('current')} primary={tab==='current'}>현재</Button>
+            <Button onClick={() => setTab('alumni')} primary={tab==='alumni'}>Alumni</Button>
             {deleteModeToggle}
             <Button primary onClick={openNew}>+ 새 멤버</Button>
           </>
@@ -422,7 +422,7 @@ export default function AdminMembers() {
             <Field label="상태">
               <Select
                 value={edit.status}
-                options={[{ value: 'current', label: '재학' }, { value: 'alumni', label: '졸업' }]}
+                options={[{ value: 'current', label: '현재' }, { value: 'alumni', label: 'Alumni' }]}
                 onChange={e => setEdit({ ...edit, status: e.target.value })}
               />
             </Field>
