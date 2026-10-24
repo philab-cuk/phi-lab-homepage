@@ -240,6 +240,7 @@ const INSTITUTION_DISPLAY_ORDER = [
   "Eunpyeong St. Mary's Hospital",
   'Catholic Medical Center',
   'Samsung Seoul Hospital',
+  'National Cancer Center',
   'Yonsei University Health System',
   // 학교
   'Seoul National University',
