@@ -206,6 +206,7 @@ export async function fetchPublications() {
       '*, publication_authors(position, is_pi, is_co_first, is_co_correspond, authors(name, full_name))',
     )
     .order('year', { ascending: false })
+    .order('date', { ascending: false, nullsFirst: false })
     .order('display_order')
   if (error) throw error
   return (data ?? []).map(mapPublication)
