@@ -8,6 +8,19 @@ export const PI_NAMES = ['김효정', 'Hyo Jung Kim', 'Kim, H. J.']
 // 영어 우선 + 한글 병기(사이트 표기 규칙). *En 이 주 표기, *Ko 를 괄호로 병기.
 export const BOOKS = [
   {
+    id: 'book-ai-medical-humanities-2026',
+    authors: ['Seung Suk Nam', 'Hyo Jung Kim'],
+    titleEn: 'AI and Medical Humanities',
+    titleKo: 'AI와 의료 인문학',
+    publisherEn: 'Communication Books',
+    publisherKo: '커뮤니케이션북스',
+    seriesEn: 'Artificial Intelligence Series',
+    seriesKo: '인공지능총서',
+    year: 2026,
+    date: '2026.10.20',
+    isbn: '9791143033307',
+  },
+  {
     id: 'book-ai-precision-medicine-2025',
     authors: ['Hyo Jung Kim'],
     titleEn: 'AI and Precision Medicine',
