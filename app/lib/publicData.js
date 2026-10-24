@@ -199,6 +199,19 @@ function mapPublication(p) {
   }
 }
 
+const MONTH_NUM = {
+  january:1,february:2,march:3,april:4,may:5,june:6,
+  july:7,august:8,september:9,october:10,november:11,december:12,
+}
+function parsePubDate(d) {
+  if (!d) return 0
+  const dot = d.match(/^(\d{4})\.(\d{1,2})\.(\d{1,2})/)
+  if (dot) return +dot[1] * 10000 + +dot[2] * 100 + +dot[3]
+  const txt = d.match(/([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4})/)
+  if (txt) { const m = MONTH_NUM[txt[1].toLowerCase()]; if (m) return +txt[3] * 10000 + m * 100 + +txt[2] }
+  return 0
+}
+
 export async function fetchPublications() {
   const { data, error } = await supabase
     .from('publications')
@@ -206,10 +219,16 @@ export async function fetchPublications() {
       '*, publication_authors(position, is_pi, is_co_first, is_co_correspond, authors(name, full_name))',
     )
     .order('year', { ascending: false })
-    .order('date', { ascending: false, nullsFirst: false })
     .order('display_order')
   if (error) throw error
-  return (data ?? []).map(mapPublication)
+  const pubs = (data ?? []).map((p, i) => ({ ...mapPublication(p), _ord: i }))
+  pubs.sort((a, b) => {
+    if (a.year !== b.year) return b.year - a.year
+    const da = parsePubDate(a.date), db = parsePubDate(b.date)
+    if (da !== db) return db - da
+    return a._ord - b._ord
+  })
+  return pubs
 }
 
 // 홈 "Collaborating Institutions" — 외부 협력 기관만(내부 PHI Lab·가톨릭대 제외).
