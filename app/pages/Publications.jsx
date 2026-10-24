@@ -274,16 +274,11 @@ export default function Publications() {
       if (!map[p.year]) map[p.year] = []
       map[p.year].push(p)
     })
-    const order = {
-      article: 0,
-      'international-presentation': 1,
-      'national-presentation': 2,
-    }
     return Object.entries(map)
       .sort(([a], [b]) => Number(b) - Number(a))
       .map(([year, pubs]) => ({
         year: Number(year),
-        pubs: pubs.sort((a, b) => (order[a.category] ?? 9) - (order[b.category] ?? 9)),
+        pubs,
       }))
   }, [publicationsData])
 
